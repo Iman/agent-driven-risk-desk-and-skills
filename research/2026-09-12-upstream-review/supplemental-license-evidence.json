@@ -1,0 +1,66 @@
+[
+  {
+    "repo": "pymc-devs/pymc",
+    "file": "LICENSE",
+    "url": "https://raw.githubusercontent.com/pymc-devs/pymc/main/LICENSE",
+    "revision_status": "branch snapshot, not pinned",
+    "sha256": "7ff724eb577182bb98aedb227589dc71dd5111781a3698a84c1fffc2b63dd0eb",
+    "retrieved_at": "2026-09-12T22:48:07.667021+00:00"
+  },
+  {
+    "repo": "arviz-devs/arviz",
+    "file": "LICENSE",
+    "url": "https://raw.githubusercontent.com/arviz-devs/arviz/main/LICENSE",
+    "revision_status": "branch snapshot, not pinned",
+    "sha256": "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1",
+    "retrieved_at": "2026-09-12T22:48:08.255783+00:00"
+  },
+  {
+    "repo": "ccxt/ccxt",
+    "file": "LICENSE.txt",
+    "url": "https://raw.githubusercontent.com/ccxt/ccxt/master/LICENSE.txt",
+    "revision_status": "branch snapshot, not pinned",
+    "sha256": "1086fddb6d4084c1d5ef1175ff9e524c574a4c5b27255258911a58d8b9efa39c",
+    "retrieved_at": "2026-09-12T22:48:07.633358+00:00"
+  },
+  {
+    "repo": "evidentlyai/evidently",
+    "file": "LICENSE",
+    "url": "https://raw.githubusercontent.com/evidentlyai/evidently/main/LICENSE",
+    "revision_status": "branch snapshot, not pinned",
+    "sha256": "379054a067cbe8e134e084287550e9391d2804636687c4723f80a2c58a463f0e",
+    "retrieved_at": "2026-09-12T22:48:07.664138+00:00"
+  },
+  {
+    "repo": "OpenGamma/Strata",
+    "file": "LICENSE.txt",
+    "url": "https://raw.githubusercontent.com/OpenGamma/Strata/main/LICENSE.txt",
+    "revision_status": "branch snapshot, not pinned",
+    "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "retrieved_at": "2026-09-12T22:48:07.837411+00:00"
+  },
+  {
+    "repo": "OpenGamma/Strata",
+    "file": "NOTICE.txt",
+    "url": "https://raw.githubusercontent.com/OpenGamma/Strata/main/NOTICE.txt",
+    "revision_status": "branch snapshot, not pinned",
+    "sha256": "0dd2a6eb5fb7ae15dfc893a81aaef2db5c66de20fb205730f8e9bbfbe905f1e2",
+    "retrieved_at": "2026-09-12T22:48:07.866853+00:00"
+  },
+  {
+    "repo": "open-risk/transitionMatrix",
+    "file": "LICENSE.txt",
+    "url": "https://raw.githubusercontent.com/open-risk/transitionMatrix/master/LICENSE.txt",
+    "revision_status": "branch snapshot, not pinned",
+    "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "retrieved_at": "2026-09-12T22:48:07.888273+00:00"
+  },
+  {
+    "repo": "georgebv/pyextremes",
+    "file": "LICENSE",
+    "url": "https://raw.githubusercontent.com/georgebv/pyextremes/master/LICENSE",
+    "revision_status": "branch snapshot, not pinned",
+    "sha256": "8f1cdd5ae9489369d4634894817cec8c71828909beabb08d8902a5e03d39e5ab",
+    "retrieved_at": "2026-09-12T22:48:08.065442+00:00"
+  }
+]

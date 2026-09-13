@@ -1,0 +1,28 @@
+[project]
+name = "riskdesk"
+version = "0.1.0"
+description = "Portfolio risk, historical tail risk, stress and ORE XVA tools"
+requires-python = ">=3.11"
+license = "PolyForm-Noncommercial-1.0.0"
+license-files = ["LICENSE", "notices/**/*"]
+authors = [{name = "Iman Samizadeh"}]
+dependencies = ["skfolio==1.1.0", "pydantic>=2.11,<3", "mcp==1.30.0"]
+
+[project.optional-dependencies]
+xva = ["open-source-risk-engine==1.8.16.0"]
+dev = ["pytest", "build"]
+
+[project.scripts]
+riskdesk = "riskdesk.cli:main"
+riskdesk-mcp = "riskdesk.server:main"
+
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/riskdesk"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

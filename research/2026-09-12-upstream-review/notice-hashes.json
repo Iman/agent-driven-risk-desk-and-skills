@@ -1,0 +1,78 @@
+[
+  {
+    "file": "upstream-notices/OpenGamma--Strata/LICENSE.txt",
+    "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+  },
+  {
+    "file": "upstream-notices/OpenGamma--Strata/NOTICE.txt",
+    "sha256": "0dd2a6eb5fb7ae15dfc893a81aaef2db5c66de20fb205730f8e9bbfbe905f1e2"
+  },
+  {
+    "file": "upstream-notices/OpenSourceRisk--Engine/license.txt",
+    "sha256": "cae7892665c00e450c6cb87bcc3246986b2597aa4cef6a4771d74cce364e34e5"
+  },
+  {
+    "file": "upstream-notices/OpenSourceRisk--Engine/licenseheader.txt",
+    "sha256": "07192984ff9977ec7f2c3fdbdc26ebb2776ac2f5d21c4ae078f61511302afa7d"
+  },
+  {
+    "file": "upstream-notices/arviz-devs--arviz/LICENSE",
+    "sha256": "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1"
+  },
+  {
+    "file": "upstream-notices/bashtage--arch/LICENSE.md",
+    "sha256": "c6e622bd89db4e13315f4e91605ff96fcbb9012d78ee74e429855870b203eed6"
+  },
+  {
+    "file": "upstream-notices/ccxt--ccxt/LICENSE.txt",
+    "sha256": "1086fddb6d4084c1d5ef1175ff9e524c574a4c5b27255258911a58d8b9efa39c"
+  },
+  {
+    "file": "upstream-notices/cvxgrp--cvxportfolio/LICENSE",
+    "sha256": "e57f1c320b8cf8798a7d2ff83a6f9e06a33a03585f6e065fea97f1d86db84052"
+  },
+  {
+    "file": "upstream-notices/dcajasn--Riskfolio-Lib/LICENSE.txt",
+    "sha256": "7f7a68d261604e432e818993f92b74b636c632e31f207730dd189267044aa5e6"
+  },
+  {
+    "file": "upstream-notices/domokane--FinancePy/LICENSE",
+    "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+  },
+  {
+    "file": "upstream-notices/evidentlyai--evidently/LICENSE",
+    "sha256": "379054a067cbe8e134e084287550e9391d2804636687c4723f80a2c58a463f0e"
+  },
+  {
+    "file": "upstream-notices/georgebv--pyextremes/LICENSE",
+    "sha256": "8f1cdd5ae9489369d4634894817cec8c71828909beabb08d8902a5e03d39e5ab"
+  },
+  {
+    "file": "upstream-notices/lballabio--QuantLib/CITATION.cff",
+    "sha256": "92caad1586e1c48fe8f4d9197032b66714b091a9eb6b5c01ff2c19f40b73014f"
+  },
+  {
+    "file": "upstream-notices/lballabio--QuantLib/LICENSE.TXT",
+    "sha256": "b0ba466e8fb8baa6d6d6171dc6130efa70a06139a5e6cfc25e08df0d19aed86e"
+  },
+  {
+    "file": "upstream-notices/open-risk--transitionMatrix/LICENSE.txt",
+    "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+  },
+  {
+    "file": "upstream-notices/pymc-devs--pymc/LICENSE",
+    "sha256": "7ff724eb577182bb98aedb227589dc71dd5111781a3698a84c1fffc2b63dd0eb"
+  },
+  {
+    "file": "upstream-notices/ranaroussi--quantstats/LICENSE.txt",
+    "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+  },
+  {
+    "file": "upstream-notices/robertmartin8--PyPortfolioOpt/LICENSE",
+    "sha256": "0e401d63a7b31bde363ca577a2537af1c345fccbf532edc55cb589f568b2a883"
+  },
+  {
+    "file": "upstream-notices/skfolio--skfolio/LICENSE",
+    "sha256": "07b8dfceb7b319e5145e7b1594d2cdaf94d924d78166d28951d4b360a4dc5844"
+  }
+]

@@ -1,0 +1,30 @@
+{
+  "as_of": "2026-09-12",
+  "currency": "USD",
+  "source": "synthetic example",
+  "data_mode": "synthetic",
+  "nav": 1000,
+  "positions": [
+    {
+      "id": "long",
+      "asset": "A",
+      "market_value": 600,
+      "instrument_type": "linear"
+    },
+    {
+      "id": "short",
+      "asset": "B",
+      "market_value": -200,
+      "instrument_type": "linear"
+    }
+  ],
+  "scenarios": [
+    {
+      "name": "combined_down",
+      "shocks": {
+        "A": -0.1,
+        "B": -0.2
+      }
+    }
+  ]
+}

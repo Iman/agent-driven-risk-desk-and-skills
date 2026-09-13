@@ -1,0 +1,14 @@
+#!/usr/bin/env python3
+"""Reject prohibited attribution while retaining the user's own Git identity."""
+from pathlib import Path
+import re
+import subprocess
+import sys
+
+message = Path(sys.argv[1]).read_text()
+names = r"(?:codex|chatgpt|openai|ai assistant|\bbot\b)"
+identities = [subprocess.check_output(["git", "var", key], text=True)
+              for key in ("GIT_AUTHOR_IDENT", "GIT_COMMITTER_IDENT")]
+trailers = r"(?im)^(?:co-authored-by|signed-off-by|reviewed-by|reported-by|generated-by):.*" + names
+if re.search(trailers, message) or any(re.search(names, value, re.I) for value in identities):
+    sys.exit("Commit rejected: use the user's own identity and omit automated attribution.")

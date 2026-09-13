@@ -1,0 +1,218 @@
+{
+  "retrieved_at": "2026-09-12T22:46:43.656591+00:00",
+  "repositories": [
+    {
+      "repo": "OpenSourceRisk/Engine",
+      "url": "https://github.com/OpenSourceRisk/Engine",
+      "stars": 786,
+      "pushed_at": "2026-09-11T17:26:31Z",
+      "archived": false,
+      "branch": "master",
+      "sha": "3d75a69087911a7e2cf1e6882da7bc27135c0762",
+      "declared_license": "NOASSERTION",
+      "licenses": [
+        {
+          "file": "license.txt",
+          "url": "https://github.com/OpenSourceRisk/Engine/blob/3d75a69087911a7e2cf1e6882da7bc27135c0762/license.txt"
+        },
+        {
+          "file": "licenseheader.txt",
+          "url": "https://github.com/OpenSourceRisk/Engine/blob/3d75a69087911a7e2cf1e6882da7bc27135c0762/licenseheader.txt"
+        }
+      ],
+      "latest_release": {
+        "tag": "v1.8.16.0",
+        "published_at": "2026-05-21T09:32:30Z",
+        "url": "https://github.com/OpenSourceRisk/Engine/releases/tag/v1.8.16.0"
+      }
+    },
+    {
+      "repo": "lballabio/QuantLib",
+      "url": "https://github.com/lballabio/QuantLib",
+      "stars": 7609,
+      "pushed_at": "2026-09-11T08:09:53Z",
+      "archived": false,
+      "branch": "master",
+      "sha": "ca953b7ebdb400f2839d86f18eeb0d4a2a4a30a4",
+      "declared_license": "NOASSERTION",
+      "licenses": [
+        {
+          "file": "CITATION.cff",
+          "url": "https://github.com/lballabio/QuantLib/blob/ca953b7ebdb400f2839d86f18eeb0d4a2a4a30a4/CITATION.cff"
+        },
+        {
+          "file": "LICENSE.TXT",
+          "url": "https://github.com/lballabio/QuantLib/blob/ca953b7ebdb400f2839d86f18eeb0d4a2a4a30a4/LICENSE.TXT"
+        }
+      ],
+      "latest_release": {
+        "tag": "v1.43",
+        "published_at": "2026-07-14T08:33:16Z",
+        "url": "https://github.com/lballabio/QuantLib/releases/tag/v1.43"
+      }
+    },
+    {
+      "repo": "skfolio/skfolio",
+      "url": "https://github.com/skfolio/skfolio",
+      "stars": 2387,
+      "pushed_at": "2026-09-12T14:24:43Z",
+      "archived": false,
+      "branch": "main",
+      "sha": "961ebc0b143786ed15caca2942b301663676f9d3",
+      "declared_license": "BSD-3-Clause",
+      "licenses": [
+        {
+          "file": "LICENSE",
+          "url": "https://github.com/skfolio/skfolio/blob/961ebc0b143786ed15caca2942b301663676f9d3/LICENSE"
+        }
+      ],
+      "latest_release": {
+        "tag": "v1.1.0",
+        "published_at": "2026-09-12T14:24:44Z",
+        "url": "https://github.com/skfolio/skfolio/releases/tag/v1.1.0"
+      }
+    },
+    {
+      "repo": "dcajasn/Riskfolio-Lib",
+      "url": "https://github.com/dcajasn/Riskfolio-Lib",
+      "stars": 4494,
+      "pushed_at": "2026-08-18T17:08:34Z",
+      "archived": false,
+      "branch": "master",
+      "sha": "632a9e48fbaf2b9f8e83864a492332364b6ed32c",
+      "declared_license": "BSD-3-Clause",
+      "licenses": [
+        {
+          "file": "LICENSE.txt",
+          "url": "https://github.com/dcajasn/Riskfolio-Lib/blob/632a9e48fbaf2b9f8e83864a492332364b6ed32c/LICENSE.txt"
+        }
+      ],
+      "latest_release": null
+    },
+    {
+      "repo": "robertmartin8/PyPortfolioOpt",
+      "url": "https://github.com/PyPortfolio/PyPortfolioOpt",
+      "stars": 6020,
+      "pushed_at": "2026-07-07T21:18:14Z",
+      "archived": false,
+      "branch": "main",
+      "sha": "a6638d2e06dae6f444fd022cfd4b3c528902a85b",
+      "declared_license": "MIT",
+      "licenses": [
+        {
+          "file": "LICENSE",
+          "url": "https://github.com/PyPortfolio/PyPortfolioOpt/blob/a6638d2e06dae6f444fd022cfd4b3c528902a85b/LICENSE"
+        }
+      ],
+      "latest_release": {
+        "tag": "v1.6.0",
+        "published_at": "2026-02-26T23:25:46Z",
+        "url": "https://github.com/PyPortfolio/PyPortfolioOpt/releases/tag/v1.6.0"
+      }
+    },
+    {
+      "repo": "bashtage/arch",
+      "url": "https://github.com/bashtage/arch",
+      "stars": 1566,
+      "pushed_at": "2026-08-10T04:34:30Z",
+      "archived": false,
+      "branch": "main",
+      "sha": "704bb70e48372e3ccccdde7da379811657ad0224",
+      "declared_license": "NOASSERTION",
+      "licenses": [
+        {
+          "file": "LICENSE.md",
+          "url": "https://github.com/bashtage/arch/blob/704bb70e48372e3ccccdde7da379811657ad0224/LICENSE.md"
+        }
+      ],
+      "latest_release": {
+        "tag": "v8.0.0",
+        "published_at": "2025-10-21T08:35:55Z",
+        "url": "https://github.com/bashtage/arch/releases/tag/v8.0.0"
+      }
+    },
+    {
+      "repo": "ranaroussi/quantstats",
+      "url": "https://github.com/ranaroussi/quantstats",
+      "stars": 7628,
+      "pushed_at": "2026-07-20T14:12:56Z",
+      "archived": false,
+      "branch": "main",
+      "sha": "fbd10daed0227aa0d10da6513f1b15e7e98d7fae",
+      "declared_license": "Apache-2.0",
+      "licenses": [
+        {
+          "file": "LICENSE.txt",
+          "url": "https://github.com/ranaroussi/quantstats/blob/fbd10daed0227aa0d10da6513f1b15e7e98d7fae/LICENSE.txt"
+        }
+      ],
+      "latest_release": {
+        "tag": "v0.0.81",
+        "published_at": "2026-01-13T18:17:07Z",
+        "url": "https://github.com/ranaroussi/quantstats/releases/tag/v0.0.81"
+      }
+    },
+    {
+      "repo": "cvxgrp/cvxportfolio",
+      "url": "https://github.com/cvxgrp/cvxportfolio",
+      "stars": 1285,
+      "pushed_at": "2026-04-27T14:11:17Z",
+      "archived": false,
+      "branch": "master",
+      "sha": "351c782b9b8b395c1a5f886b77e0d55f1bc9396e",
+      "declared_license": "GPL-3.0",
+      "licenses": [
+        {
+          "file": "LICENSE",
+          "url": "https://github.com/cvxgrp/cvxportfolio/blob/351c782b9b8b395c1a5f886b77e0d55f1bc9396e/LICENSE"
+        }
+      ],
+      "latest_release": null
+    },
+    {
+      "repo": "domokane/FinancePy",
+      "url": "https://github.com/domokane/FinancePy",
+      "stars": 3146,
+      "pushed_at": "2026-09-12T08:46:54Z",
+      "archived": false,
+      "branch": "master",
+      "sha": "2b9227fea9d832c4033421d6cd53a54316414fca",
+      "declared_license": "GPL-3.0",
+      "licenses": [
+        {
+          "file": "LICENSE",
+          "url": "https://github.com/domokane/FinancePy/blob/2b9227fea9d832c4033421d6cd53a54316414fca/LICENSE"
+        }
+      ],
+      "latest_release": null
+    },
+    {
+      "repo": "pymc-devs/pymc",
+      "error": "HTTP Error 403: rate limit exceeded"
+    },
+    {
+      "repo": "arviz-devs/arviz",
+      "error": "HTTP Error 403: rate limit exceeded"
+    },
+    {
+      "repo": "georgebv/pyextremes",
+      "error": "HTTP Error 403: rate limit exceeded"
+    },
+    {
+      "repo": "ccxt/ccxt",
+      "error": "HTTP Error 403: rate limit exceeded"
+    },
+    {
+      "repo": "evidentlyai/evidently",
+      "error": "HTTP Error 403: rate limit exceeded"
+    },
+    {
+      "repo": "OpenGamma/Strata",
+      "error": "HTTP Error 403: rate limit exceeded"
+    },
+    {
+      "repo": "open-risk/transitionMatrix",
+      "error": "HTTP Error 403: rate limit exceeded"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "as_of": "2026-09-12",
+  "currency": "USD",
+  "source": "synthetic example",
+  "data_mode": "synthetic",
+  "pnl": [
+    -100,
+    -50,
+    0,
+    50
+  ],
+  "confidence": 0.625,
+  "horizon_days": 1,
+  "portfolio_value": 1000
+}

@@ -1,0 +1,27 @@
+{
+  "name": "risk-desk",
+  "version": "0.1.0",
+  "description": "Historical VaR and Expected Shortfall, portfolio exposure, explicit stress scenarios and local ORE XVA.",
+  "author": {
+    "name": "Iman Samizadeh"
+  },
+  "license": "PolyForm-Noncommercial-1.0.0",
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Risk Desk",
+    "shortDescription": "Portfolio risk and XVA research.",
+    "longDescription": "Calculate risk from explicit local inputs with skfolio and ORE. Preserve loss signs, currencies, horizons, model assumptions and upstream credit.",
+    "developerName": "Iman Samizadeh",
+    "category": "Finance",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Calculate historical VaR and Expected Shortfall.",
+      "Stress my linear portfolio.",
+      "Run my local ORE exposure and XVA project."
+    ]
+  }
+}
