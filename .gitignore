@@ -10,3 +10,4 @@ artifacts/
 .env.*
 .DS_Store
 research/2026-09-12-upstream-review/
+requirements-macos-arm64-py313.lock
