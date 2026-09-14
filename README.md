@@ -137,9 +137,10 @@ survivors, and recorded 2 mutants as equivalent with the measurement that
 justifies calling them that. There is no mutation badge here, because two
 cases are not killed and a badge would round that away.
 
-`scripts/evidence.py` is the part worth a minute. Every figure quoted in
-this README and in `docs/IMPLEMENTATION.md` is recorded in
-`docs/evidence.json` with where it came from, and `check` fails when a
+`scripts/evidence.py` is the part worth a minute. The figures that travel
+between documents, the ones quoted here and in `docs/ORE.md`,
+`docs/IMPLEMENTATION.md` and `CHANGELOG.md`, are recorded in
+`docs/evidence.json` with where each came from, and `check` fails when a
 document and the record disagree. A validation test runs that check, so
 the suite goes red when the prose drifts from the repository. Figures the
 recorder counted here are marked `measured`; the ORE regression values,
