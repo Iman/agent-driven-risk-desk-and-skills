@@ -30,6 +30,23 @@ def evidence():
     return load_evidence_module()
 
 
+def copy_documents(destination, evidence, monkeypatch):
+    """Copy every document the evidence file cites, and point the module at
+    the copies. Copying a fixed list instead would make this test fail the
+    day a new document is cited, for a reason that is not drift."""
+    figures = json.loads(evidence.EVIDENCE.read_text(encoding="utf-8"))[
+        "figures"]
+    names = {name for entry in figures.values() for name in entry["documents"]}
+    for name in sorted(names):
+        target = destination / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(ROOT / name, target)
+    shutil.copy2(evidence.EVIDENCE, destination / "docs" / "evidence.json")
+    monkeypatch.setattr(evidence, "ROOT", destination)
+    monkeypatch.setattr(evidence, "EVIDENCE",
+                        destination / "docs" / "evidence.json")
+
+
 def test_the_recorded_file_exists_and_names_its_provenance(evidence):
     payload = json.loads(evidence.EVIDENCE.read_text(encoding="utf-8"))
     figures = payload["figures"]
@@ -51,12 +68,7 @@ def test_the_check_rejects_a_document_that_drifted(tmp_path, evidence,
     """Change one digit of one quoted number and the check must fail. This
     is the whole point of the file: a build that lets the prose drift is a
     build that certifies nothing."""
-    for name in ("README.md",):
-        shutil.copy2(ROOT / name, tmp_path / name)
-    shutil.copytree(ROOT / "docs", tmp_path / "docs")
-    monkeypatch.setattr(evidence, "ROOT", tmp_path)
-    monkeypatch.setattr(evidence, "EVIDENCE", tmp_path / "docs"
-                        / "evidence.json")
+    copy_documents(tmp_path, evidence, monkeypatch)
     assert evidence.check() == 0
 
     figures = json.loads((tmp_path / "docs" / "evidence.json")
@@ -72,11 +84,7 @@ def test_the_check_rejects_a_document_that_drifted(tmp_path, evidence,
 
 def test_a_missing_document_is_a_failure_not_a_pass(tmp_path, evidence,
                                                     monkeypatch):
-    shutil.copy2(ROOT / "README.md", tmp_path / "README.md")
-    shutil.copytree(ROOT / "docs", tmp_path / "docs")
-    monkeypatch.setattr(evidence, "ROOT", tmp_path)
-    monkeypatch.setattr(evidence, "EVIDENCE", tmp_path / "docs"
-                        / "evidence.json")
+    copy_documents(tmp_path, evidence, monkeypatch)
     (tmp_path / "docs" / "ORE.md").unlink()
     assert evidence.check() == 1
 

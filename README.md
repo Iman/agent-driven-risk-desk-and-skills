@@ -9,7 +9,8 @@ tools call the same runtime functions, so an agent and a person get the
 same numbers with the same provenance, units, assumptions and degraded
 flag attached. 5 plugin skills cover these tasks and setup.
 
-[![Tests](https://img.shields.io/badge/tests-72%20collected-blue)](docs/IMPLEMENTATION.md)
+[![Tests](https://img.shields.io/badge/tests-103%20collected-blue)](docs/IMPLEMENTATION.md)
+[![Unit coverage](https://img.shields.io/badge/unit%20coverage-85.65%25-blue)](#development)
 [![Python](https://img.shields.io/badge/python-3.13%20tested-blue)](#get-started)
 [![License](https://img.shields.io/badge/license-PolyForm%20Noncommercial-blue)](LICENSE)
 
@@ -112,14 +113,29 @@ valuation model for those, not this one.
 ## Development
 
 ```sh
-.venv/bin/python -m pytest -q --color=no          # 72 tests, none skipped
+.venv/bin/python -m pytest -q --color=no          # 103 tests, none skipped
 .venv/bin/python scripts/evidence.py check        # documents match the record
+.venv/bin/python -m coverage run -m pytest -q --color=no -m unit
+.venv/bin/python -m coverage json -q
+.venv/bin/python scripts/check_unit_coverage.py artifacts/coverage/unit.json
+.venv/bin/python scripts/mutate.py                # break it, check it is noticed
 .venv/bin/python -m build
 ```
 
 Tests are separated by marker: `-m unit` runs in process with no subprocess
 and no socket, `-m integration` runs the real scripts and the real stdio
-transport, and `-m validation` checks the repository and its documents.
+transport, and `-m validation` checks the repository and its documents. The
+coverage gate is measured from the unit suite alone, because integration
+tests light up lines they assert nothing about, and it refuses a report
+that is missing a production file.
+
+`scripts/mutate.py` breaks the analytics on purpose, 33 ways, and requires
+the tests to notice: sign flips, the quantile boundary, gross counted as
+net, the leverage divisor, the degraded flag and every validation rule. Its
+last recorded run detected 31 by the test file named for each, found no
+survivors, and recorded 2 mutants as equivalent with the measurement that
+justifies calling them that. There is no mutation badge here, because two
+cases are not killed and a badge would round that away.
 
 `scripts/evidence.py` is the part worth a minute. Every figure quoted in
 this README and in `docs/IMPLEMENTATION.md` is recorded in
@@ -133,6 +149,10 @@ repository, are marked `pinned` with the date they were observed.
 `scripts/screenshot_report.py` regenerates the image above from a page it
 writes in the same run. It needs Playwright, which is not a project
 dependency, so the image is committed and regenerating it is deliberate.
+
+See [CHANGELOG.md](CHANGELOG.md) for what changed and when it was
+measured, [SECURITY.md](SECURITY.md) for what is in scope and how to report
+privately, and [DISCLAIMER.md](DISCLAIMER.md) for the terms of use.
 
 ## Licensing
 

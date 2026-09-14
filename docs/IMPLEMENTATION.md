@@ -18,9 +18,8 @@ Not measured in the 2026-09-14/15 session, and therefore not claimed:
 - Python 3.11 and 3.12 were not exercised. `pyproject.toml` declares 3.11
   or later; only CPython 3.13.14 was run.
 - No behaviour was observed on Linux or on Windows.
-- Unit line coverage was not measured, so no coverage figure appears in
-  README.md and there is no coverage gate.
-- No mutation harness exists, so no mutation figure appears in README.md.
+- `.github/workflows/tests.yml` was written but has never run. Nothing was
+  pushed, so there is no CI result to point at and no badge for one.
 
 ## VERIFIED
 
@@ -40,9 +39,37 @@ macOS ARM64 (Darwin 25.6.0):
   `.venv/bin/python -m pip install '.[xva]'` installed
   `open_source_risk_engine-1.8.16.0-cp313-cp313-macosx_14_0_arm64.whl`
   (61.8 MB). The suite then reported `25 passed in 2.30s`.
-- After this session's work the suite reports 72 tests collected, with no
-  failures and no skips. By marker: 50 unit, 16 integration, 6 validation.
+- After this session's work the suite reports 103 tests collected, with no
+  failures and no skips. By marker: 69 unit, 16 integration, 18 validation.
   The unit tests start no subprocess and open no socket.
+- Unit line coverage of `src/riskdesk`, measured from the unit suite alone
+  by `coverage run -m pytest -m unit` then `check_unit_coverage.py`: 400 of
+  467 lines, 85.65 percent, against a gate of 80 percent, so the gate
+  passes. Per file: `models.py` 100.00%, `report.py` 99.28%, `cli.py`
+  97.67%, `analytics.py` 94.64%, `summaries.py` 92.45%, `server.py`
+  87.50%, `ore.py` 77.61%, `ore_worker.py` 0.00%. `ore_worker.py` is zero
+  because it only executes inside the ORE worker process; that is a real
+  gap and it is visible rather than averaged away.
+- Mutation run over `analytics.py` and `models.py`: 33 mutations, 31
+  detected by the test file named for each, 0 detected only elsewhere, 0
+  survived, 0 skipped, 2 recorded as equivalent.
+- The mutation harness found four real gaps before it found none. The
+  first run reported six survivors. Two were the quantile-boundary pair
+  below. The other four were holes: the overflow guard could be removed
+  because the test matched a substring that both error messages contain;
+  `net_leverage` was computed but never asserted; and allowing non-finite
+  numbers or a zero portfolio value still raised a ValueError further down
+  the function, so a test asserting `ValueError` could not tell the
+  contract from the arithmetic. Tests were tightened until each was
+  killed, then the run was repeated.
+- The two quantile-boundary mutants are recorded as equivalent, on a
+  measurement rather than an argument. Over 199,500 (count, confidence)
+  pairs, count 2 to 400 and confidence 0.500 to 0.999, neither mutation
+  ever changed which observation VaR selects, and Expected Shortfall
+  differed by at most 4.09e-16 and 4.43e-16 relative. Killing them would
+  mean asserting a last-bit float. Note what that also says: on this grid
+  the unconditional shift is indistinguishable from the guarded one. That
+  is one grid, not a proof that the guard is redundant.
 - `scripts/evidence.py record` wrote 13 figures to `docs/evidence.json`:
   6 measured in this checkout (72 tests collected, 5 skills, 4 MCP tools,
   79 notice files, 47 notice distributions, 6 examples) and 7 pinned from
@@ -159,11 +186,9 @@ Do not treat every capability in the earlier research shortlist as shipped.
 Deliberately not done in the 2026-09-14/15 session, so that nothing
 unmeasured reached README.md:
 
-- No unit coverage gate and no coverage badge. The gate needs a measured
-  figure per package and the figure was not measured.
-- No mutation harness and no mutation badge.
-- No GitHub Actions workflow.
-- No CHANGELOG.md, SECURITY.md or DISCLAIMER.md.
+- No mutation badge. Two of the 33 cases are equivalent rather than
+  killed, and a badge would round that away.
+- No CI badge. The workflow exists and has never run.
 - No Docker image, no registry or Smithery listing, no hosted sample.
   These need the owner's decision before any work starts.
 - No new risk model, no market-data client and no broker connectivity. The

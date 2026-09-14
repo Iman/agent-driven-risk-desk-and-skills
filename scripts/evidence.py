@@ -55,6 +55,34 @@ def measure_tests_collected():
     return int(match.group(1))
 
 
+def measure_unit_coverage():
+    """Unit line coverage of the package, to two decimal places.
+
+    Measured here rather than pinned, because it is measurable here and a
+    coverage figure copied forward from a previous run is the exact kind
+    of sentence this file exists to stop.
+    """
+    report = ROOT / "artifacts" / "coverage" / "unit.json"
+    for argv in ([sys.executable, "-m", "coverage", "run", "-m", "pytest",
+                  "-q", "--color=no", "-m", "unit", "-p", "no:cacheprovider"],
+                 [sys.executable, "-m", "coverage", "json", "-q"]):
+        finished = subprocess.run(argv, cwd=str(ROOT), capture_output=True,
+                                  text=True, timeout=900)
+        if finished.returncode:
+            raise ValueError("coverage step failed: {}\n{}".format(
+                " ".join(argv), finished.stdout[-2000:]))
+    payload = json.loads(report.read_text(encoding="utf-8"))
+    covered = total = 0
+    for name, entry in payload["files"].items():
+        if not name.replace("\\", "/").startswith("src/riskdesk/"):
+            continue
+        covered += entry["summary"]["covered_lines"]
+        total += entry["summary"]["num_statements"]
+    if not total:
+        raise ValueError("coverage report has no production statements")
+    return "{:.2f}".format(100 * covered / total)
+
+
 def measure_skills():
     return len(sorted((ROOT / "plugins" / "risk-desk" / "skills")
                       .glob("*/SKILL.md")))
@@ -94,6 +122,7 @@ def measure_examples():
 
 MEASURES = {
     "tests_collected": measure_tests_collected,
+    "unit_coverage": measure_unit_coverage,
     "skills": measure_skills,
     "mcp_tools": measure_mcp_tools,
     "notice_files": measure_notice_files,
@@ -116,6 +145,16 @@ CLAIMS = [
         "documents": {
             "README.md": "tests-%d%%20collected",
             "docs/IMPLEMENTATION.md": "%d tests collected",
+        },
+    },
+    {
+        "id": "unit_coverage",
+        "measure": "unit_coverage",
+        "about": "unit line coverage of src/riskdesk, percent",
+        "documents": {
+            "README.md": "unit%%20coverage-%s%%25",
+            "docs/IMPLEMENTATION.md": "%s percent",
+            "CHANGELOG.md": "%s percent",
         },
     },
     {
