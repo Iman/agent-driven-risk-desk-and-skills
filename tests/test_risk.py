@@ -1,5 +1,6 @@
 import copy
 import pytest
+from pydantic import ValidationError
 
 pytestmark = pytest.mark.unit
 from riskdesk.analytics import tail_risk, portfolio_exposure, stress_test
@@ -47,8 +48,12 @@ def test_gain_only_sample_does_not_become_positive_loss():
     {"confidence": 0}, {"portfolio_value": 0}, {"horizon_days": 0}, {"surprise": 1},
 ])
 def test_invalid_tail_inputs_are_refused(change):
+    # ValidationError, not any ValueError: each of these must be refused by
+    # the contract, before a number is produced. A model that accepted a NaN
+    # or a zero portfolio value and then failed the arithmetic guard further
+    # down would still raise, and would still be wrong.
     request = tail(); request.update(change)
-    with pytest.raises(ValueError): tail_risk(request)
+    with pytest.raises(ValidationError): tail_risk(request)
 
 
 def test_exposure_sign_scaling_and_concentration():
@@ -56,6 +61,7 @@ def test_exposure_sign_scaling_and_concentration():
     assert result["gross_exposure"] == 800
     assert result["net_exposure"] == 400
     assert result["gross_leverage"] == .8
+    assert result["net_leverage"] == .4
     assert result["gross_shares"]["A"] == .75
 
 
@@ -79,3 +85,35 @@ def test_derivatives_cannot_be_treated_as_linear_holdings():
 def test_duplicate_positions_are_refused():
     request = portfolio(); request["positions"].append(copy.deepcopy(request["positions"][0]))
     with pytest.raises(ValueError): portfolio_exposure(request)
+
+
+def test_stressed_nav_moves_by_the_scenario_pnl():
+    request = portfolio(); request["scenarios"] = [{"name":"down", "shocks":{"A":-.1,"B":-.2}}]
+    scenario = stress_test(request)["scenarios"][0]
+    assert scenario["stressed_nav"] == pytest.approx(request["nav"] + scenario["pnl"])
+
+
+def test_the_input_hash_identifies_the_input():
+    first = portfolio_exposure(portfolio())
+    changed = portfolio(); changed["positions"][0]["market_value"] = 601
+    assert first["input_sha256"] != portfolio_exposure(changed)["input_sha256"]
+    assert first["input_sha256"] == portfolio_exposure(portfolio())["input_sha256"]
+
+
+@pytest.mark.filterwarnings("ignore:overflow encountered in divide")
+def test_normalised_pnl_beyond_numerical_limits_is_refused():
+    request = tail(); request.update(pnl=[1e308, -1e308], portfolio_value=1e-10)
+    with pytest.raises(ValueError, match="normalised P&L exceeds numerical limits"):
+        tail_risk(request)
+
+
+def test_a_shock_worse_than_total_loss_is_refused():
+    request = portfolio(); request["scenarios"] = [{"name":"gone", "shocks":{"A":-1.5,"B":-.2}}]
+    with pytest.raises(ValueError): stress_test(request)
+
+
+def test_two_scenarios_cannot_share_a_name():
+    request = portfolio(); request["scenarios"] = [
+        {"name":"down", "shocks":{"A":-.1,"B":-.2}},
+        {"name":"down", "shocks":{"A":-.2,"B":-.3}}]
+    with pytest.raises(ValueError): stress_test(request)
