@@ -1,0 +1,135 @@
+{
+ "note": "Figures quoted in the documentation, with where each came from. A measured figure was counted in this checkout when this file was written. A pinned figure came from a run against inputs that are not in this repository and was not re-measured. Written by scripts/evidence.py.",
+ "figures": {
+  "tests_collected": {
+   "value": 72,
+   "kind": "measured",
+   "measured_by": "scripts/evidence.py record",
+   "about": "tests pytest collects in this checkout",
+   "documents": {
+    "README.md": "tests-72%20collected",
+    "docs/IMPLEMENTATION.md": "72 tests collected"
+   }
+  },
+  "skills": {
+   "value": 5,
+   "kind": "measured",
+   "measured_by": "scripts/evidence.py record",
+   "about": "plugin skills under plugins/risk-desk/skills",
+   "documents": {
+    "README.md": "5 plugin skills cover these tasks"
+   }
+  },
+  "mcp_tools": {
+   "value": 4,
+   "kind": "measured",
+   "measured_by": "scripts/evidence.py record",
+   "about": "tools the local MCP server registers",
+   "documents": {
+    "README.md": "4 local MCP tools call the same runtime"
+   }
+  },
+  "notice_files": {
+   "value": 79,
+   "kind": "measured",
+   "measured_by": "scripts/evidence.py record",
+   "about": "upstream notice files retained under notices/",
+   "documents": {
+    "README.md": "79 upstream notice files"
+   }
+  },
+  "notice_distributions": {
+   "value": 47,
+   "kind": "measured",
+   "measured_by": "scripts/evidence.py record",
+   "about": "upstream distributions with a retained notice",
+   "documents": {
+    "README.md": "from 47 distributions"
+   }
+  },
+  "examples": {
+   "value": 6,
+   "kind": "measured",
+   "measured_by": "scripts/evidence.py record",
+   "about": "example input files under examples/",
+   "documents": {
+    "README.md": "6 example input files"
+   }
+  },
+  "ore_exposure_dates": {
+   "value": 82,
+   "kind": "pinned",
+   "observed": "2026-09-13",
+   "provenance": "docs/IMPLEMENTATION.md VERIFIED block of 2026-09-13; produced by scripts/ore_smoke.py against an upstream ORE checkout that is not part of this repository",
+   "about": "netting-set exposure dates in the pinned ORE example",
+   "documents": {
+    "docs/ORE.md": "82 netting-set exposure dates",
+    "docs/IMPLEMENTATION.md": "82 netting-set exposure dates"
+   }
+  },
+  "ore_cva": {
+   "value": 42600.768114722014,
+   "kind": "pinned",
+   "observed": "2026-09-13",
+   "provenance": "docs/IMPLEMENTATION.md VERIFIED block of 2026-09-13; a numerical regression value, not model validation",
+   "about": "CVA reported by the pinned ORE example, in EUR",
+   "documents": {
+    "docs/ORE.md": "CVA 42600.768114722014 EUR",
+    "docs/IMPLEMENTATION.md": "CVA 42600.768114722014 EUR"
+   }
+  },
+  "ore_dva": {
+   "value": 62036.0247267215,
+   "kind": "pinned",
+   "observed": "2026-09-13",
+   "provenance": "docs/IMPLEMENTATION.md VERIFIED block of 2026-09-13; a numerical regression value, not model validation",
+   "about": "DVA reported by the pinned ORE example, in EUR",
+   "documents": {
+    "docs/ORE.md": "DVA 62036.0247267215 EUR",
+    "docs/IMPLEMENTATION.md": "DVA 62036.0247267215 EUR"
+   }
+  },
+  "ore_samples": {
+   "value": 1000,
+   "kind": "pinned",
+   "observed": "2026-09-13",
+   "provenance": "docs/IMPLEMENTATION.md VERIFIED block of 2026-09-13; retained by scripts/ore_smoke.py",
+   "about": "simulation samples retained in the pinned ORE example",
+   "documents": {
+    "docs/ORE.md": "1000 simulation samples and seed 42"
+   }
+  },
+  "ore_seed": {
+   "value": 42,
+   "kind": "pinned",
+   "observed": "2026-09-13",
+   "provenance": "docs/IMPLEMENTATION.md VERIFIED block of 2026-09-13; retained by scripts/ore_smoke.py",
+   "about": "simulation seed retained in the pinned ORE example",
+   "documents": {
+    "docs/ORE.md": "simulation samples and seed 42"
+   }
+  },
+  "ore_version": {
+   "value": "1.8.16.0",
+   "kind": "pinned",
+   "observed": "2026-09-13",
+   "provenance": "docs/IMPLEMENTATION.md VERIFIED block of 2026-09-13; the wheel version the example was run against",
+   "about": "ORE release the pinned example was run against",
+   "documents": {
+    "docs/ORE.md": "ORE v1.8.16.0",
+    "README.md": "Version 1.8.16.0 was tested"
+   }
+  },
+  "ore_commit": {
+   "value": "b1f239332fdd51e5c514dd6de34a665fe0ff8326",
+   "kind": "pinned",
+   "observed": "2026-09-13",
+   "provenance": "docs/IMPLEMENTATION.md VERIFIED block of 2026-09-13; the revision scripts/ore_smoke.py verifies before copying example inputs",
+   "about": "upstream ORE revision behind the pinned example",
+   "documents": {
+    "docs/ORE.md": "`b1f239332fdd51e5c514dd6de34a665fe0ff8326`",
+    "docs/IMPLEMENTATION.md": "`b1f239332fdd51e5c514dd6de34a665fe0ff8326`"
+   }
+  }
+ }
+}
