@@ -5,8 +5,24 @@ from pathlib import Path
 import sys
 from riskdesk.analytics import tail_risk, portfolio_exposure, stress_test
 from riskdesk.ore import run_ore
+from riskdesk.report import build_report
 
 HANDLERS = {"tail": tail_risk, "exposure": portfolio_exposure, "stress": stress_test}
+
+
+def write_report(stress_path, output_path, tail_path=None):
+    """Write the HTML page and return a summary of what reached it."""
+    stress_payload = json.loads(Path(stress_path).read_text())
+    tail_payload = json.loads(Path(tail_path).read_text()) if tail_path else None
+    document, payload = build_report(stress_payload, tail_payload)
+    output_path = Path(output_path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(document, encoding="utf-8")
+    return dict(output=str(output_path), bytes=len(document.encode("utf-8")),
+                currency=payload["currency"], as_of=payload["as_of"],
+                degraded=payload["degraded"], degraded_reason=payload["degraded_reason"],
+                scenarios=[s["name"] for s in payload["scenarios"]],
+                tail_included=payload["tail"] is not None)
 
 
 def main(argv=None):
@@ -18,10 +34,18 @@ def main(argv=None):
     ore = commands.add_parser("xva")
     for field in ("project", "config", "output", "data-mode"):
         ore.add_argument("--"+field, required=True)
+    # The report reads a stress request and, optionally, a tail request. The
+    # tail panel is omitted rather than invented when no tail input is given.
+    page = commands.add_parser("report")
+    page.add_argument("--input", required=True, type=Path)
+    page.add_argument("--output", required=True, type=Path)
+    page.add_argument("--tail", type=Path)
     args = parser.parse_args(argv)
     try:
         if args.command == "xva":
             result = run_ore(args.project, args.config, args.output, args.data_mode)
+        elif args.command == "report":
+            result = write_report(args.input, args.output, args.tail)
         else:
             result = HANDLERS[args.command](json.loads(args.input.read_text()))
         print(json.dumps(result, indent=2, allow_nan=False))
