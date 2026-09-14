@@ -1,0 +1,60 @@
+name: tests
+
+# Core scope only. The ORE extra is deliberately not installed here: its
+# wheel is published for a limited set of Python and platform combinations,
+# and a matrix job that silently skipped it would report a green tick for a
+# thing it never ran.
+#
+# Nothing in this workflow needs a secret, and nothing here reaches a market
+# data provider or a broker.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install the package and its development extra
+        run: python -m pip install ".[dev]"
+      - name: Run the tests
+        run: >-
+          python -m pytest -q --color=no
+          --junitxml=artifacts/tests-${{ matrix.python-version }}.xml
+      - name: Keep the junit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: junit-${{ matrix.python-version }}
+          path: artifacts/tests-${{ matrix.python-version }}.xml
+
+  gates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install the package and its development extra
+        run: python -m pip install ".[dev]"
+      - name: Check the documents against the recorded figures
+        run: python scripts/evidence.py check
+      - name: Unit line coverage gate
+        run: |
+          python -m coverage run -m pytest -q --color=no -m unit
+          python -m coverage json -q
+          python scripts/check_unit_coverage.py artifacts/coverage/unit.json
