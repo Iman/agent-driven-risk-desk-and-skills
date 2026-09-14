@@ -1,0 +1,11 @@
+[run]
+relative_files = True
+source =
+    src/riskdesk
+
+[report]
+show_missing = True
+skip_empty = True
+
+[json]
+output = artifacts/coverage/unit.json
