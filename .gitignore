@@ -12,3 +12,34 @@ artifacts/
 .DS_Store
 research/2026-09-12-upstream-review/
 requirements-macos-arm64-py313.lock
+
+# Keep personal material out of version control.
+campaign_notes.md
+*campaign-notes*
+*_cv.*
+*-cv.*
+cv.*
+resume.*
+
+# Private article drafts, math, LaTeX, diagrams, images, and build outputs.
+/article/
+/articles/
+article-*/
+*-article/
+*.ansi
+
+# Article publication material: platform drafts, submission packs, captures.
+linkedin/
+*linkedin*
+devto/
+*dev.to*
+*devto*
+medium/
+*medium-import*
+*hackernews*
+*hacker-news*
+*reddit*
+submission-pack/
+*submission-pack*
+publication/
+*publication-pack*
