@@ -60,9 +60,11 @@ macOS ARM64 (Darwin 25.6.0):
   test pins that behaviour.
 - `riskdesk report` wrote a self-contained page. From
   `examples/energy_stress.json` and `examples/energy_tail.json` it wrote
-  8,898 bytes with `"degraded": false` and both scenarios listed; from
-  `examples/stress.json` with no tail input it wrote 4,187 bytes and the
-  page states that no tail result was supplied. The page contains no
+  10,230 bytes with `"degraded": false` and both scenarios listed; from
+  `examples/stress.json` with no tail input it wrote 4,195 bytes and the
+  page states that no tail result was supplied. A run against the
+  four-sample `examples/tail.json` instead wrote 8,908 bytes and reported
+  `"degraded": true`, which is the warning path. The page contains no
   `http://`, no `https://` and no `<script`.
 - The energy examples parse and are not degraded. `riskdesk exposure
   --input examples/energy_book.json` reported gross exposure 14,100,000.00
@@ -73,9 +75,14 @@ macOS ARM64 (Darwin 25.6.0):
   examples/energy_tail.json` reported VaR 511,773.00 USD and ES
   617,885.16 USD at 97.5% over one day, from 1000 observations with 25 in
   the tail, not degraded.
-- `./demo.sh` ran both books end to end and exited 0, printing the method,
-  the sign convention and the degraded flag before every number, and
-  listing 4 MCP tools over stdio.
+- `./install.sh && ./demo.sh` succeeded from a fresh clone into a new
+  directory with no pre-existing environment. install.sh selected
+  CPython 3.13.13 from PATH, reported `ORE extra: installed: 1.8.16.0`,
+  and its test run reported `72 passed in 30.13s`. demo.sh then ran both
+  books end to end and exited 0, printing the method, the sign convention
+  and the degraded flag before every number, listing 4 MCP tools over
+  stdio, and writing a 10,230 byte report page. Neither script emitted an
+  escape byte.
 - `docs/images/report-energy-stress.png` was captured with Playwright's
   Chromium from a page written in the same run, at 1650 by 3233 pixels and
   158,998 bytes. Playwright is not a project dependency; the capture ran
