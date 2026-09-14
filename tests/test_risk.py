@@ -1,5 +1,7 @@
 import copy
 import pytest
+
+pytestmark = pytest.mark.unit
 from riskdesk.analytics import tail_risk, portfolio_exposure, stress_test
 
 

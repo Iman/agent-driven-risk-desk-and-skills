@@ -4,6 +4,8 @@ from types import SimpleNamespace
 import pytest
 from riskdesk.ore import prepare_config, run_ore
 
+pytestmark = pytest.mark.unit
+
 
 def project(tmp_path):
     root=tmp_path/'project';(root/'Input').mkdir(parents=True)

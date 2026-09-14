@@ -26,3 +26,8 @@ packages = ["src/riskdesk"]
 [tool.pytest.ini_options]
 pythonpath = ["src"]
 testpaths = ["tests"]
+markers = [
+    "unit: in process, no subprocess and no socket",
+    "integration: real processes, scripts and transports",
+    "validation: repository, documentation and packaging checks",
+]

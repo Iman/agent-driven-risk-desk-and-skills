@@ -2,7 +2,10 @@ import asyncio
 import json
 import subprocess
 import sys
+import pytest
 from riskdesk.server import server
+
+pytestmark = pytest.mark.integration
 
 
 def test_mcp_lists_typed_tools_and_calculates_tail():
