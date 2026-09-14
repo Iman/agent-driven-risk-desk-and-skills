@@ -1,0 +1,69 @@
+{
+  "as_of": "2026-09-12",
+  "currency": "USD",
+  "source": "Synthetic energy book, not market data. Values are already in USD; the TTF leg was converted from EUR at 1.08 USD per EUR. Two hand-chosen shapes, neither fitted to a dated episode, neither carrying a probability, neither a forecast. Supply dislocation: European and Asian gas rise far more than North American gas, crude rises moderately, power follows gas by less. Demand collapse: every benchmark falls, crude and European gas furthest, power least.",
+  "data_mode": "synthetic",
+  "nav": 12000000,
+  "positions": [
+    {
+      "id": "wti_front_future_long",
+      "asset": "WTI_CRUDE_FUTURE",
+      "market_value": 4200000,
+      "instrument_type": "linear"
+    },
+    {
+      "id": "brent_front_future_short",
+      "asset": "BRENT_CRUDE_FUTURE",
+      "market_value": -2600000,
+      "instrument_type": "linear"
+    },
+    {
+      "id": "henry_hub_winter_long",
+      "asset": "HENRY_HUB_GAS",
+      "market_value": 1800000,
+      "instrument_type": "linear"
+    },
+    {
+      "id": "ttf_winter_short",
+      "asset": "TTF_GAS",
+      "market_value": -1450000,
+      "instrument_type": "linear"
+    },
+    {
+      "id": "jkm_linked_cargo_long",
+      "asset": "JKM_LNG",
+      "market_value": 3100000,
+      "instrument_type": "linear"
+    },
+    {
+      "id": "pjm_west_cal_forward_long",
+      "asset": "PJM_WEST_POWER",
+      "market_value": 950000,
+      "instrument_type": "linear"
+    }
+  ],
+  "scenarios": [
+    {
+      "name": "european_gas_supply_dislocation_shape",
+      "shocks": {
+        "WTI_CRUDE_FUTURE": 0.18,
+        "BRENT_CRUDE_FUTURE": 0.22,
+        "HENRY_HUB_GAS": 0.35,
+        "TTF_GAS": 1.4,
+        "JKM_LNG": 0.95,
+        "PJM_WEST_POWER": 0.12
+      }
+    },
+    {
+      "name": "global_energy_demand_collapse_shape",
+      "shocks": {
+        "WTI_CRUDE_FUTURE": -0.38,
+        "BRENT_CRUDE_FUTURE": -0.36,
+        "HENRY_HUB_GAS": -0.3,
+        "TTF_GAS": -0.45,
+        "JKM_LNG": -0.42,
+        "PJM_WEST_POWER": -0.22
+      }
+    }
+  ]
+}

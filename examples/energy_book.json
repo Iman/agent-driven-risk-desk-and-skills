@@ -1,0 +1,45 @@
+{
+  "as_of": "2026-09-12",
+  "currency": "USD",
+  "source": "Synthetic energy book, not market data. Signed market values are already translated into USD: crude and Henry Hub legs are quoted in USD; the TTF leg was converted from EUR at 1.08 USD per EUR; the JKM-linked cargo and the power forward are stated in USD. No position is an option or a spread instrument.",
+  "data_mode": "synthetic",
+  "nav": 12000000,
+  "positions": [
+    {
+      "id": "wti_front_future_long",
+      "asset": "WTI_CRUDE_FUTURE",
+      "market_value": 4200000,
+      "instrument_type": "linear"
+    },
+    {
+      "id": "brent_front_future_short",
+      "asset": "BRENT_CRUDE_FUTURE",
+      "market_value": -2600000,
+      "instrument_type": "linear"
+    },
+    {
+      "id": "henry_hub_winter_long",
+      "asset": "HENRY_HUB_GAS",
+      "market_value": 1800000,
+      "instrument_type": "linear"
+    },
+    {
+      "id": "ttf_winter_short",
+      "asset": "TTF_GAS",
+      "market_value": -1450000,
+      "instrument_type": "linear"
+    },
+    {
+      "id": "jkm_linked_cargo_long",
+      "asset": "JKM_LNG",
+      "market_value": 3100000,
+      "instrument_type": "linear"
+    },
+    {
+      "id": "pjm_west_cal_forward_long",
+      "asset": "PJM_WEST_POWER",
+      "market_value": 950000,
+      "instrument_type": "linear"
+    }
+  ]
+}
