@@ -1,96 +1,145 @@
 # Risk Desk
 
-Risk Desk calculates historical VaR and Expected Shortfall, linear portfolio
-exposure, explicit stress scenarios, and counterparty exposure/XVA through
-ORE. The CLI and four local MCP tools call the same runtime functions.
-Five plugin skills cover these tasks and setup.
+Risk Desk measures the loss side of a book and shows its working. It
+calculates historical VaR and Expected Shortfall from supplied P&L,
+gross and net exposure for signed linear positions, explicit stress
+scenarios that carry no probability, and counterparty exposure and XVA
+through a local Open Source Risk Engine project. The CLI and 4 local MCP
+tools call the same runtime functions, so an agent and a person get the
+same numbers with the same provenance, units, assumptions and degraded
+flag attached. 5 plugin skills cover these tasks and setup.
 
-## Install
+[![Tests](https://img.shields.io/badge/tests-72%20collected-blue)](docs/IMPLEMENTATION.md)
+[![Python](https://img.shields.io/badge/python-3.13%20tested-blue)](#get-started)
+[![License](https://img.shields.io/badge/license-PolyForm%20Noncommercial-blue)](LICENSE)
 
-Use a separate Python environment for Risk Desk:
+## See the desk
+
+![Stress contributions and a P&L distribution with VaR and Expected Shortfall marked, drawn from synthetic example inputs](docs/images/report-energy-stress.png)
+
+One page, written by `riskdesk report`, from the synthetic energy book in
+`examples/`. Synthetic example inputs, not market data and not a record of
+any position. The page states its sign convention, prints its degraded
+flag whether or not it is set, and embeds its own styling and charts, so it
+opens with no network.
+
+## Get started
+
+Requirements: Git, and a Python the project supports. `pyproject.toml`
+declares 3.11 or later; the pinned dependency set and the ORE wheel were
+tested on CPython 3.13, macOS ARM64.
 
 ```sh
-python3 -m venv .venv
-.venv/bin/python -m pip install '.[xva]'
-.venv/bin/riskdesk tail --input examples/tail.json
-.venv/bin/riskdesk exposure --input examples/portfolio.json
-.venv/bin/riskdesk stress --input examples/stress.json
+git clone https://github.com/Iman/agent-driven-risk-desk-and-skills-.git
+cd agent-driven-risk-desk-and-skills-
+./install.sh
+./demo.sh
 ```
 
-The ORE extra requires an upstream wheel supported on your Python/platform
-combination. Version 1.8.16.0 was tested on Python 3.13, macOS ARM64. Install
-`.` without the extra if you need only historical and linear portfolio risk.
+`install.sh` creates `.venv`, installs the package with its development
+extra, attempts the optional ORE extra and says plainly whether that
+worked, then runs the tests. `demo.sh` runs every command over the 6
+example input files and prints what each result means. Neither script
+prints colour, neither reaches the network beyond pip, and both exit
+non-zero on any failure.
 
 The plugin is [plugins/risk-desk](plugins/risk-desk). It starts
-`riskdesk-mcp` through PATH. Activate the environment in the client launch
-environment or configure the client to use the installed executable's
-absolute path. Plugin files do not install the runtime automatically.
-The MCP server uses stdio and makes no market-data or broker requests.
+`riskdesk-mcp` through PATH, so either activate the environment in the
+client's launch environment or configure the client with the absolute path
+to the installed executable. Installing the plugin does not install the
+runtime. The server speaks stdio and makes no market-data or broker
+requests.
 
-## Input and result conventions
+## Ask your agent
 
-See [input contracts](plugins/risk-desk/references/contracts.md).
-The Python models in `src/riskdesk/models.py` are the executable contracts.
+With the plugin installed, these are things a person types.
 
-- Tail risk consumes monetary P&L observations that already span the stated
-  horizon. It uses skfolio's empirical quantile and fractional-tail ES.
-  Positive VaR/ES means loss; negative values are preserved as gains.
-- Portfolio exposure requires signed linear-position market values already
-  translated into one base currency. Gross exposure counts absolute values
-  before offsetting. Leverage divides by the supplied NAV.
-- Stress requires explicit return shocks for every asset. It reports P&L,
-  loss, stressed NAV and position contributions. It assigns no probability.
-- ORE reports preserve upstream column names, currency, requested adjustment
-  flags and unavailable values. Netting-set and trade rows overlap. Do not
-  sum them together or interpret disabled zero columns as enabled models.
+| Ask this | Skill | Tool it calls |
+| --- | --- | --- |
+| "Here is a year of daily P&L in GBP. What is my 99% one-day VaR and Expected Shortfall, and is the sample big enough to say?" | `risk-tail` | `risk_tail` |
+| "Take `examples/energy_book.json`. What is my gross and net exposure, my leverage against NAV, and which asset is the biggest share of gross?" | `risk-portfolio` | `risk_exposure` |
+| "Apply the two shapes in `examples/energy_stress.json` and tell me the loss, the stressed NAV, and the three positions that hurt most in each." | `risk-stress` | `risk_stress` |
+| "Run this ORE project and give me the CVA and DVA. Tell me first whether ORE reported any error and which adjustments were actually enabled." | `risk-xva` | `risk_xva` |
 
-Every core result includes provenance, an input hash, units through its
-currency, assumptions and a degraded flag. Small tail samples receive a
-warning. This warning is not a confidence interval or forecast validation.
-Options, nonlinear margin and credit migration do not fit the linear
-portfolio contract; use a configured valuation model for those exposures.
+Each skill states the sign convention and the degraded status before the
+numbers, because a loss figure without them is unreadable.
 
-## ORE exposure and XVA
+## What it computes
+
+The input contracts are in
+[plugins/risk-desk/references/contracts.md](plugins/risk-desk/references/contracts.md).
+The Pydantic models in `src/riskdesk/models.py` are the executable version;
+unknown fields and nonfinite numbers are rejected.
+
+- **Tail risk** consumes monetary P&L observations that already span the
+  stated horizon. It uses skfolio's empirical quantile and fractional-tail
+  Expected Shortfall. Positive VaR and ES mean loss; negative values are
+  preserved as gains and are not floored at zero. No square-root-of-time
+  scaling is applied and no observation is dropped.
+- **Exposure** requires signed linear-position market values already
+  translated into one base currency. Gross counts absolute values before
+  offsetting; net does not. Leverage divides by the supplied NAV.
+- **Stress** requires an explicit return shock for every asset in every
+  scenario. It reports P&L, loss, stressed NAV and per-position
+  contributions. It attaches no probability to a scenario.
+- **ORE exposure and XVA** preserves upstream column names, currency,
+  requested adjustment flags and unavailable values. Netting-set and trade
+  rows overlap, so they are never summed, and a zero in a disabled column
+  is not a result. See [docs/ORE.md](docs/ORE.md) for the pinned
+  reproduction, what it does and does not establish, and the rules for
+  running your own project. Version 1.8.16.0 was tested on CPython 3.13,
+  macOS ARM64; install `.` without the extra for everything else.
+
+Every core result carries provenance, a SHA-256 of its input, its currency,
+its assumptions and a degraded flag. A small tail sample raises a warning.
+That warning is a reporting threshold, not a confidence interval and not
+forecast validation.
+
+## What it does not claim
+
+This is research tooling. It reads files you give it, writes files, and
+places no orders; it opens no broker connection and fetches no market data.
+
+The scope is historical VaR and Expected Shortfall, linear exposure,
+explicit stress, and the ORE adapter. It does not establish regulatory
+compliance, forecast skill, wrong-way-risk calibration, liquidity survival,
+SIMM permissions, or coverage of every instrument ORE supports. A
+historical loss measure is not risk-neutral valuation, and a regression
+value that reproduces is not model validation. Options, nonlinear margin
+and credit migration do not fit the linear contract; use a configured
+valuation model for those, not this one.
+
+## Development
 
 ```sh
-.venv/bin/riskdesk xva --project INPUT_BUNDLE --config Input/ore.xml --output NEW_OUTPUT --data-mode user-licensed
-```
-
-Replace the paths with a trusted, inspected ORE project. All referenced
-inputs must be inside the bundle. Output must be new and outside it. Both
-simulation and XVA must be active. The adapter uses a separate process,
-forces `continueOnError=false`, and refuses a summary if ORE reports errors.
-This process boundary is not a sandbox for hostile configurations.
-
-To reproduce the upstream example, obtain ORE v1.8.16.0 with its
-`Examples/Input` and `Examples/ORE-Python/Input` directories, then run:
-
-```sh
-.venv/bin/python scripts/ore_smoke.py --upstream ORE_CHECKOUT --work NEW_WORK_DIRECTORY
-```
-
-The script requires the pinned revision recorded in its source and credits.
-It retains 1,000 simulation samples and seed 42, creates a self-contained
-input copy, and removes two unused security curves with missing spreads.
-Its data provenance is `upstream-example`. The observed report has 82
-exposure dates and CVA 42600.768114722014 EUR. That is a pinned regression
-result, not independent verification of ORE's financial models.
-
-## Validation and limits
-
-```sh
-.venv/bin/python -m pip install '.[dev]'
-.venv/bin/python -m pytest -q --color=no
+.venv/bin/python -m pytest -q --color=no          # 72 tests, none skipped
+.venv/bin/python scripts/evidence.py check        # documents match the record
 .venv/bin/python -m build
 ```
 
-See [implementation evidence](docs/IMPLEMENTATION.md) for observed checks.
-The initial scope does not establish regulatory compliance, forecast skill,
-wrong-way-risk calibration, liquidity survival, SIMM permissions, or coverage
-of every instrument supported by ORE. No broker orders are submitted.
+Tests are separated by marker: `-m unit` runs in process with no subprocess
+and no socket, `-m integration` runs the real scripts and the real stdio
+transport, and `-m validation` checks the repository and its documents.
 
-Risk Desk is source-available under [PolyForm Noncommercial 1.0.0](LICENSE),
-matching Option Desk. [Credits and upstream notices](THIRD-PARTY.md) remain
-under their original terms.
+`scripts/evidence.py` is the part worth a minute. Every figure quoted in
+this README and in `docs/IMPLEMENTATION.md` is recorded in
+`docs/evidence.json` with where it came from, and `check` fails when a
+document and the record disagree. A validation test runs that check, so
+the suite goes red when the prose drifts from the repository. Figures the
+recorder counted here are marked `measured`; the ORE regression values,
+which came from a run against an upstream checkout that is not part of this
+repository, are marked `pinned` with the date they were observed.
 
-# agent-driven-risk-desk-and-skills-
+`scripts/screenshot_report.py` regenerates the image above from a page it
+writes in the same run. It needs Playwright, which is not a project
+dependency, so the image is committed and regenerating it is deliberate.
+
+## Licensing
+
+Risk Desk's own code is source-available under
+[PolyForm Noncommercial 1.0.0](LICENSE). Upstream software keeps its own
+licence, copyright notice and disclaimer: 79 upstream notice files from 47
+distributions are retained unchanged in [notices/](notices/) and travel in
+the wheel, the source archive and the plugin package. See
+[THIRD-PARTY.md](THIRD-PARTY.md) for the credits, and note that market-data
+rights and methodology rights are separate from software licences.
