@@ -9,8 +9,8 @@ tools call the same runtime functions, so an agent and a person get the
 same numbers with the same provenance, units, assumptions and degraded
 flag attached. 5 plugin skills cover these tasks and setup.
 
-[![Tests](https://img.shields.io/badge/tests-144%20collected-blue)](docs/IMPLEMENTATION.md)
-[![Unit coverage](https://img.shields.io/badge/unit%20coverage-87.55%25-blue)](#development)
+[![Tests](https://img.shields.io/badge/tests-147%20collected-blue)](docs/IMPLEMENTATION.md)
+[![Unit coverage](https://img.shields.io/badge/unit%20coverage-87.57%25-blue)](#development)
 [![Python](https://img.shields.io/badge/python-3.13%20tested-blue)](#get-started)
 [![License](https://img.shields.io/badge/license-PolyForm%20Noncommercial-blue)](LICENSE)
 
@@ -60,9 +60,17 @@ No Python needed, and the examples travel with the image:
 
 ```sh
 docker build -t risk-desk .
-docker run --rm -v "$PWD/artifacts:/artifacts" risk-desk demo
+docker run --rm --user "$(id -u):$(id -g)" \
+    -v "$PWD/artifacts:/artifacts" risk-desk demo
 docker run --rm risk-desk                        # what this image can do
 ```
+
+`--user` is not decoration. The image runs as a fixed non-root uid on
+purpose, and on Linux a bind mount keeps the ownership it has on the host,
+so without it the container cannot write into your directory. Docker
+Desktop on macOS hides that by remapping ownership, which is how this
+reached CI green on a laptop and red on a Linux runner. Run without it and
+the entrypoint refuses with exit 65 and prints the line above.
 
 The image ships the core scope. The ORE extra is platform dependent and
 this was measured, not assumed: on `python:3.13-slim` at linux/amd64 pip
@@ -73,8 +81,10 @@ up front with the reason rather than failing inside a worker. Build with
 `--build-arg WITH_XVA=require` to turn a missing extra into a failed build.
 
 A command that writes a file into a container with no volume mounted is
-refused, because the summary it would print is identical to a real run and
-the file would be gone on exit.
+refused with exit 64, because the summary it would print is identical to a
+real run and the file would be gone on exit. A mount the container cannot
+write is refused with exit 65 before anything runs, and `xva` with no ORE
+backend with exit 69.
 
 The plugin is [plugins/risk-desk](plugins/risk-desk). It starts
 `riskdesk-mcp` through PATH, so either activate the environment in the
@@ -168,7 +178,7 @@ valuation model for those, not this one.
 ## Development
 
 ```sh
-.venv/bin/python -m pytest -q --color=no          # 144 tests, none skipped
+.venv/bin/python -m pytest -q --color=no          # 147 tests, none skipped
 .venv/bin/python scripts/evidence.py check        # documents match the record
 .venv/bin/python -m coverage run -m pytest -q --color=no -m unit
 .venv/bin/python -m coverage json -q

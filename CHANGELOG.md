@@ -11,6 +11,36 @@ portfolio exposure, explicit stress scenarios, and an Open Source Risk
 Engine exposure and XVA adapter. One runtime under `src/riskdesk`, called
 by both the CLI and the MCP server. Five plugin skills.
 
+### Fixed on 2026-09-15, container writes on Linux
+
+- The container could not write a bind mount it did not own. The image
+  runs as a fixed non-root uid, and on Linux a bind mount keeps the host's
+  ownership, so the demo died at its first writing step. Docker Desktop on
+  macOS remaps that ownership, so it was green on a laptop and red on the
+  first CI run that ever built the image. The entrypoint now refuses an
+  unwritable mount with exit 65 before running anything, names the uid and
+  prints the `--user` flag that fixes it. The image was not made root.
+- A failing command said nothing on stderr. The CLI printed its error
+  envelope to stdout only, and `demo.sh` sends that command's stdout to
+  `/dev/null`, so the diagnosis was discarded while the exit code
+  survived. That is what made the CI failure unreadable. The JSON envelope
+  stays on stdout for machine callers; a human line now also goes to
+  stderr.
+- A container test skipped in CI and hid the branch CI runs. The ORE wheel
+  resolves on linux/amd64 and not on linux/arm64, so the xva refusal test
+  skipped on the platform that matters. It now asserts the correct
+  behaviour for whichever scope the image has, and nothing skips.
+
+### Measured on 2026-09-15, container writes on Linux
+
+- Reproduced before fixing: exit 1, stderr 0 bytes, stdout stopping at the
+  same line as CI, then `PermissionError: [Errno 13] Permission denied`
+  once the redirect was removed.
+- 144 tests before, 147 after, none skipped. Container tests 7 to 10.
+- Unit line coverage 87.55 percent before, 87.57 percent after.
+- The linux/amd64 image reports `ORE extra: installed: 1.8.16.0` and is
+  953,676,718 bytes; the linux/arm64 image is 643,894,733 bytes.
+
 ### Added on 2026-09-15, exposure charts
 
 - `riskdesk report --exposure PATH`, an optional third input beside the

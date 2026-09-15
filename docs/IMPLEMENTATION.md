@@ -31,6 +31,54 @@ Not measured in the 2026-09-14/15 session, and therefore not claimed:
 
 ## VERIFIED
 
+Observed on 2026-09-15 London time, for the CI failure and its fix:
+
+- CI went red on `gates` for the first run that ever exercised the docker
+  split, runs 34959651440 and 34960887423. The three pytest matrix jobs
+  succeeded; only the container step failed, `1 failed, 5 passed, 1
+  skipped`, on `docker run ... demo` returning 1 with an empty stderr and
+  stdout stopping at the report step.
+- REPRODUCED here before anything was changed, which took two attempts.
+  A named volume did not reproduce it: Docker chowns an empty volume to
+  the container user, so the write succeeded and the run exited 0. A
+  volume populated first and then chowned to uid 1001 did reproduce it
+  exactly: `EXIT=1`, stderr 0 bytes, stdout stopping at the same line as
+  CI.
+- The cause, measured by running the same command without the redirect:
+  `PermissionError: [Errno 13] Permission denied: '/artifacts/report.html'`.
+  The image runs as uid 10001 and a Linux bind mount keeps the host's
+  ownership, so it cannot write a directory owned by the runner. Docker
+  Desktop on macOS remaps that ownership, which is why the same test was
+  green here and red there.
+- A second defect made it unreadable and is CLOSED on its own terms. The
+  CLI printed its error envelope to stdout only, and `demo.sh` sends that
+  command's stdout to `/dev/null`, so the diagnosis was discarded while
+  the exit code survived. The JSON envelope stays on stdout, which is the
+  tested contract, and a human line now also goes to stderr.
+- The fix keeps every guard. The entrypoint now refuses an unwritable
+  mount with exit 65 before running anything, naming the uid and the
+  `--user` flag; exit 64 for no mount and 69 for no ORE backend are
+  unchanged; the image still runs as uid 10001 and was not made root.
+- Verified on linux/amd64, the platform CI uses, which also closes an
+  earlier UNKNOWN: that image reports `ORE extra: installed: 1.8.16.0`,
+  so the wheel does resolve there and the Dockerfile's platform logic is
+  correct on both architectures. It is 953,676,718 bytes against the
+  arm64 image's 643,894,733.
+- The refusal was checked against the fix it recommends: the same run with
+  `--user 1001:1001` exits 0 and writes a 14,778 byte page owned by 1001.
+  The CI shape itself, amd64 with a bind mount and `--user`, exits 0 with
+  an empty stderr.
+- The `1 skipped` is accounted for and no longer exists. It was
+  `test_xva_without_a_backend_is_refused_before_anything_runs`, which
+  skipped because the amd64 image does have the ORE extra, leaving the
+  branch CI actually runs untested. That test now asserts the correct
+  behaviour for whichever scope the image has, so both platforms are
+  covered and nothing skips.
+- Tests: 144 collected before, 147 tests collected after, all passing and
+  none skipped, in 60.47s. Container tests 7 before, 10 after, 0 skipped.
+  Unit coverage 471 of 538 lines before, 472 of 539 lines after, 87.57
+  percent.
+
 Observed on 2026-09-15 London time, for the hosted plugin, code only:
 
 - Nothing was deployed, no DNS record was created or read, no registry or
@@ -58,8 +106,8 @@ Observed on 2026-09-15 London time, for the hosted plugin, code only:
   not-live wording is required in both READMEs; the absent tool is
   required to stay absent; the copies must match their sources; and
   `glama.json` carries a maintainer and nothing else.
-- Tests: 138 collected before, 144 tests collected after, all passing and
-  none skipped, in 55.73s. Unit coverage unchanged at 471 of 538 lines,
+- Tests: 138 collected before, 144 after, all passing and none skipped,
+  in 55.73s. Unit coverage unchanged at 471 of 538 lines,
   87.55 percent, because the additions are JSON, Markdown and validation
   tests rather than package code.
 
