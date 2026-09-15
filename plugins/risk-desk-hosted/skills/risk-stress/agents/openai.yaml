@@ -1,0 +1,10 @@
+interface:
+  display_name: "Risk Stress"
+  short_description: "Scenario losses and contributions from explicit shocks"
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "riskdesk-hosted"
+      description: "Hosted Risk Desk calculations and synthetic demo"
+      transport: "streamable_http"
+      url: "https://riskdesk.avidquant.com/mcp"

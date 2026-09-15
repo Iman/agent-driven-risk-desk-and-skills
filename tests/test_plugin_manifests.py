@@ -176,16 +176,20 @@ def test_no_other_hostname_reaches_the_hosted_plugin():
             assert secret not in text, "{}: {}".format(path, secret)
 
 
-def test_the_hosted_plugin_says_plainly_that_it_is_not_live():
-    """A reader who tries a dead endpoint and concludes the project is
-    broken is a cost this sentence exists to avoid."""
+def test_the_hosted_plugin_states_what_the_endpoint_can_and_cannot_do():
+    """A reader who believes the hosted endpoint can do everything the
+    local one can is a cost these sentences exist to avoid. Verified live
+    on 2026-09-15: / answered 200 and tools/list advertised risk_tail,
+    risk_exposure, risk_stress and risk_desk_status."""
     readme = (PLUGINS / "risk-desk-hosted" / "README.md").read_text(
         encoding="utf-8")
-    assert "not live yet" in readme
-    assert "does not resolve" in readme
-    assert "nothing is deployed" in readme
+    assert "The endpoint is live" in readme
+    assert "riskdesk.avidquant.com/mcp" in readme
+    assert "synthetic" in readme
+    assert "risk_xva" in readme
     root_readme = (ROOT / "README.md").read_text(encoding="utf-8")
-    assert "not live" in root_readme
+    assert "riskdesk.avidquant.com/mcp" in root_readme
+    assert "synthetic" in root_readme
 
 
 def test_the_hosted_plugin_does_not_offer_a_tool_it_cannot_run():

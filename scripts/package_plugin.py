@@ -44,3 +44,15 @@ with ZipFile(target) as archive:
     for runtime in ('.claude-plugin/plugin.json','.codex-plugin/plugin.json','.mcp.json'):
         assert runtime in archive.namelist(), runtime
 print(target)
+
+# Package the hosted client independently of the local runtime plugin.
+hosted_target = root / 'dist/risk-desk-hosted-plugin.zip'
+with ZipFile(hosted_target, 'w', ZIP_DEFLATED) as archive:
+    for path in sorted(hosted.rglob('*')):
+        if publishable(path):
+            archive.write(path, path.relative_to(hosted))
+with ZipFile(hosted_target) as archive:
+    assert archive.testzip() is None
+    for required in ('LICENSE', '.codex-plugin/plugin.json', '.mcp.json'):
+        assert required in archive.namelist(), required
+print(hosted_target)

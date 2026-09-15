@@ -124,9 +124,9 @@ that launches the agent or by pointing the client at
 | Runtime | Install the plugin | Manifest it reads |
 | --- | --- | --- |
 | Claude Code | `/plugin marketplace add Iman/agent-driven-risk-desk-and-skills` then `/plugin install risk-desk@risk-desk` | [.claude-plugin/plugin.json](plugins/risk-desk/.claude-plugin/plugin.json), listed in [.claude-plugin/marketplace.json](.claude-plugin/marketplace.json) |
-| Codex | Copy or symlink `plugins/risk-desk` into your Codex plugin directory | [.codex-plugin/plugin.json](plugins/risk-desk/.codex-plugin/plugin.json), which points at `skills/` and `.mcp.json` |
+| Codex | Configure the plugin through a Codex marketplace, or add its runtime with `codex mcp add riskdesk -- "$PWD/.venv/bin/riskdesk-mcp"`. Hosted setup is in [OpenAI connections](docs/OPENAI.md). | [.codex-plugin/plugin.json](plugins/risk-desk/.codex-plugin/plugin.json), which points at `skills/` and `.mcp.json` |
 | Any MCP client | Add `.mcp.json`'s single stdio server, or run `riskdesk-mcp` yourself | [.mcp.json](plugins/risk-desk/.mcp.json) |
-| Hosted, **not live yet** | Nothing to install, but `riskdesk.avidquant.com` does not resolve and nothing is deployed behind it. Use the local plugin. | [risk-desk-hosted](plugins/risk-desk-hosted/README.md) |
+| Hosted | The endpoint is live at `https://riskdesk.avidquant.com/mcp` and advertises 3 risk tools plus a status tool. It serves synthetic demo data only, and it cannot run `risk_xva`. | [risk-desk-hosted](plugins/risk-desk-hosted/README.md) |
 
 Both manifests describe the same plugin, both point at the same 5 skill
 directories, and a validation test fails the build if either stops

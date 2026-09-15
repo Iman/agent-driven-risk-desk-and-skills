@@ -1,16 +1,17 @@
 # risk-desk-hosted plugin
 
-## The endpoint is not live yet
+## The endpoint is live
 
-`https://riskdesk.avidquant.com` does not resolve and nothing is deployed
-behind it. This plugin is the client side, written and checked ahead of
-the service so that the manifests, the skills and the tool names are
-settled before anything is published to a directory. Installing it today
-gives you a plugin whose MCP server will not answer. That is expected, and
-it is not a fault in your setup.
+`https://riskdesk.avidquant.com/mcp` answers and advertises `risk_tail`,
+`risk_exposure`, `risk_stress` and `risk_desk_status`. It needs no login.
 
-**Use [the local plugin](../risk-desk) instead**, which works now, computes
-on your machine, and sends nothing anywhere.
+It serves a synthetic energy book. It holds no market data, places no
+order, and cannot run `risk_xva`, because that reads an ORE project
+directory on the caller's own machine.
+
+**[The local plugin](../risk-desk) remains the better choice for real
+work**: it computes on your machine, sends nothing anywhere, and it is
+the only one that can run `risk_xva`.
 
 ## What it will be
 
@@ -21,9 +22,17 @@ repository root; edit the sources there and rebuild with
 
 | Tool | What it does |
 | --- | --- |
+| `risk_desk_status` | Availability, synthetic demo, limits and reporting conventions |
 | `risk_tail` | Historical VaR and Expected Shortfall over P&L you supply |
 | `risk_exposure` | Gross and net exposure, leverage, concentration |
 | `risk_stress` | Explicit shocks applied to linear positions |
+
+The calculation tools also accept an omitted `request` for the synthetic
+energy-book demo. Each skill calls status first and distinguishes that
+demo from data the user supplies.
+
+For ChatGPT, Codex and Responses API setup, see the
+[connection guide](https://github.com/Iman/agent-driven-risk-desk-and-skills/blob/main/docs/OPENAI.md).
 
 ## What it will not do
 

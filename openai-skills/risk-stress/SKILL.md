@@ -5,9 +5,19 @@ description: Revalue linear positions under explicitly supplied asset-return sce
 
 # Risk Stress, hosted
 
-Use `risk_stress` over the hosted Risk Desk MCP. Nothing is installed and
-no market data is fetched: the user supplies both the positions and every
-shock, and the service revalues exactly those.
+Call `risk_desk_status` first to check availability, input limits and
+reporting conventions. Then use `risk_stress` on the connected hosted Risk
+Desk MCP. Discover its input schema instead of guessing field names.
+No local runtime or market-data feed is needed.
+
+For a requested demonstration, omit `request` to use the synthetic energy
+book. Label the result as synthetic. For the user's own book, pass the
+supplied data in `request`; never substitute the demo when input is
+missing or invalid. Ask only for missing required fields.
+
+Report degraded status, its reason, base currency, horizon and sign
+convention before the figures. Preserve source and as-of information.
+If the service is unavailable, report the failure without inventing results.
 
 Every scenario must name exactly the portfolio assets, including an
 explicit zero where no change is intended. A missing asset is refused
@@ -23,8 +33,9 @@ forecast. Say so when the user names one that way.
 The model is linear. Do not apply it to option premium values, credit
 migration or nonlinear margin calls.
 
-Before anything is sent, confirm the user is permitted to share the
-positions with a hosted service. `data_mode` records their declaration; it
+Before sending user data, establish that the user is permitted to share
+it with a hosted service. Existing permission in the conversation is
+sufficient. `data_mode` records their declaration; it
 is not a rights certificate and the service does not check it.
 
 Counterparty exposure and XVA are not available here. They need a trusted
