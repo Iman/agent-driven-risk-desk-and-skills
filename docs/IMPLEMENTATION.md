@@ -15,19 +15,25 @@ Not measured in the 2026-09-14/15 session, and therefore not claimed:
   The exposure, CVA and DVA figures below remain the 2026-09-13
   observation, carried forward and marked `pinned` in `docs/evidence.json`.
   The ORE wheel installed, which is a different and smaller claim.
-- Python 3.11 and 3.12 were not exercised. `pyproject.toml` declares 3.11
-  or later; only CPython 3.13.14 was run.
-- No behaviour was observed on Linux or on Windows.
-- The mutation harness has no case over `report.py`, so the sign handling
-  in the new exposure ladder is guarded by unit tests only. Adding
-  mutations there was outside the scope approved for this run and is not
-  claimed as done.
+- Python 3.11 and 3.12 were not exercised HERE. CI run 34963838757 is
+  reported green on 3.11, 3.12 and 3.13; that is a report, not a log this
+  session read. Locally only CPython 3.13.14 and, in containers, 3.13.15
+  were run.
+- No behaviour was observed on Windows. Linux is no longer unknown: see
+  the container entries under VERIFIED, which were measured on
+  linux/arm64 and linux/amd64.
+- The mutation harness has no case over `report.py` or over the
+  dashboard, so the sign handling in the exposure ladder and every
+  dashboard view are guarded by unit tests only. Adding mutations there
+  was outside the scope approved for those runs and is not claimed as
+  done.
 - The screenshots were taken by one Chromium build at one device scale.
   How the page renders in another browser was not observed.
-- `.github/workflows/tests.yml` is reported to have run for the first time
-  and succeeded in 1m4s, run 34911224128. That is a report, not an
-  observation made here: no CI log was read in this session, and the run
-  predates the exposure charts. No CI badge is claimed.
+- No CI log was read in this session. What is known about CI is reported:
+  34911224128 green, then 34959651440 and 34960887423 red on `gates`, then
+  34963838757 green on all four jobs after the container fix. No CI badge
+  is claimed, because a badge would assert something this repository has
+  not itself observed.
 
 ## VERIFIED
 
