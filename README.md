@@ -24,19 +24,14 @@ any position. The page states its sign convention, prints its degraded
 flag whether or not it is set, and embeds its own styling and charts, so it
 opens with no network.
 
-### The exposure section, closer
-
-![A signed net exposure ladder with shorts left of the zero line and longs right of it, and an ordered share-of-gross concentration chart, drawn from synthetic example inputs](docs/images/report-energy-exposure.png)
-
-The same page, at the exposure section. Synthetic example inputs, not
-market data. The ladder puts the 6 legs of the synthetic energy book on
-the side of the zero line their sign says they are on, so a short reads as
-a short without anyone reading the minus sign, and the concentration chart
-is ordered and says what the shares are shares of.
+Both surfaces follow the reader's system setting: these captures are the
+dark default, and there is a light mode built from the same tokens. Every
+colour comes from one token layer, so neither mode is hard coded in a
+rule, and no rule outside that layer writes a colour at all.
 
 ### The dashboard
 
-![The dashboard exposure view: a signed net exposure ladder with shorts left of the zero line, and an ordered share-of-gross chart, drawn from synthetic example inputs](docs/images/dashboard-exposure.png)
+![The dashboard overview: a navigation strip across five views, a not-degraded flag beside a synthetic-inputs flag, the sign convention, and a table giving the headline figure and the input state for exposure, stress, tail risk and counterparty XVA. Drawn from synthetic example inputs, not market data](docs/images/dashboard-overview.png)
 
 The same numbers over a loopback socket, five views: overview, exposure,
 stress, tail risk and counterparty XVA. Synthetic example inputs, not
@@ -45,6 +40,14 @@ no outbound request, and reads no path from the request. Every view prints
 the sign convention and the degraded flag whether or not the flag is set,
 and a view whose input was absent says so in words that do not imply a
 zero.
+
+![The dashboard exposure view: a signed net exposure ladder with shorts drawn left of a zero line and longs right of it, above an ordered share-of-gross concentration chart. Drawn from synthetic example inputs, not market data](docs/images/dashboard-exposure.png)
+
+The exposure view, which is where the sign convention earns its keep. The
+ladder puts the 6 legs of the synthetic energy book on the side of the
+zero line their sign says they are on, so a short reads as a short without
+anyone reading the minus sign, and the concentration chart is ordered and
+says what the shares are shares of.
 
 ## Get started
 
