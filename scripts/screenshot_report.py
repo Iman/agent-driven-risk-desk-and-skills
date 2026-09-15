@@ -1,17 +1,25 @@
 #!/usr/bin/env python3
-"""Capture the README image from a report page that was just generated.
+"""Capture a README image from a report page that was just generated.
 
-The one image in the README is the part a reader trusts without reading, so
-it is taken from a file this script generates in the same run rather than
+The images in the README are the part a reader trusts without reading, so
+each is taken from a file this script generates in the same run rather than
 from a page somebody kept. Playwright and its Chromium are not project
-dependencies, which is why this is a script and not a test: the image is
-committed, and regenerating it is a deliberate act.
+dependencies, which is why this is a script and not a test: the images are
+committed, and regenerating one is a deliberate act.
+
+The whole page:
 
     python3 scripts/screenshot_report.py \\
         --python .venv/bin/python \\
-        --stress examples/energy_stress.json \\
-        --tail examples/tail.json \\
         --output docs/images/report-energy-stress.png
+
+One section of it, clipped to the section's own bounding box read from the
+live DOM, so the crop is the section rather than a guessed rectangle:
+
+    python3 scripts/screenshot_report.py \\
+        --python .venv/bin/python \\
+        --section "Linear portfolio exposure" \\
+        --output docs/images/report-energy-exposure.png
 
 Install the capture tool first, in any Python, not necessarily the project
 environment: `pip install playwright` then `python -m playwright install
@@ -25,6 +33,24 @@ import tempfile
 
 ROOT = Path(__file__).resolve().parent.parent
 
+# Reads the live DOM: everything from the named h2 up to the next h2, so a
+# section that grows a chart is still captured whole.
+SECTION_BOX = """
+(heading) => {
+  const tops = Array.from(document.querySelectorAll('h2'));
+  const start = tops.find(node => node.textContent.trim() === heading);
+  if (!start) { return null; }
+  const stop = tops[tops.indexOf(start) + 1] || null;
+  let bottom = stop ? stop.getBoundingClientRect().top + window.scrollY
+                    : document.body.scrollHeight;
+  const box = start.getBoundingClientRect();
+  const top = box.top + window.scrollY;
+  return {x: 0, y: Math.max(top - 12, 0),
+          width: document.body.scrollWidth,
+          height: Math.max(bottom - top - 8, 1)};
+}
+"""
+
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
@@ -32,9 +58,13 @@ def main(argv=None):
                         help="interpreter that has riskdesk installed")
     parser.add_argument("--stress", default="examples/energy_stress.json")
     parser.add_argument("--tail", default="examples/energy_tail.json")
+    parser.add_argument("--exposure", default="examples/energy_book.json")
     parser.add_argument("--output",
                         default="docs/images/report-energy-stress.png")
+    parser.add_argument("--section",
+                        help="capture only this h2 section, not the page")
     parser.add_argument("--width", type=int, default=1100)
+    parser.add_argument("--scale", type=float, default=1.5)
     parser.add_argument("--colors", type=int, default=64,
                         help="palette size for the saved PNG")
     args = parser.parse_args(argv)
@@ -50,12 +80,15 @@ def main(argv=None):
     output.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory() as work:
         page_path = Path(work) / "report.html"
-        finished = subprocess.run(
-            [args.python, "-m", "riskdesk.cli", "report",
-             "--input", str(ROOT / args.stress),
-             "--tail", str(ROOT / args.tail),
-             "--output", str(page_path)],
-            cwd=str(ROOT), capture_output=True, text=True)
+        command = [args.python, "-m", "riskdesk.cli", "report",
+                   "--input", str(ROOT / args.stress),
+                   "--output", str(page_path)]
+        if args.tail:
+            command += ["--tail", str(ROOT / args.tail)]
+        if args.exposure:
+            command += ["--exposure", str(ROOT / args.exposure)]
+        finished = subprocess.run(command, cwd=str(ROOT), capture_output=True,
+                                  text=True)
         if finished.returncode:
             print(finished.stdout.strip())
             print(finished.stderr.strip())
@@ -64,9 +97,17 @@ def main(argv=None):
             browser = play.chromium.launch()
             page = browser.new_page(viewport={"width": args.width,
                                               "height": 900},
-                                    device_scale_factor=1.5)
+                                    device_scale_factor=args.scale)
             page.goto(page_path.as_uri())
-            page.screenshot(path=str(output), full_page=True)
+            if args.section:
+                box = page.evaluate(SECTION_BOX, args.section)
+                if box is None:
+                    print("no h2 reads exactly: " + args.section)
+                    browser.close()
+                    return 1
+                page.screenshot(path=str(output), full_page=True, clip=box)
+            else:
+                page.screenshot(path=str(output), full_page=True)
             browser.close()
     # The page is flat colour and text, so an adaptive palette keeps it
     # legible at a fraction of the truecolour size. README images are read
@@ -81,8 +122,11 @@ def main(argv=None):
             image.convert("RGB").quantize(
                 colors=args.colors, method=Image.Quantize.MEDIANCUT).save(
                     output, optimize=True)
-    print("wrote {} ({} bytes)".format(
-        output.relative_to(ROOT), output.stat().st_size))
+    try:
+        shown = output.relative_to(ROOT)
+    except ValueError:
+        shown = output
+    print("wrote {} ({} bytes)".format(shown, output.stat().st_size))
     return 0
 
 
