@@ -249,8 +249,23 @@ th { background: var(--od-surface); color: var(--od-text-muted);
      text-transform: uppercase; font-weight: var(--od-weight-medium); }
 th:first-child, td:first-child { text-align: left; }
 
-.chart { max-width: 100%; height: auto;
-         margin: var(--od-space-2) 0 var(--od-space-4) 0; }
+/* The chart frame. Structure and surface are the shared system's
+   .od-chartframe; the horizontal scroll is an addition, and it is here
+   because that frame does not solve this problem. Its body rule is
+   width 100%, height auto, which scales an inline SVG down with its own
+   text: at a 390px phone width the axis labels on these charts render
+   around 5px and cannot be read. Measured by looking at the page in a
+   phone viewport, not by reasoning about it. Below the minimum the frame
+   scrolls instead, so the chart stays legible and only the frame moves,
+   never the page. */
+.chart-frame { overflow-x: auto;
+               border: var(--od-border-hair) solid var(--od-line);
+               border-radius: var(--od-radius-3);
+               background: var(--od-surface);
+               padding: var(--od-space-4) var(--od-space-5);
+               margin: var(--od-space-2) 0 var(--od-space-5) 0; }
+.chart { display: block; width: 100%; min-width: 560px; height: auto;
+         margin: 0; }
 .chart .axis { stroke: var(--od-axis); stroke-width: 1; }
 .chart .bar.loss, .chart .bar.short { fill: var(--od-loss); }
 .chart .bar.gain, .chart .bar.long { fill: var(--od-gain); }

@@ -168,6 +168,16 @@ def report_payload(stress_result, tail_result=None, tail_pnl=None,
     return payload
 
 
+def framed(svg):
+    """Put a chart in its frame.
+
+    Presentation only: the chart functions are untouched, so there is still
+    one place a chart is drawn. The frame exists so a narrow screen scrolls
+    the chart instead of shrinking its labels out of legibility.
+    """
+    return '<div class="chart-frame">' + svg + "</div>"
+
+
 def net_by_asset_svg(exposure, currency):
     """Signed net exposure per asset, longs and shorts across a zero line.
 
@@ -407,9 +417,9 @@ def render_html(payload):
                        exposure["net_leverage"]))
         out.append("</table>")
         out.append("<h3>Net exposure by asset</h3>")
-        out.append(net_by_asset_svg(exposure, payload["currency"]))
+        out.append(framed(net_by_asset_svg(exposure, payload["currency"])))
         out.append("<h3>Share of gross exposure</h3>")
-        out.append(gross_share_svg(exposure, payload["currency"]))
+        out.append(framed(gross_share_svg(exposure, payload["currency"])))
         out.append('<p class="meta">Exposure input source: {}</p>'.format(
             esc(exposure["source"])))
         out.append('<p class="meta">Exposure input SHA-256: {}</p>'.format(
@@ -431,7 +441,7 @@ def render_html(payload):
     out.append("</table>")
     for scenario in payload["scenarios"]:
         out.append("<h3>{}</h3>".format(esc(scenario["name"])))
-        out.append(contribution_svg(scenario, payload["currency"]))
+        out.append(framed(contribution_svg(scenario, payload["currency"])))
 
     out.append("<h2>Historical tail risk</h2>")
     tail = payload["tail"]
@@ -454,7 +464,7 @@ def render_html(payload):
         out.append("<tr><td>Expected Shortfall</td><td>{}</td></tr>".format(
             esc(money(tail["expected_shortfall"], payload["currency"]))))
         out.append("</table>")
-        out.append(tail_svg(tail, payload["currency"]))
+        out.append(framed(tail_svg(tail, payload["currency"])))
         out.append('<p class="meta">Tail input source: {}</p>'.format(
             esc(tail["source"])))
 

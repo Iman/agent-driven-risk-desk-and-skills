@@ -165,3 +165,36 @@ def test_the_page_still_adds_no_dependency_and_fetches_nothing():
         for forbidden in ("@import", "@font-face", "url(http", "//fonts.",
                           "cdn."):
             assert forbidden not in body, "{}: {}".format(name, forbidden)
+
+
+def test_every_chart_is_inside_a_scrolling_frame():
+    """Found by looking at the page in a phone viewport, not by reasoning.
+
+    An inline SVG with width 100% scales its own text down with it, so at
+    390px the axis labels rendered around 5px and could not be read. The
+    frame scrolls instead. A chart emitted outside one would silently go
+    back to being unreadable on a phone.
+    """
+    from riskdesk import report
+    from riskdesk.dashboard import data, page
+
+    desk = data.build(data.load_desk(
+        ROOT / "examples" / "energy_stress.json",
+        ROOT / "examples" / "energy_tail.json",
+        ROOT / "examples" / "energy_book.json"))
+    documents = [page.render(desk, slug)
+                 for slug in ("exposure", "stress", "tail")]
+    stress = json_load(ROOT / "examples" / "energy_stress.json")
+    tail = json_load(ROOT / "examples" / "energy_tail.json")
+    book = json_load(ROOT / "examples" / "energy_book.json")
+    documents.append(report.build_report(stress, tail, book)[0])
+    for document in documents:
+        assert document.count("<svg") > 0
+        assert document.count('<div class="chart-frame">') == \
+            document.count("<svg"), "a chart is drawn outside its frame"
+    assert "min-width" in design.COMPONENTS
+
+
+def json_load(path):
+    import json
+    return json.loads(path.read_text(encoding="utf-8"))

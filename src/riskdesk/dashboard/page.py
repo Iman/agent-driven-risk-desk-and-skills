@@ -15,8 +15,9 @@ import html
 
 from riskdesk.dashboard import data as desk_data
 from riskdesk.dashboard import maths
-from riskdesk.report import (STYLE, contribution_svg, gross_share_svg, money,
-                             net_by_asset_svg, tail_svg)
+from riskdesk.report import (STYLE, contribution_svg, framed,
+                             gross_share_svg, money, net_by_asset_svg,
+                             tail_svg)
 
 # Dashboard chrome only. Every colour reads a token from riskdesk.design,
 # which report.STYLE already brings in, so the served page and the saved
@@ -202,9 +203,9 @@ def exposure(payload):
         esc(view["net_leverage_text"])))
     body.append("</table>")
     body.append("<h3>Net exposure by asset</h3>")
-    body.append(net_by_asset_svg(view, currency))
+    body.append(framed(net_by_asset_svg(view, currency)))
     body.append("<h3>Share of gross exposure</h3>")
-    body.append(gross_share_svg(view, currency))
+    body.append(framed(gross_share_svg(view, currency)))
     body.append('<p class="meta">Exposure input source: {}</p>'.format(
         esc(view["source"])))
     body.append('<p class="meta">Exposure input SHA-256: {}</p>'.format(
@@ -230,7 +231,7 @@ def stress(payload):
     body.append("</table>")
     for scenario in payload["scenarios"]:
         body.append("<h3>{}</h3>".format(esc(scenario["name"])))
-        body.append(contribution_svg(scenario, currency))
+        body.append(framed(contribution_svg(scenario, currency)))
     body.append('<p class="meta">Stress input SHA-256: {}</p>'.format(
         esc(payload["input_sha256"])))
     return _shell(payload, "stress", body)
@@ -257,7 +258,7 @@ def tail(payload):
     body.append("<tr><td>Expected Shortfall</td><td>{}</td></tr>".format(
         esc(money(view["expected_shortfall"], currency))))
     body.append("</table>")
-    body.append(tail_svg(view, currency))
+    body.append(framed(tail_svg(view, currency)))
     body.append('<p class="meta">Tail input source: {}</p>'.format(
         esc(view["source"])))
     return _shell(payload, "tail", body)
