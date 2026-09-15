@@ -83,8 +83,8 @@ up front with the reason rather than failing inside a worker. Build with
 A command that writes a file into a container with no volume mounted is
 refused with exit 64, because the summary it would print is identical to a
 real run and the file would be gone on exit. A mount the container cannot
-write is refused with exit 65 before anything runs, and `xva` with no ORE
-backend with exit 69.
+write is refused with exit 65 before anything runs, an artifacts path that
+does not exist with exit 66, and `xva` with no ORE backend with exit 69.
 
 The plugin is [plugins/risk-desk](plugins/risk-desk). It starts
 `riskdesk-mcp` through PATH, so either activate the environment in the
