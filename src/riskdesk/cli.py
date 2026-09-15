@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 import sys
 from riskdesk.analytics import tail_risk, portfolio_exposure, stress_test
+from riskdesk.dashboard import app as dashboard_app
 from riskdesk.ore import run_ore
 from riskdesk.report import build_report
 
@@ -44,7 +45,14 @@ def main(argv=None):
     page.add_argument("--output", required=True, type=Path)
     page.add_argument("--tail", type=Path)
     page.add_argument("--exposure", type=Path)
+    # The dashboard serves the same results over a loopback socket. It owns
+    # its own exit codes and prints its own failures, so it returns rather
+    # than raising into the envelope below.
+    dashboard_parser = commands.add_parser("dashboard")
+    dashboard_app.add_arguments(dashboard_parser)
     args = parser.parse_args(argv)
+    if args.command == "dashboard":
+        return dashboard_app.run(args)
     try:
         if args.command == "xva":
             result = run_ore(args.project, args.config, args.output, args.data_mode)
