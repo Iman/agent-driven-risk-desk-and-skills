@@ -57,9 +57,11 @@ the exposure charts:
   BRENT_CRUDE_FUTURE -2,600,000.00. Two of the six are negative and are
   drawn on the short side of the zero line. Share of gross, as the
   concentration chart orders it: 29.8%, 22.0%, 18.4%, 12.8%, 10.3%, 6.7%.
-- `riskdesk report` with all three inputs wrote 14,758 bytes; with stress
-  alone it wrote 4,775 bytes and the page states that no exposure result
-  and no tail result were supplied.
+- `riskdesk report` with all three inputs wrote 14,778 bytes; with stress
+  alone it wrote 4,795 bytes and the page states that no exposure result
+  and no tail result were supplied. Both figures were first taken before
+  the page title changed and were 20 bytes lower; they are re-measured
+  here rather than carried forward.
 - Images. `docs/images/report-energy-exposure.png` is new, clipped to the
   exposure section's own bounding box read from the live DOM, 63,427
   bytes. `docs/images/report-energy-stress.png` was regenerated, because
