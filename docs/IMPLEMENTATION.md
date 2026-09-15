@@ -32,6 +32,39 @@ Not measured in the 2026-09-14/15 session, and therefore not claimed:
 ## VERIFIED
 
 Observed on 2026-09-15 London time, on macOS ARM64 (Darwin 25.6.0), for
+the container image, with Docker 29.7.2:
+
+- The ORE extra was measured on the image platform before the Dockerfile
+  was written, not reasoned about. `docker run --rm python:3.13-slim pip
+  index versions open-source-risk-engine` reports no matching distribution
+  at linux/arm64 and `1.8.16.0, 1.8.15.0, 1.8.14.1, 1.8.14.0, 1.8.13.1,
+  1.8.13.0` at linux/amd64. The arm64 image therefore ships the core
+  scope, records that in `/opt/risk-desk/xva-status`, prints it, and
+  refuses `xva` with exit 69 before anything runs.
+- `docker build -t risk-desk:test .` succeeded in 32 seconds on this
+  machine with a warm base image. The image is 643,894,733 bytes,
+  linux/arm64. That figure is the image as Docker reports it, not a
+  download size.
+- `docker run --rm risk-desk:test` printed riskdesk 0.1.0 on CPython
+  3.13.15 aarch64, with `ORE extra: not available for this image platform`.
+- `docker run --rm -v DIR:/artifacts risk-desk:test demo` exited 0, ran
+  both example books, listed 4 MCP tools, and left a 14,778 byte
+  `report.html` in the mounted directory.
+- The two guards fire with distinct codes: 64 for a writing command with
+  no mount, 69 for `xva` with no ORE backend. `RISKDESK_ALLOW_EPHEMERAL=1`
+  overrides the first and says on stderr that the output will be
+  discarded.
+- The image runs as uid 10001 `desk`, verified by
+  `docker run --entrypoint id IMAGE -un`.
+- Tests: 128 collected before, 135 tests collected after, all passing and
+  none skipped, in 22.71s. By marker: 81 unit, 25 integration, 29 validation, of which 7 are the new
+  `docker` marker. Unit coverage unchanged at 471 of 538 lines,
+  87.55 percent, because the container tests are integration and the new
+  files are not Python.
+- The container tests skip rather than fail when no Docker binary or no
+  answering daemon is present. They ran here; they were not skipped.
+
+Observed on 2026-09-15 London time, on macOS ARM64 (Darwin 25.6.0), for
 the plugin manifests:
 
 - A live defect is CLOSED. README.md pointed at `plugins/risk-desk`, which
@@ -46,8 +79,8 @@ the plugin manifests:
   AssertionError: it compared the notice files in the zip, which exclude
   `.DS_Store`, against every file under `notices/`, which includes one.
   Observed failing before the change and passing after.
-- Tests: 117 collected before, 128 tests collected after, all passing and
-  none skipped. By marker: 81 unit, 18 integration, 29 validation.
+- Tests: 117 collected before, 128 after, all passing and none skipped.
+  By marker: 81 unit, 18 integration, 29 validation.
 - Unit line coverage unchanged at 471 of 538 lines, 87.55 percent, because
   the new tests are validation rather than unit and the new files are JSON
   rather than Python.

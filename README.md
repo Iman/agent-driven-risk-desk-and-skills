@@ -9,7 +9,7 @@ tools call the same runtime functions, so an agent and a person get the
 same numbers with the same provenance, units, assumptions and degraded
 flag attached. 5 plugin skills cover these tasks and setup.
 
-[![Tests](https://img.shields.io/badge/tests-128%20collected-blue)](docs/IMPLEMENTATION.md)
+[![Tests](https://img.shields.io/badge/tests-135%20collected-blue)](docs/IMPLEMENTATION.md)
 [![Unit coverage](https://img.shields.io/badge/unit%20coverage-87.55%25-blue)](#development)
 [![Python](https://img.shields.io/badge/python-3.13%20tested-blue)](#get-started)
 [![License](https://img.shields.io/badge/license-PolyForm%20Noncommercial-blue)](LICENSE)
@@ -53,6 +53,28 @@ worked, then runs the tests. `demo.sh` runs every command over the 6
 example input files and prints what each result means. Neither script
 prints colour, neither reaches the network beyond pip, and both exit
 non-zero on any failure.
+
+### Or run it in a container
+
+No Python needed, and the examples travel with the image:
+
+```sh
+docker build -t risk-desk .
+docker run --rm -v "$PWD/artifacts:/artifacts" risk-desk demo
+docker run --rm risk-desk                        # what this image can do
+```
+
+The image ships the core scope. The ORE extra is platform dependent and
+this was measured, not assumed: on `python:3.13-slim` at linux/amd64 pip
+resolves open-source-risk-engine 1.8.16.0, and at linux/arm64 pip reports
+no distribution of any version. So the build attempts it, records what
+happened, and `docker run risk-desk` prints that status; `xva` is refused
+up front with the reason rather than failing inside a worker. Build with
+`--build-arg WITH_XVA=require` to turn a missing extra into a failed build.
+
+A command that writes a file into a container with no volume mounted is
+refused, because the summary it would print is identical to a real run and
+the file would be gone on exit.
 
 The plugin is [plugins/risk-desk](plugins/risk-desk). It starts
 `riskdesk-mcp` through PATH, so either activate the environment in the
@@ -145,7 +167,7 @@ valuation model for those, not this one.
 ## Development
 
 ```sh
-.venv/bin/python -m pytest -q --color=no          # 128 tests, none skipped
+.venv/bin/python -m pytest -q --color=no          # 135 tests, none skipped
 .venv/bin/python scripts/evidence.py check        # documents match the record
 .venv/bin/python -m coverage run -m pytest -q --color=no -m unit
 .venv/bin/python -m coverage json -q
