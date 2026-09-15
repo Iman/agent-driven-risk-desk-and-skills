@@ -31,6 +31,38 @@ Not measured in the 2026-09-14/15 session, and therefore not claimed:
 
 ## VERIFIED
 
+Observed on 2026-09-15 London time, for the hosted plugin, code only:
+
+- Nothing was deployed, no DNS record was created or read, no registry or
+  directory was contacted, and no credential was written. The endpoint
+  `https://riskdesk.avidquant.com` does not resolve today; it is written
+  into the manifests as the documented target and both the plugin's own
+  README and the root README say it is not live.
+- `plugins/risk-desk-hosted` carries a Claude Code manifest, a Codex
+  manifest, an `.mcp.json` declaring one http server, a README and the
+  licence. `glama.json` is at the repository root. The marketplace now
+  lists 2 plugins.
+- The hosted plugin carries 3 skills, not 5. `risk_xva` is deliberately
+  absent because it reads a trusted local ORE project directory and a
+  remote endpoint cannot read files on the caller's machine; offering it
+  would put a tool in the list that could never run. Each hosted skill
+  says so in its own text.
+- The hosted skills are copies of `openai-skills/`, rebuilt by
+  `scripts/package_plugin.py`. A validation test compares them byte for
+  byte, because two hand-edited copies drift and the one nobody opens is
+  the one that ships.
+- Six new validation tests: the endpoint hostname is pinned in the
+  `.mcp.json`, the Codex `websiteURL` and both descriptions; no other
+  hostname and no credential-shaped string reaches the hosted directory,
+  with the upstream PolyForm licence URL as the one allowance; the
+  not-live wording is required in both READMEs; the absent tool is
+  required to stay absent; the copies must match their sources; and
+  `glama.json` carries a maintainer and nothing else.
+- Tests: 138 collected before, 144 tests collected after, all passing and
+  none skipped, in 55.73s. Unit coverage unchanged at 471 of 538 lines,
+  87.55 percent, because the additions are JSON, Markdown and validation
+  tests rather than package code.
+
 Observed on 2026-09-15 London time, for the repository rename:
 
 - The repository was renamed to drop a trailing hyphen. GitHub redirects,
@@ -47,8 +79,8 @@ Observed on 2026-09-15 London time, for the repository rename:
   marketplace command and the image label. It builds the retired string
   from the current one rather than writing it out, so the test file does
   not trip its own check.
-- Tests: 135 collected before, 138 tests collected after, all passing and
-  none skipped, in 58.93s with the container tests included. Unit coverage
+- Tests: 135 collected before, 138 after, all passing and none skipped,
+  in 58.93s with the container tests included. Unit coverage
   unchanged at 471 of 538 lines, 87.55 percent. No evidence figure quotes
   the repository name, so none needed resyncing.
 
