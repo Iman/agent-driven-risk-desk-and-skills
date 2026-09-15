@@ -76,10 +76,11 @@ note "riskdesk stress --input examples/energy_stress.json"
 
 # ------------------------------------------------------------- 3. report
 
-say "3. One self-contained HTML page from the stress and tail results"
-note "riskdesk report --input examples/energy_stress.json --tail examples/energy_tail.json --output artifacts/report.html"
+say "3. One self-contained HTML page from all three results"
+note "riskdesk report --input examples/energy_stress.json --tail examples/energy_tail.json --exposure examples/energy_book.json --output artifacts/report.html"
 "$DESK" report --input "$ROOT/examples/energy_stress.json" \
   --tail "$ROOT/examples/energy_tail.json" \
+  --exposure "$ROOT/examples/energy_book.json" \
   --output "$OUT_DIR/report.html" >/dev/null
 note "written: $OUT_DIR/report.html"
 note "it embeds its own styling and charts, so it opens with no network"
