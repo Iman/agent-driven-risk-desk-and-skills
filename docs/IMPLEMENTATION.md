@@ -74,8 +74,11 @@ Observed on 2026-09-15 London time, for the CI failure and its fix:
   branch CI actually runs untested. That test now asserts the correct
   behaviour for whichever scope the image has, so both platforms are
   covered and nothing skips.
-- Tests: 144 collected before, 147 tests collected after, all passing and
-  none skipped, in 60.47s. Container tests 7 before, 10 after, 0 skipped.
+- Tests: 144 collected before, 148 tests collected after, all passing
+  and none skipped. Container tests 7 before, 11 after, 0 skipped.
+  The eleventh separates a missing artifacts directory, exit 66, from
+  an unwritable one, exit 65, because pointing a reader at --user
+  for a path that does not exist would not help them.
   Unit coverage 471 of 538 lines before, 472 of 539 lines after, 87.57
   percent.
 

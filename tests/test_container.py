@@ -208,6 +208,19 @@ def test_a_failing_command_says_why_on_stderr(image):
     assert json.loads(finished.stdout)["error"] == "FileNotFoundError"
 
 
+def test_a_missing_artifacts_directory_reports_that_and_not_permissions(
+        image):
+    """Two different problems deserve two different messages. Reporting a
+    missing directory as a permission problem sends the reader to --user,
+    which would not help."""
+    finished = docker("run", "--rm", "-e", "RISKDESK_ARTIFACTS=/nowhere",
+                      image, "demo")
+    assert finished.returncode == 66
+    assert "There is no directory at /nowhere" in finished.stderr
+    assert "--user" not in finished.stderr
+    assert "Nothing was run" in finished.stderr
+
+
 def test_the_image_does_not_run_as_root(image):
     finished = docker("run", "--rm", "--entrypoint", "id", image, "-un")
     assert finished.returncode == 0, finished.stderr

@@ -76,6 +76,12 @@ if writes_files "${1:-}"; then
     # another uid is the failure that is hardest to read: the command dies
     # inside Python with EACCES, and a caller that redirects stdout sees an
     # exit code and nothing else.
+    if [ ! -d "$ARTIFACTS" ]; then
+        echo "There is no directory at $ARTIFACTS." >&2
+        echo "RISKDESK_ARTIFACTS points somewhere this image does not have." >&2
+        echo "Nothing was run." >&2
+        exit 66
+    fi
     if [ ! -w "$ARTIFACTS" ]; then
         echo "Cannot write to $ARTIFACTS as uid $(id -u)." >&2
         echo "" >&2
