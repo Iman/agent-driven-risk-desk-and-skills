@@ -83,4 +83,4 @@ CMD ["doctor"]
 LABEL org.opencontainers.image.title="risk desk" \
       org.opencontainers.image.description="Historical VaR and Expected Shortfall, linear exposure, explicit stress and local ORE XVA. Research software, not investment advice." \
       org.opencontainers.image.licenses="PolyForm-Noncommercial-1.0.0" \
-      org.opencontainers.image.source="https://github.com/Iman/agent-driven-risk-desk-and-skills-"
+      org.opencontainers.image.source="https://github.com/Iman/agent-driven-risk-desk-and-skills"

@@ -5,8 +5,8 @@
   "author": {
     "name": "Iman Samizadeh"
   },
-  "homepage": "https://github.com/Iman/agent-driven-risk-desk-and-skills-",
-  "repository": "https://github.com/Iman/agent-driven-risk-desk-and-skills-",
+  "homepage": "https://github.com/Iman/agent-driven-risk-desk-and-skills",
+  "repository": "https://github.com/Iman/agent-driven-risk-desk-and-skills",
   "license": "PolyForm-Noncommercial-1.0.0",
   "keywords": [
     "risk",
@@ -35,7 +35,7 @@
       "Read",
       "Write"
     ],
-    "websiteURL": "https://github.com/Iman/agent-driven-risk-desk-and-skills-",
+    "websiteURL": "https://github.com/Iman/agent-driven-risk-desk-and-skills",
     "defaultPrompt": [
       "Calculate historical VaR and Expected Shortfall.",
       "Stress my linear portfolio.",

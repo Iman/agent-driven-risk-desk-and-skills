@@ -12,6 +12,7 @@ route the README implied did not exist.
 import json
 from pathlib import Path
 import re
+import subprocess
 
 import pytest
 
@@ -148,3 +149,57 @@ def test_the_readme_names_both_runtimes_with_a_command():
     assert "Claude Code" in readme
     assert "Codex" in readme
     assert "/plugin marketplace add" in readme
+
+
+# The repository was renamed from a trailing-hyphen form. GitHub redirects,
+# so nothing broke on the day, and that is exactly why a stale URL can sit
+# in a manifest until a directory indexes it and publishes the dead name.
+REPOSITORY = "https://github.com/Iman/agent-driven-risk-desk-and-skills"
+# Built rather than written out, so this file does not itself contain the
+# string it forbids and need an exemption from its own check.
+RETIRED_NAMES = (REPOSITORY.rsplit("/", 1)[-1] + "-",)
+
+
+def tracked_text_files():
+    names = subprocess.run(["git", "ls-files"], capture_output=True,
+                           text=True, cwd=str(ROOT)).stdout.split()
+    for name in names:
+        if name.startswith(("notices/", "plugins/risk-desk/notices/")):
+            continue
+        path = ROOT / name
+        try:
+            yield name, path.read_text(encoding="utf-8")
+        except (OSError, UnicodeDecodeError):
+            continue
+
+
+def test_no_tracked_file_names_a_retired_repository():
+    """A redirect makes a stale URL invisible until something republishes
+    it. One of these was missed by hand in the Dockerfile's image.source
+    label, which is precisely what a container index reads."""
+    offenders = []
+    for name, text in tracked_text_files():
+        for retired in RETIRED_NAMES:
+            for line, content in enumerate(text.splitlines(), 1):
+                if retired in content:
+                    offenders.append("{}:{}".format(name, line))
+    assert not offenders, "retired repository name in " + ", ".join(offenders)
+
+
+def test_every_manifest_url_points_at_this_repository():
+    for _, _, path in manifest_paths():
+        manifest = load(path)
+        for key in ("homepage", "repository"):
+            if key in manifest:
+                assert manifest[key] == REPOSITORY, "{} {}".format(path, key)
+        website = manifest.get("interface", {}).get("websiteURL")
+        if website and website.startswith("https://github.com/"):
+            assert website == REPOSITORY, str(path)
+
+
+def test_the_readme_and_the_image_label_name_this_repository():
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    assert REPOSITORY + ".git" in readme
+    assert "Iman/agent-driven-risk-desk-and-skills`" in readme
+    dockerfile = (ROOT / "Dockerfile").read_text(encoding="utf-8")
+    assert 'image.source="{}"'.format(REPOSITORY) in dockerfile

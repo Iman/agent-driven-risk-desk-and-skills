@@ -9,7 +9,7 @@ tools call the same runtime functions, so an agent and a person get the
 same numbers with the same provenance, units, assumptions and degraded
 flag attached. 5 plugin skills cover these tasks and setup.
 
-[![Tests](https://img.shields.io/badge/tests-135%20collected-blue)](docs/IMPLEMENTATION.md)
+[![Tests](https://img.shields.io/badge/tests-138%20collected-blue)](docs/IMPLEMENTATION.md)
 [![Unit coverage](https://img.shields.io/badge/unit%20coverage-87.55%25-blue)](#development)
 [![Python](https://img.shields.io/badge/python-3.13%20tested-blue)](#get-started)
 [![License](https://img.shields.io/badge/license-PolyForm%20Noncommercial-blue)](LICENSE)
@@ -41,8 +41,8 @@ declares 3.11 or later; the pinned dependency set and the ORE wheel were
 tested on CPython 3.13, macOS ARM64.
 
 ```sh
-git clone https://github.com/Iman/agent-driven-risk-desk-and-skills-.git
-cd agent-driven-risk-desk-and-skills-
+git clone https://github.com/Iman/agent-driven-risk-desk-and-skills.git
+cd agent-driven-risk-desk-and-skills
 ./install.sh
 ./demo.sh
 ```
@@ -95,7 +95,7 @@ that launches the agent or by pointing the client at
 
 | Runtime | Install the plugin | Manifest it reads |
 | --- | --- | --- |
-| Claude Code | `/plugin marketplace add Iman/agent-driven-risk-desk-and-skills-` then `/plugin install risk-desk@risk-desk` | [.claude-plugin/plugin.json](plugins/risk-desk/.claude-plugin/plugin.json), listed in [.claude-plugin/marketplace.json](.claude-plugin/marketplace.json) |
+| Claude Code | `/plugin marketplace add Iman/agent-driven-risk-desk-and-skills` then `/plugin install risk-desk@risk-desk` | [.claude-plugin/plugin.json](plugins/risk-desk/.claude-plugin/plugin.json), listed in [.claude-plugin/marketplace.json](.claude-plugin/marketplace.json) |
 | Codex | Copy or symlink `plugins/risk-desk` into your Codex plugin directory | [.codex-plugin/plugin.json](plugins/risk-desk/.codex-plugin/plugin.json), which points at `skills/` and `.mcp.json` |
 | Any MCP client | Add `.mcp.json`'s single stdio server, or run `riskdesk-mcp` yourself | [.mcp.json](plugins/risk-desk/.mcp.json) |
 
@@ -167,7 +167,7 @@ valuation model for those, not this one.
 ## Development
 
 ```sh
-.venv/bin/python -m pytest -q --color=no          # 135 tests, none skipped
+.venv/bin/python -m pytest -q --color=no          # 138 tests, none skipped
 .venv/bin/python scripts/evidence.py check        # documents match the record
 .venv/bin/python -m coverage run -m pytest -q --color=no -m unit
 .venv/bin/python -m coverage json -q

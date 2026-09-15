@@ -31,6 +31,27 @@ Not measured in the 2026-09-14/15 session, and therefore not claimed:
 
 ## VERIFIED
 
+Observed on 2026-09-15 London time, for the repository rename:
+
+- The repository was renamed to drop a trailing hyphen. GitHub redirects,
+  so nothing was broken on the day, which is exactly why a stale URL can
+  sit in a manifest until a directory indexes it and republishes the dead
+  name.
+- The hand-written list of places to fix named 8 lines. A scan of every
+  tracked file found 9 occurrences across 8 files-and-lines, and the one
+  missing from the list was `Dockerfile` line 86, the OCI
+  `org.opencontainers.image.source` label, which is the field a container
+  index reads. All 9 were replaced.
+- A validation test now scans every tracked file for the retired name and
+  pins the repository URL in both manifests, the README clone command, the
+  marketplace command and the image label. It builds the retired string
+  from the current one rather than writing it out, so the test file does
+  not trip its own check.
+- Tests: 135 collected before, 138 tests collected after, all passing and
+  none skipped, in 58.93s with the container tests included. Unit coverage
+  unchanged at 471 of 538 lines, 87.55 percent. No evidence figure quotes
+  the repository name, so none needed resyncing.
+
 Observed on 2026-09-15 London time, on macOS ARM64 (Darwin 25.6.0), for
 the container image, with Docker 29.7.2:
 
@@ -56,8 +77,8 @@ the container image, with Docker 29.7.2:
   discarded.
 - The image runs as uid 10001 `desk`, verified by
   `docker run --entrypoint id IMAGE -un`.
-- Tests: 128 collected before, 135 tests collected after, all passing and
-  none skipped, in 22.71s. By marker: 81 unit, 25 integration, 29 validation, of which 7 are the new
+- Tests: 128 collected before, 135 after, all passing and none skipped,
+  in 22.71s. By marker: 81 unit, 25 integration, 29 validation, of which 7 are the new
   `docker` marker. Unit coverage unchanged at 471 of 538 lines,
   87.55 percent, because the container tests are integration and the new
   files are not Python.
