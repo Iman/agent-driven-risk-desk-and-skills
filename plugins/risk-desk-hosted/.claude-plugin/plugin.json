@@ -1,0 +1,24 @@
+{
+  "name": "risk-desk-hosted",
+  "version": "0.1.0",
+  "description": "Portfolio risk over the hosted Risk Desk MCP at riskdesk.avidquant.com: historical VaR and Expected Shortfall from P&L you supply, signed linear exposure, and explicit stress scenarios that carry no probability. No market data is fetched and no local install is needed. The endpoint is not live yet. Counterparty XVA is local only. Research software, not investment advice.",
+  "author": {
+    "name": "Iman Samizadeh"
+  },
+  "homepage": "https://github.com/Iman/agent-driven-risk-desk-and-skills",
+  "repository": "https://github.com/Iman/agent-driven-risk-desk-and-skills",
+  "license": "PolyForm-Noncommercial-1.0.0",
+  "keywords": [
+    "risk",
+    "value-at-risk",
+    "expected-shortfall",
+    "stress-testing",
+    "portfolio-risk",
+    "quantitative-finance",
+    "mcp",
+    "remote-mcp",
+    "skills",
+    "claude-skills",
+    "agent-skills"
+  ]
+}

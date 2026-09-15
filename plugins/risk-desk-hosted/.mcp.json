@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "riskdesk-hosted": {
+      "type": "http",
+      "url": "https://riskdesk.avidquant.com/mcp"
+    }
+  }
+}
