@@ -68,6 +68,10 @@ def main(argv=None):
     parser.add_argument("--scale", type=float, default=1.5)
     parser.add_argument("--colors", type=int, default=64,
                         help="palette size for the saved PNG")
+    parser.add_argument("--color-scheme", default="dark",
+                        choices=("dark", "light"),
+                        help="the tokens are dark first; headless Chromium "
+                             "defaults to light, so this is set explicitly")
     args = parser.parse_args(argv)
 
     try:
@@ -98,7 +102,8 @@ def main(argv=None):
             browser = play.chromium.launch()
             page = browser.new_page(viewport={"width": args.width,
                                               "height": 900},
-                                    device_scale_factor=args.scale)
+                                    device_scale_factor=args.scale,
+                                    color_scheme=args.color_scheme)
             page.goto(page_path.as_uri())
             if args.section:
                 box = page.evaluate(SECTION_BOX, args.section)
@@ -153,6 +158,8 @@ def capture_dashboard(argv=None):
     parser.add_argument("--width", type=int, default=1100)
     parser.add_argument("--scale", type=float, default=1.25)
     parser.add_argument("--colors", type=int, default=32)
+    parser.add_argument("--color-scheme", default="dark",
+                        choices=("dark", "light"))
     args = parser.parse_args(argv)
 
     try:
@@ -187,7 +194,8 @@ def capture_dashboard(argv=None):
             browser = play.chromium.launch()
             page = browser.new_page(viewport={"width": args.width,
                                               "height": 900},
-                                    device_scale_factor=args.scale)
+                                    device_scale_factor=args.scale,
+                                    color_scheme=args.color_scheme)
             for view in args.views:
                 target = (ROOT / args.out_dir
                           / "{}-{}.png".format(args.prefix, view))
@@ -215,7 +223,11 @@ def capture_dashboard(argv=None):
     for target in written:
         size = target.stat().st_size
         total += size
-        print("wrote {} ({} bytes)".format(target.relative_to(ROOT), size))
+        try:
+            shown = target.relative_to(ROOT)
+        except ValueError:
+            shown = target
+        print("wrote {} ({} bytes)".format(shown, size))
     print("total {} bytes across {} views".format(total, len(written)))
     return 0
 
