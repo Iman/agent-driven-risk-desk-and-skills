@@ -30,4 +30,5 @@ markers = [
     "unit: in process, no subprocess and no socket",
     "integration: real processes, scripts and transports",
     "validation: repository, documentation and packaging checks",
+    "docker: builds and runs the container image, needs a Docker daemon",
 ]
