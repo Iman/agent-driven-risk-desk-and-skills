@@ -60,6 +60,31 @@ def test_report_writes_the_page_and_reports_what_reached_it(tmp_path, capsys):
                                    .encode("utf-8"))
 
 
+def test_report_takes_an_exposure_input_and_draws_it(tmp_path, capsys):
+    output = tmp_path / "page.html"
+    assert cli.main(["report",
+                     "--input", str(EXAMPLES / "energy_stress.json"),
+                     "--exposure", str(EXAMPLES / "energy_book.json"),
+                     "--output", str(output)]) == 0
+    summary = read(capsys)
+    assert summary["exposure_included"] is True
+    assert summary["tail_included"] is False
+    document = output.read_text(encoding="utf-8")
+    assert 'class="bar long"' in document
+    assert 'class="bar short"' in document
+    assert 'class="bar share"' in document
+
+
+def test_report_without_an_exposure_says_so_rather_than_inventing_one(
+        tmp_path, capsys):
+    output = tmp_path / "page.html"
+    assert cli.main(["report", "--input", str(EXAMPLES / "stress.json"),
+                     "--output", str(output)]) == 0
+    assert read(capsys)["exposure_included"] is False
+    assert "No exposure result was supplied" in output.read_text(
+        encoding="utf-8")
+
+
 def test_report_without_a_tail_says_so_rather_than_inventing_one(tmp_path,
                                                                  capsys):
     output = tmp_path / "page.html"
