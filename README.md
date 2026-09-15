@@ -9,8 +9,8 @@ tools call the same runtime functions, so an agent and a person get the
 same numbers with the same provenance, units, assumptions and degraded
 flag attached. 5 plugin skills cover these tasks and setup.
 
-[![Tests](https://img.shields.io/badge/tests-148%20collected-blue)](docs/IMPLEMENTATION.md)
-[![Unit coverage](https://img.shields.io/badge/unit%20coverage-87.57%25-blue)](#development)
+[![Tests](https://img.shields.io/badge/tests-257%20collected-blue)](docs/IMPLEMENTATION.md)
+[![Unit coverage](https://img.shields.io/badge/unit%20coverage-85.87%25-blue)](#development)
 [![Python](https://img.shields.io/badge/python-3.13%20tested-blue)](#get-started)
 [![License](https://img.shields.io/badge/license-PolyForm%20Noncommercial-blue)](LICENSE)
 
@@ -34,6 +34,18 @@ the side of the zero line their sign says they are on, so a short reads as
 a short without anyone reading the minus sign, and the concentration chart
 is ordered and says what the shares are shares of.
 
+### The dashboard
+
+![The dashboard exposure view: a signed net exposure ladder with shorts left of the zero line, and an ordered share-of-gross chart, drawn from synthetic example inputs](docs/images/dashboard-exposure.png)
+
+The same numbers over a loopback socket, five views: overview, exposure,
+stress, tail risk and counterparty XVA. Synthetic example inputs, not
+market data. It binds a loopback address and refuses anything else, makes
+no outbound request, and reads no path from the request. Every view prints
+the sign convention and the degraded flag whether or not the flag is set,
+and a view whose input was absent says so in words that do not imply a
+zero.
+
 ## Get started
 
 Requirements: Git, and a Python the project supports. `pyproject.toml`
@@ -45,6 +57,12 @@ git clone https://github.com/Iman/agent-driven-risk-desk-and-skills.git
 cd agent-driven-risk-desk-and-skills
 ./install.sh
 ./demo.sh
+```
+
+Then, for the web view:
+
+```sh
+.venv/bin/riskdesk dashboard          # http://127.0.0.1:8899
 ```
 
 `install.sh` creates `.venv`, installs the package with its development
@@ -129,6 +147,25 @@ With the plugin installed, these are things a person types.
 Each skill states the sign convention and the degraded status before the
 numbers, because a loss figure without them is unreadable.
 
+### Read it in a browser
+
+`riskdesk dashboard` serves the synthetic energy book by default, from
+`examples/`, and takes the same `--input`, `--tail`, `--exposure` and
+`--xva` flags as `riskdesk report`. It computes nothing of its own: the
+views come from the functions the CLI and the MCP tools call, through the
+same shaping path as the saved report page, so the two cannot disagree
+about a number.
+
+It serves one machine. There is no authentication, so it binds a loopback
+address and refuses any other host rather than letting a typo in a flag put
+a risk book on a network. Each failure has its own exit code and a sentence
+on stderr: 64 for a host that is not loopback, 66 for a missing input, 67
+for an input that fails its contract, 73 for a port already in use.
+
+The XVA view never runs ORE. The adapter needs a trusted local project
+directory, a fresh output directory and a separate process, so the view
+reprints a result the adapter already wrote, or explains what is missing.
+
 ## What it computes
 
 The input contracts are in
@@ -178,7 +215,7 @@ valuation model for those, not this one.
 ## Development
 
 ```sh
-.venv/bin/python -m pytest -q --color=no          # 148 tests, none skipped
+.venv/bin/python -m pytest -q --color=no          # 257 tests, none skipped
 .venv/bin/python scripts/evidence.py check        # documents match the record
 .venv/bin/python -m coverage run -m pytest -q --color=no -m unit
 .venv/bin/python -m coverage json -q

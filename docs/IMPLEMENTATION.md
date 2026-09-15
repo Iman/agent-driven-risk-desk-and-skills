@@ -37,6 +37,51 @@ Not measured in the 2026-09-14/15 session, and therefore not claimed:
 
 ## VERIFIED
 
+Observed on 2026-09-15 London time, for the dashboard:
+
+- A local web view over the four tools, five modules under
+  `src/riskdesk/dashboard`: `maths` is display arithmetic, `data` shapes,
+  `page` renders, `server` owns the socket, `app` wires and reports
+  failures. No dependency was added: a validation test parses every
+  dashboard module and asserts each import is standard library or
+  `riskdesk`.
+- One charting path, enforced rather than intended. The four SVG functions
+  in `report.py` became public and the dashboard imports them; a test
+  asserts no dashboard module contains `<svg` and that none of the four is
+  redefined. A second test compares the dashboard payload field by field
+  against `report_payload` for the same inputs, so the served page and the
+  saved page cannot disagree about a number.
+- It binds a loopback address and refuses anything else. `0.0.0.0`, `::`,
+  `8.8.8.8` and `example.invalid` are all refused with exit 64 before a
+  socket exists, and a name that merely resolves to loopback is not
+  trusted. Every failure has its own exit code and one sentence on stderr:
+  64 not loopback, 66 missing input, 67 input fails its contract, 73 port
+  in use. All four were run and observed.
+- The request cannot name a file. The routing table is fixed, so
+  `../../etc/passwd`, `%2e%2e%2fetc%2fpasswd` and `examples` are all 404
+  with a readable page. Responses carry a content security policy of
+  `default-src 'none'`, and no view contains `http://`, `https://`,
+  `<script` or `<img`.
+- The unit and integration split is enforced from the syntax tree, not
+  from prose. An earlier version of that check matched the word socket
+  anywhere in a file and failed on a docstring reading "no socket", which
+  tested prose rather than behaviour; it now walks the AST for imports and
+  names. 154 unit tests bind nothing.
+- `docs/images/dashboard-{overview,exposure,tail}.png` were captured from
+  a server this repository started and stopped, at scale 1.25 and 32
+  colours: 66,982, 73,945 and 52,105 bytes, 193,032 in total. That is
+  above the 144,000 I estimated and inside the 220,293 available, so
+  nothing was degraded and the two existing images were not touched.
+  Images now total 472,739 of the 500,000 budget, 27,261 spare.
+- Tests: 148 collected before, 257 tests collected after, all passing and
+  none skipped, in 93.51s. By marker: 154 unit, 58 integration, 45
+  validation, 11 docker.
+- Unit line coverage 472 of 539 lines before, 778 of 906 lines after,
+  85.87 percent, still above the 80 percent gate. `dashboard/server.py` is
+  31.82 percent under the unit marker because its handler body only runs
+  when a socket serves, which is integration; that is visible rather than
+  averaged away, as `ore_worker.py` already was.
+
 Observed on 2026-09-15 London time, for the CI failure and its fix:
 
 - CI went red on `gates` for the first run that ever exercised the docker
@@ -80,8 +125,7 @@ Observed on 2026-09-15 London time, for the CI failure and its fix:
   branch CI actually runs untested. That test now asserts the correct
   behaviour for whichever scope the image has, so both platforms are
   covered and nothing skips.
-- Tests: 144 collected before, 148 tests collected after, all passing
-  and none skipped. Container tests 7 before, 11 after, 0 skipped.
+- Tests: 144 collected before, 148 after, all passing and none skipped. Container tests 7 before, 11 after, 0 skipped.
   The eleventh separates a missing artifacts directory, exit 66, from
   an unwritable one, exit 65, because pointing a reader at --user
   for a path that does not exist would not help them.

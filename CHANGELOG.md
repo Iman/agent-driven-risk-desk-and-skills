@@ -11,6 +11,39 @@ portfolio exposure, explicit stress scenarios, and an Open Source Risk
 Engine exposure and XVA adapter. One runtime under `src/riskdesk`, called
 by both the CLI and the MCP server. Five plugin skills.
 
+### Added on 2026-09-15, local dashboard
+
+- `riskdesk dashboard`, a local web view over the four tools: overview,
+  exposure, stress, tail risk and counterparty XVA. Five modules, standard
+  library only, no new dependency and nothing added to `notices/`,
+  `wheel-hashes.json` or the lock.
+- The charts are the ones `report.py` already draws, now public, so the
+  served page and the saved page come from one implementation. A
+  validation test fails the build if a dashboard module grows an SVG of
+  its own.
+- It serves the synthetic energy book by default, binds a loopback address
+  and refuses any other host, makes no outbound request, and reads no path
+  from the request. Every view prints the sign convention and the degraded
+  flag whether or not the flag is set, and an absent input says so in
+  words that do not imply a zero.
+- Every failure is one sentence on stderr with its own exit code: 64 not
+  loopback, 66 missing input, 67 input fails its contract, 73 port in use.
+  That shape is deliberate, and it comes from the container defect fixed
+  earlier the same day, which arrived as a bare exit code and an empty
+  stderr.
+- `scripts/screenshot_report.py` gained a dashboard capture that starts the
+  real server on an ephemeral port, photographs it, and stops it.
+
+### Measured on 2026-09-15, local dashboard
+
+- 148 tests before, 257 after, none skipped: 154 unit, 58 integration, 45
+  validation, 11 docker.
+- Unit line coverage 87.57 percent before, 85.87 percent after, against a
+  gate of 80 percent.
+- Three captures at scale 1.25 and 32 colours: 66,982, 73,945 and 52,105
+  bytes, 193,032 in total, inside the 220,293 available. Images total
+  472,739 of 500,000.
+
 ### Fixed on 2026-09-15, container writes on Linux
 
 - The container could not write a bind mount it did not own. The image
