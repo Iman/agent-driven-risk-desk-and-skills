@@ -18,6 +18,8 @@ at the same arithmetic rather than two implementations that agree today.
 import html
 import math
 
+from riskdesk import design
+
 SIGN_CONVENTION = (
     "Positive VaR and Expected Shortfall denote loss; a negative value "
     "denotes a gain and is not floored at zero. Stress P&L is signed, and "
@@ -332,41 +334,15 @@ def tail_svg(tail, currency):
     return "".join(parts)
 
 
-STYLE = """
-body { font-family: -apple-system, Segoe UI, Helvetica, Arial, sans-serif;
-       margin: 0; padding: 32px; color: #1d1d1f; background: #ffffff;
-       line-height: 1.45; }
-h1 { font-size: 22px; margin: 0 0 4px 0; }
-h2 { font-size: 17px; margin: 32px 0 8px 0; }
-h3 { font-size: 14px; margin: 20px 0 4px 0; font-weight: 600; }
-p, li { font-size: 13px; }
-.meta { font-size: 12px; color: #4a4a4f; }
-.flag { display: inline-block; padding: 4px 10px; border-radius: 4px;
-        font-size: 12px; font-weight: 600; }
-.flag.ok { background: #e6f0e6; color: #1f4620; }
-.flag.degraded { background: #f6e3c8; color: #6a3b00; }
-.convention { border-left: 3px solid #999; padding: 8px 12px;
-              background: #f6f6f7; font-size: 12px; }
-table { border-collapse: collapse; font-size: 12px; margin: 8px 0; }
-th, td { border: 1px solid #d4d4d8; padding: 5px 10px; text-align: right; }
-th:first-child, td:first-child { text-align: left; }
-.chart { max-width: 100%; height: auto; margin: 4px 0 8px 0; }
-.chart .axis { stroke: #8a8a90; stroke-width: 1; }
-.chart .bar.loss { fill: #9c2b2b; }
-.chart .bar.gain { fill: #2f6b46; }
-.chart .bar.short { fill: #9c2b2b; }
-.chart .bar.long { fill: #2f6b46; }
-.chart .bar.flat { fill: #6a6a70; }
-.chart .bar.share { fill: #4a6a8a; }
-.chart .bin { fill: #4a6a8a; }
-.chart .mark { stroke-width: 2; }
-.chart .mark.var { stroke: #9c2b2b; }
-.chart .mark.es { stroke: #6a2b7a; stroke-dasharray: 5 3; }
-.chart .label, .chart .value, .chart .tick, .chart .marklabel {
-    font-family: -apple-system, Segoe UI, Helvetica, Arial, sans-serif;
-    font-size: 11px; fill: #1d1d1f; }
-.chart .label { text-anchor: end; }
-footer { margin-top: 36px; font-size: 11px; color: #5a5a60; }
+# The page reads the shared desk tokens. Every colour it paints comes from
+# riskdesk.design, so dark and light both come from one place and neither
+# is hard coded in a rule. Before this the block here carried 22 literal
+# colours, 11 of them chart rules, which is why the dashboard could not be
+# restyled without restyling this page too: the dashboard inlines this
+# same string.
+STYLE = design.STYLE + """
+.flag-row { display: flex; flex-wrap: wrap; gap: var(--od-space-4);
+            align-items: center; margin: var(--od-space-5) 0; }
 """
 
 
@@ -386,7 +362,14 @@ def render_html(payload):
                    esc(payload["as_of"]), esc(payload["currency"]),
                    esc(payload["data_mode"]),
                    esc(payload["riskdesk_version"])))
-    out.append('<p><span class="flag {}">{}</span></p>'.format(flag, label))
+    out.append('<p class="flag-row"><span class="flag {}">{}</span>'.format(
+        flag, label))
+    # data_mode is a state the page already carried in grey prose. It is a
+    # different fact from degraded and gets its own token, never the amber
+    # that means stale.
+    if payload["data_mode"] == "synthetic":
+        out.append('<span class="flag synthetic">synthetic inputs</span>')
+    out.append("</p>")
     if payload["degraded_reason"]:
         out.append("<p class=\"meta\">Degraded reason: {}</p>".format(
             esc(payload["degraded_reason"])))

@@ -18,22 +18,42 @@ from riskdesk.dashboard import maths
 from riskdesk.report import (STYLE, contribution_svg, gross_share_svg, money,
                              net_by_asset_svg, tail_svg)
 
+# Dashboard chrome only. Every colour reads a token from riskdesk.design,
+# which report.STYLE already brings in, so the served page and the saved
+# page cannot drift apart in either mode.
 NAV_STYLE = """
-nav { display: flex; flex-wrap: wrap; gap: 4px; margin: 0 0 18px 0;
-      border-bottom: 1px solid #d4d4d8; padding-bottom: 10px; }
-nav a { font-size: 13px; text-decoration: none; color: #1d1d1f;
-        padding: 6px 12px; border-radius: 4px; border: 1px solid #d4d4d8; }
-nav a.here { background: #1d1d1f; color: #ffffff; border-color: #1d1d1f; }
-nav a.empty { color: #6a6a70; border-style: dashed; }
-.absent { border-left: 3px solid #b08838; background: #fbf5e9;
-          padding: 10px 14px; font-size: 13px; }
-.counts { font-size: 13px; }
-.counts strong { font-variant-numeric: tabular-nums; }
-.pathline { font-size: 11px; color: #5a5a60; word-break: break-all; }
-code { font-size: 12px; background: #f2f2f4; padding: 1px 4px;
-       border-radius: 3px; }
-pre { font-size: 12px; background: #f2f2f4; padding: 10px;
-      overflow-x: auto; border-radius: 4px; }
+nav { display: flex; flex-wrap: wrap; gap: var(--od-space-2);
+      margin: 0 0 var(--od-space-6) 0;
+      border-bottom: var(--od-border-hair) solid var(--od-line);
+      padding-bottom: var(--od-space-5); }
+nav a { font-size: var(--od-font-size-4); text-decoration: none;
+        color: var(--od-text); background: var(--od-surface-raised);
+        padding: var(--od-space-3) var(--od-space-5);
+        border-radius: var(--od-radius-1);
+        border: var(--od-border-hair) solid var(--od-line); }
+nav a.here { background: var(--od-accent); color: var(--od-accent-ink);
+             border-color: var(--od-accent);
+             font-weight: var(--od-weight-medium); }
+nav a.empty { color: var(--od-text-muted); border-style: dashed; }
+.absent { border-left: var(--od-border-flag) solid var(--od-degraded);
+          background: var(--od-degraded-ground);
+          padding: var(--od-space-5) var(--od-space-6);
+          font-size: var(--od-font-size-4);
+          max-width: var(--od-measure); }
+.counts { font-size: var(--od-font-size-4);
+          font-variant-numeric: tabular-nums; }
+.counts strong { color: var(--od-text);
+                 font-weight: var(--od-weight-strong); }
+.pathline { font-size: var(--od-font-size-6); color: var(--od-text-faint);
+            word-break: break-all; }
+code { font-size: var(--od-font-size-5); background: var(--od-surface-sunken);
+       font-family: var(--od-font-mono);
+       padding: var(--od-space-1) var(--od-space-2);
+       border-radius: var(--od-radius-1); }
+pre { font-size: var(--od-font-size-5); background: var(--od-surface-sunken);
+      font-family: var(--od-font-mono); padding: var(--od-space-5);
+      overflow-x: auto; border-radius: var(--od-radius-1);
+      border: var(--od-border-hair) solid var(--od-line); }
 """
 
 
@@ -63,7 +83,11 @@ def _shell(payload, slug, body):
         out.append('<a class="{}" href="/{}">{}</a>'.format(
             " ".join(classes), view["slug"], esc(view["title"])))
     out.append("</nav>")
-    out.append('<p><span class="flag {}">{}</span></p>'.format(flag, label))
+    out.append('<p class="flag-row"><span class="flag {}">{}</span>'.format(
+        flag, label))
+    if payload["data_mode"] == "synthetic":
+        out.append('<span class="flag synthetic">synthetic inputs</span>')
+    out.append("</p>")
     if payload["degraded_reason"]:
         out.append('<p class="meta">Degraded reason: {}</p>'.format(
             esc(payload["degraded_reason"])))
