@@ -11,6 +11,23 @@ portfolio exposure, explicit stress scenarios, and an Open Source Risk
 Engine exposure and XVA adapter. One runtime under `src/riskdesk`, called
 by both the CLI and the MCP server. Five plugin skills.
 
+### Fixed on 2026-09-15, charts on a narrow screen
+
+- Charts were unreadable at phone width. An inline SVG at width 100%
+  scales its own text down with it, so at 390px the axis labels rendered
+  around 5px. Found by opening the page in a real browser at that
+  viewport, after bytes and contrast had both been measured and neither
+  had caught it. The shared system's chart frame does not fix this, its
+  body rule being the same width 100%, so this frame adds a horizontal
+  scroll and a minimum chart width: below it the frame moves, never the
+  page. Every chart sits in one, pinned by a test.
+
+### Measured on 2026-09-15, charts on a narrow screen
+
+- 267 tests before, 268 after. Unit line coverage 86.03 percent before,
+  86.06 percent after. Contrast 32 pairs enforced, 0 failures.
+- Images re-shot after the frame changed the pages: 404,753 of 500,000.
+
 ### Removed on 2026-09-15, README images
 
 - `docs/images/report-energy-exposure.png`. A crop of the report's

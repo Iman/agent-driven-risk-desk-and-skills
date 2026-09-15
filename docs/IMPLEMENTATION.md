@@ -37,6 +37,33 @@ Not measured in the 2026-09-14/15 session, and therefore not claimed:
 
 ## VERIFIED
 
+Observed on 2026-09-15 London time, for what looking at the pages found:
+
+- The pages were opened in a real Chrome at 1280x900 and at 390x844
+  mobile, in dark. Two things were found that bytes and contrast numbers
+  had not.
+- The synthetic violet is correct in a browser. The grey pill seen
+  earlier was purely PNG palette quantisation, not a CSS fault, which is
+  why the 64-colour palette is the one that ships.
+- At 390px the charts were unreadable: an inline SVG at width 100% scales
+  its own text down with it, and the axis labels rendered around 5px. The
+  shared system's own chart frame does not fix this; its body rule is the
+  same width 100%, height auto. So the frame here adds a horizontal
+  scroll and a minimum chart width, and below that width the frame moves
+  rather than the page. Re-checked at 390px afterwards: the asset labels
+  are legible.
+- Every chart now sits in a frame, pinned by a test, because a chart
+  emitted outside one would quietly go back to being unreadable on a
+  phone. The chart functions are untouched, so there is still one place a
+  chart is drawn.
+- Re-measured after the frame changed the rendered pages:
+  report-energy-stress 250,126, dashboard-exposure 82,310,
+  dashboard-overview 72,317, totalling 404,753 of the 500,000 cap, 95,247
+  spare.
+- 268 tests collected, all passing and none skipped, up from 267. Unit
+  coverage 86.03 to 86.06 percent. Contrast 32 pairs enforced with 0
+  failures.
+
 Observed on 2026-09-15 London time, for the README images:
 
 - The four restyled images were re-rendered dark at 64 colours and
@@ -93,8 +120,7 @@ Observed on 2026-09-15 London time, for the design system:
 - The captures were rendering the LIGHT mode of a dark-first system,
   because headless Chromium defaults to light. Both capture paths now set
   the scheme and default to dark.
-- Tests: 257 collected before, 267 tests collected after, all passing and
-  none skipped. Unit coverage 778 of 906 lines before, 788 of 916 lines
+- Tests: 257 collected before, 267 after, all passing and none skipped. Unit coverage 778 of 906 lines before, 788 of 916 lines
   after, 86.03 percent.
 
 Observed on 2026-09-15 London time, for the dashboard:
