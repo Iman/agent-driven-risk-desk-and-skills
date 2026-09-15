@@ -22,24 +22,5 @@
     "skills",
     "claude-skills",
     "agent-skills"
-  ],
-  "skills": "./skills/",
-  "mcpServers": "./.mcp.json",
-  "interface": {
-    "displayName": "Risk Desk",
-    "shortDescription": "Portfolio risk and XVA research.",
-    "longDescription": "Calculate risk from explicit local inputs with skfolio and ORE. Preserve loss signs, currencies, horizons, model assumptions and upstream credit.",
-    "developerName": "Iman Samizadeh",
-    "category": "Finance",
-    "capabilities": [
-      "Read",
-      "Write"
-    ],
-    "websiteURL": "https://github.com/Iman/agent-driven-risk-desk-and-skills-",
-    "defaultPrompt": [
-      "Calculate historical VaR and Expected Shortfall.",
-      "Stress my linear portfolio.",
-      "Run my local ORE exposure and XVA project."
-    ]
-  }
+  ]
 }

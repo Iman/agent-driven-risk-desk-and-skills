@@ -1,0 +1,16 @@
+{
+  "name": "risk-desk",
+  "owner": {
+    "name": "Iman Samizadeh"
+  },
+  "description": "Portfolio risk analytics for agent runtimes.",
+  "version": "0.1.0",
+  "plugins": [
+    {
+      "name": "risk-desk",
+      "description": "Portfolio risk an agent can drive: historical VaR and Expected Shortfall from supplied P&L, signed linear exposure, explicit stress scenarios that carry no probability, and counterparty exposure and XVA through a local Open Source Risk Engine project. Research software, not investment advice.",
+      "source": "./plugins/risk-desk",
+      "category": "finance"
+    }
+  ]
+}
