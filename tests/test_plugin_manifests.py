@@ -136,6 +136,92 @@ def test_the_marketplace_parses_and_points_at_plugins_that_exist():
         assert "not investment advice" in entry["description"]
 
 
+# One documented placeholder, in one place. The service does not exist yet,
+# so a hostname that drifts between manifests would be published by a
+# directory before anybody could notice the difference.
+ENDPOINT = "https://riskdesk.avidquant.com"
+HOSTED_SKILLS = ["risk-portfolio", "risk-stress", "risk-tail"]
+
+
+def test_the_hosted_manifests_name_one_endpoint_and_only_that_one():
+    """A pinned hostname. If the deploy target changes, this fails and the
+    change is made deliberately in every file at once."""
+    hosted = PLUGINS / "risk-desk-hosted"
+    servers = load(hosted / ".mcp.json")["mcpServers"]
+    assert list(servers) == ["riskdesk-hosted"]
+    assert servers["riskdesk-hosted"]["type"] == "http"
+    assert servers["riskdesk-hosted"]["url"] == ENDPOINT + "/mcp"
+    codex = load(hosted / ".codex-plugin" / "plugin.json")
+    assert codex["interface"]["websiteURL"] == ENDPOINT
+    for runtime in (".claude-plugin", ".codex-plugin"):
+        manifest = load(hosted / runtime / "plugin.json")
+        assert ENDPOINT.removeprefix("https://") in manifest["description"]
+
+
+def test_no_other_hostname_reaches_the_hosted_plugin():
+    """Nothing here should carry a second host, a credential or a token."""
+    hosted = PLUGINS / "risk-desk-hosted"
+    allowed = (ENDPOINT,
+               "https://github.com/Iman/agent-driven-risk-desk-and-skills",
+               # The licence text is upstream and stays verbatim.
+               "https://polyformproject.org/")
+    for path in sorted(hosted.rglob("*")):
+        if not path.is_file():
+            continue
+        text = path.read_text(encoding="utf-8")
+        for found in re.findall(r"https://[^\s\"'),\]]+", text):
+            assert found.startswith(allowed), "{}: {}".format(path, found)
+        for secret in ("api_key", "apiKey", "Authorization", "Bearer ",
+                       "token"):
+            assert secret not in text, "{}: {}".format(path, secret)
+
+
+def test_the_hosted_plugin_says_plainly_that_it_is_not_live():
+    """A reader who tries a dead endpoint and concludes the project is
+    broken is a cost this sentence exists to avoid."""
+    readme = (PLUGINS / "risk-desk-hosted" / "README.md").read_text(
+        encoding="utf-8")
+    assert "not live yet" in readme
+    assert "does not resolve" in readme
+    assert "nothing is deployed" in readme
+    root_readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    assert "not live" in root_readme
+
+
+def test_the_hosted_plugin_does_not_offer_a_tool_it_cannot_run():
+    """XVA reads a local ORE project directory. A remote endpoint cannot,
+    so offering it would put a tool in the list that could never work."""
+    hosted = PLUGINS / "risk-desk-hosted"
+    assert skill_directories(hosted) == HOSTED_SKILLS
+    assert not (hosted / "skills" / "risk-xva").exists()
+    text = "".join((hosted / "skills" / name / "SKILL.md").read_text(
+        encoding="utf-8") for name in HOSTED_SKILLS)
+    assert "risk_xva" not in text
+    for name in HOSTED_SKILLS:
+        body = (hosted / "skills" / name / "SKILL.md").read_text(
+            encoding="utf-8")
+        assert "not available here" in body, name
+
+
+def test_the_hosted_skills_are_copies_of_their_sources():
+    """Two hand-edited copies drift, and the one nobody opens is the one
+    that ships. scripts/package_plugin.py rebuilds these."""
+    source = ROOT / "openai-skills"
+    assert sorted(p.name for p in source.iterdir()
+                  if p.is_dir()) == HOSTED_SKILLS
+    for name in HOSTED_SKILLS:
+        built = PLUGINS / "risk-desk-hosted" / "skills" / name / "SKILL.md"
+        assert built.read_bytes() == (source / name / "SKILL.md").read_bytes(), \
+            "{} differs from openai-skills; run scripts/package_plugin.py".format(name)
+
+
+def test_glama_names_the_maintainer_and_nothing_else():
+    glama = load(ROOT / "glama.json")
+    assert glama["maintainers"] == ["Iman"]
+    assert glama["$schema"].startswith("https://glama.ai/")
+    assert set(glama) == {"$schema", "maintainers"}
+
+
 def test_the_marketplace_lists_every_plugin_directory():
     """A plugin added to the tree and forgotten in the marketplace is
     installable by nobody, and looks fine in a file listing."""
