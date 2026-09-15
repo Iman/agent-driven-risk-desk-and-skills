@@ -55,7 +55,15 @@ def main(argv=None):
         print(json.dumps(result, indent=2, allow_nan=False))
         return 0
     except Exception as exc:
+        # The JSON envelope stays on stdout, because that is the contract a
+        # machine caller reads. A human line also goes to stderr, because a
+        # caller that discards stdout otherwise loses the diagnosis
+        # entirely while still exiting non-zero: demo.sh redirects this
+        # command's stdout, so a PermissionError inside a container arrived
+        # in CI as a bare exit code with an empty stderr.
         print(json.dumps({"error": type(exc).__name__, "message": str(exc)}))
+        print("riskdesk {}: {}: {}".format(args.command, type(exc).__name__, exc),
+              file=sys.stderr)
         return 1
 
 
