@@ -189,6 +189,12 @@ CLAIMS = [
         "documents": {"README.md": "%d plugin skills cover these tasks"},
     },
     {
+        "id": "skills_in_manifest",
+        "measure": "skills",
+        "about": "skill directories both plugin manifests point at",
+        "documents": {"README.md": "point at the same %d skill directories"},
+    },
+    {
         "id": "mcp_tools",
         "measure": "mcp_tools",
         "about": "tools the local MCP server registers",

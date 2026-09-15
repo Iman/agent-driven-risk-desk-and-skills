@@ -9,7 +9,7 @@ tools call the same runtime functions, so an agent and a person get the
 same numbers with the same provenance, units, assumptions and degraded
 flag attached. 5 plugin skills cover these tasks and setup.
 
-[![Tests](https://img.shields.io/badge/tests-117%20collected-blue)](docs/IMPLEMENTATION.md)
+[![Tests](https://img.shields.io/badge/tests-128%20collected-blue)](docs/IMPLEMENTATION.md)
 [![Unit coverage](https://img.shields.io/badge/unit%20coverage-87.55%25-blue)](#development)
 [![Python](https://img.shields.io/badge/python-3.13%20tested-blue)](#get-started)
 [![License](https://img.shields.io/badge/license-PolyForm%20Noncommercial-blue)](LICENSE)
@@ -62,6 +62,27 @@ runtime. The server speaks stdio and makes no market-data or broker
 requests.
 
 ## Ask your agent
+
+### Install the plugin
+
+The runtime is a normal Python install; the plugin only tells your agent
+where to find it. Install the runtime first with `./install.sh`, then make
+`riskdesk-mcp` reachable, either by activating `.venv` in the environment
+that launches the agent or by pointing the client at
+`.venv/bin/riskdesk-mcp` by absolute path.
+
+| Runtime | Install the plugin | Manifest it reads |
+| --- | --- | --- |
+| Claude Code | `/plugin marketplace add Iman/agent-driven-risk-desk-and-skills-` then `/plugin install risk-desk@risk-desk` | [.claude-plugin/plugin.json](plugins/risk-desk/.claude-plugin/plugin.json), listed in [.claude-plugin/marketplace.json](.claude-plugin/marketplace.json) |
+| Codex | Copy or symlink `plugins/risk-desk` into your Codex plugin directory | [.codex-plugin/plugin.json](plugins/risk-desk/.codex-plugin/plugin.json), which points at `skills/` and `.mcp.json` |
+| Any MCP client | Add `.mcp.json`'s single stdio server, or run `riskdesk-mcp` yourself | [.mcp.json](plugins/risk-desk/.mcp.json) |
+
+Both manifests describe the same plugin, both point at the same 5 skill
+directories, and a validation test fails the build if either stops
+matching what is on disk. Installing the plugin does not install the
+runtime.
+
+### Prompts
 
 With the plugin installed, these are things a person types.
 
@@ -124,7 +145,7 @@ valuation model for those, not this one.
 ## Development
 
 ```sh
-.venv/bin/python -m pytest -q --color=no          # 117 tests, none skipped
+.venv/bin/python -m pytest -q --color=no          # 128 tests, none skipped
 .venv/bin/python scripts/evidence.py check        # documents match the record
 .venv/bin/python -m coverage run -m pytest -q --color=no -m unit
 .venv/bin/python -m coverage json -q

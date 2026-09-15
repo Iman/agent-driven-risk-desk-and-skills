@@ -2,13 +2,13 @@
  "note": "Figures quoted in the documentation, with where each came from. A measured figure was counted in this checkout when this file was written. A pinned figure came from a run against inputs that are not in this repository and was not re-measured. Written by scripts/evidence.py.",
  "figures": {
   "tests_collected": {
-   "value": 117,
+   "value": 128,
    "kind": "measured",
    "measured_by": "scripts/evidence.py record",
    "about": "tests pytest collects in this checkout",
    "documents": {
-    "README.md": "tests-117%20collected",
-    "docs/IMPLEMENTATION.md": "117 tests collected"
+    "README.md": "tests-128%20collected",
+    "docs/IMPLEMENTATION.md": "128 tests collected"
    }
   },
   "unit_coverage": {
@@ -29,6 +29,15 @@
    "about": "plugin skills under plugins/risk-desk/skills",
    "documents": {
     "README.md": "5 plugin skills cover these tasks"
+   }
+  },
+  "skills_in_manifest": {
+   "value": 5,
+   "kind": "measured",
+   "measured_by": "scripts/evidence.py record",
+   "about": "skill directories both plugin manifests point at",
+   "documents": {
+    "README.md": "point at the same 5 skill directories"
    }
   },
   "mcp_tools": {

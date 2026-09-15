@@ -32,6 +32,33 @@ Not measured in the 2026-09-14/15 session, and therefore not claimed:
 ## VERIFIED
 
 Observed on 2026-09-15 London time, on macOS ARM64 (Darwin 25.6.0), for
+the plugin manifests:
+
+- A live defect is CLOSED. README.md pointed at `plugins/risk-desk`, which
+  had a Codex manifest and no Claude Code manifest, and the repository had
+  no `.claude-plugin/marketplace.json`, so the install route the README
+  implied did not exist for Claude Code. Both manifests are now present,
+  both are listed, and a validation test fails the build if either stops
+  matching the directories on disk.
+- A second live defect was found while checking the first and is CLOSED in
+  its own commit. `python scripts/package_plugin.py`, a command
+  docs/IMPLEMENTATION.md tells a reader to run, failed with an
+  AssertionError: it compared the notice files in the zip, which exclude
+  `.DS_Store`, against every file under `notices/`, which includes one.
+  Observed failing before the change and passing after.
+- Tests: 117 collected before, 128 tests collected after, all passing and
+  none skipped. By marker: 81 unit, 18 integration, 29 validation.
+- Unit line coverage unchanged at 471 of 538 lines, 87.55 percent, because
+  the new tests are validation rather than unit and the new files are JSON
+  rather than Python.
+- `evidence.py check` reports `18 figures checked, 0 problems`, up from 17.
+  The new figure is the skill-directory count the manifests point at.
+- The manifest tests found a real bug in their own first draft:
+  `"./.mcp.json".lstrip("./")` is `"mcp.json"`, a different file, because
+  `lstrip` removes characters and not a prefix. Observed failing, then
+  fixed with `removeprefix` in all three path resolutions.
+
+Observed on 2026-09-15 London time, on macOS ARM64 (Darwin 25.6.0), for
 the exposure charts:
 
 - Before this change: 103 tests collected, all passing, none skipped; unit
