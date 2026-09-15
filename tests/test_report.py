@@ -189,9 +189,9 @@ def test_the_exposure_panel_carries_its_own_provenance():
 def test_a_short_is_drawn_on_the_other_side_of_the_zero_line():
     """The whole point of the ladder: a reader must not have to read the
     minus sign to see that B is short."""
-    from riskdesk.report import _net_by_asset_svg
+    from riskdesk.report import net_by_asset_svg
 
-    document = _net_by_asset_svg(exposure_payload(), "USD")
+    document = net_by_asset_svg(exposure_payload(), "USD")
     long_bar = re.search(r'<rect x="([\d.]+)"[^>]*class="bar long"', document)
     short_bar = re.search(r'<rect x="([\d.]+)"[^>]*class="bar short"',
                           document)
@@ -204,9 +204,9 @@ def test_a_short_is_drawn_on_the_other_side_of_the_zero_line():
 def test_a_zero_position_is_neither_long_nor_short():
     """A one-pixel bar on either side would claim a direction the input
     does not have."""
-    from riskdesk.report import _net_by_asset_svg
+    from riskdesk.report import net_by_asset_svg
 
-    document = _net_by_asset_svg(exposure_payload(), "USD")
+    document = net_by_asset_svg(exposure_payload(), "USD")
     assert document.count('class="bar flat"') == 1
     assert document.count('class="bar long"') == 1
     assert document.count('class="bar short"') == 1
@@ -214,11 +214,11 @@ def test_a_zero_position_is_neither_long_nor_short():
 
 @pytest.mark.unit
 def test_both_exposure_charts_name_the_base_currency():
-    from riskdesk.report import _gross_share_svg, _net_by_asset_svg
+    from riskdesk.report import gross_share_svg, net_by_asset_svg
 
     exposure = exposure_payload()
-    ladder = _net_by_asset_svg(exposure, "USD")
-    shares = _gross_share_svg(exposure, "USD")
+    ladder = net_by_asset_svg(exposure, "USD")
+    shares = gross_share_svg(exposure, "USD")
     assert "net market value, signed, in USD" in ladder
     assert "share of gross exposure, 800.00 USD in total" in shares
     assert "75.0%" in shares

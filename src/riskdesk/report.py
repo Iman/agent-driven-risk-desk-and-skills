@@ -9,6 +9,11 @@ shaping functions below are pure and the drawing is arithmetic.
 Nothing here recomputes risk. It reads the envelopes produced by
 riskdesk.analytics and reprints them, including the sign convention, the
 degraded flag and the degraded reason.
+
+The chart functions and `money` are public because the dashboard draws the
+same charts. One charting path, so a fix to a sign or an axis reaches both
+surfaces, and a reader comparing a saved page with a served one is looking
+at the same arithmetic rather than two implementations that agree today.
 """
 import html
 import math
@@ -26,7 +31,7 @@ SIGN_CONVENTION = (
 )
 
 
-def _money(value, currency):
+def money(value, currency):
     return "{:,.2f} {}".format(value, currency)
 
 
@@ -161,7 +166,7 @@ def report_payload(stress_result, tail_result=None, tail_pnl=None,
     return payload
 
 
-def _net_by_asset_svg(exposure, currency):
+def net_by_asset_svg(exposure, currency):
     """Signed net exposure per asset, longs and shorts across a zero line.
 
     A short is the thing a reader most needs to see without arithmetic, so
@@ -202,7 +207,7 @@ def _net_by_asset_svg(exposure, currency):
                      'class="{}"/>'.format(x, y + 3, drawn, css))
         parts.append('<text x="{}" y="{}" class="value">{}</text>'.format(
             label_width + axis_width + 10, y + 15,
-            html.escape(_money(row["value"], currency))))
+            html.escape(money(row["value"], currency))))
     parts.append('<text x="{}" y="{}" class="tick" text-anchor="middle">'
                  'net market value, signed, in {}</text>'.format(
                      width / 2, height - 8, html.escape(currency)))
@@ -210,7 +215,7 @@ def _net_by_asset_svg(exposure, currency):
     return "".join(parts)
 
 
-def _gross_share_svg(exposure, currency):
+def gross_share_svg(exposure, currency):
     """Share of gross exposure per asset, largest first.
 
     Gross counts absolute values before offsetting, so every bar here runs
@@ -241,13 +246,13 @@ def _gross_share_svg(exposure, currency):
     parts.append('<text x="{}" y="{}" class="tick" text-anchor="middle">'
                  'share of gross exposure, {} in total</text>'.format(
                      width / 2, height - 8,
-                     html.escape(_money(exposure["gross_exposure"],
+                     html.escape(money(exposure["gross_exposure"],
                                         currency))))
     parts.append("</svg>")
     return "".join(parts)
 
 
-def _contribution_svg(scenario, currency):
+def contribution_svg(scenario, currency):
     rows = scenario["contributions"]
     scale = max((abs(row["value"]) for row in rows), default=0.0) or 1.0
     row_height, label_width, axis_width, top = 28, 250, 380, 24
@@ -274,12 +279,12 @@ def _contribution_svg(scenario, currency):
                      'class="{}"/>'.format(x, y + 3, max(length, 1.0), css))
         parts.append('<text x="{}" y="{}" class="value">{}</text>'.format(
             label_width + axis_width + 10, y + 15,
-            html.escape(_money(row["value"], currency))))
+            html.escape(money(row["value"], currency))))
     parts.append("</svg>")
     return "".join(parts)
 
 
-def _tail_svg(tail, currency):
+def tail_svg(tail, currency):
     bins = tail["bins"]
     low, high = bins[0]["low"], bins[-1]["high"]
     var_at, es_at = -tail["var"], -tail["expected_shortfall"]
@@ -314,12 +319,12 @@ def _tail_svg(tail, currency):
                      'text-anchor="middle">{} {}</text>'.format(
                          min(max(x, 90.0), width - 90.0),
                          label_rows[name], name,
-                         html.escape(_money(value, currency))))
+                         html.escape(money(value, currency))))
     parts.append('<text x="40" y="{}" class="tick">{}</text>'.format(
-        base + 20, html.escape(_money(low, currency))))
+        base + 20, html.escape(money(low, currency))))
     parts.append('<text x="{}" y="{}" class="tick" text-anchor="end">{}</text>'
                  .format(width - 40, base + 20,
-                         html.escape(_money(high, currency))))
+                         html.escape(money(high, currency))))
     parts.append('<text x="{}" y="{}" class="tick" text-anchor="middle">'
                  'supplied P&amp;L observations, profit positive</text>'
                  .format(width / 2, base + 38))
@@ -406,22 +411,22 @@ def render_html(payload):
         out.append("<table><tr><th>Measure</th><th>Value</th>"
                    "<th>Against NAV</th></tr>")
         out.append("<tr><td>NAV</td><td>{}</td><td></td></tr>".format(
-            esc(_money(exposure["nav"], payload["currency"]))))
+            esc(money(exposure["nav"], payload["currency"]))))
         out.append("<tr><td>Gross exposure</td><td>{}</td><td>{:.4g}x</td>"
                    "</tr>".format(
-                       esc(_money(exposure["gross_exposure"],
+                       esc(money(exposure["gross_exposure"],
                                   payload["currency"])),
                        exposure["gross_leverage"]))
         out.append("<tr><td>Net exposure</td><td>{}</td><td>{:.4g}x</td>"
                    "</tr>".format(
-                       esc(_money(exposure["net_exposure"],
+                       esc(money(exposure["net_exposure"],
                                   payload["currency"])),
                        exposure["net_leverage"]))
         out.append("</table>")
         out.append("<h3>Net exposure by asset</h3>")
-        out.append(_net_by_asset_svg(exposure, payload["currency"]))
+        out.append(net_by_asset_svg(exposure, payload["currency"]))
         out.append("<h3>Share of gross exposure</h3>")
-        out.append(_gross_share_svg(exposure, payload["currency"]))
+        out.append(gross_share_svg(exposure, payload["currency"]))
         out.append('<p class="meta">Exposure input source: {}</p>'.format(
             esc(exposure["source"])))
         out.append('<p class="meta">Exposure input SHA-256: {}</p>'.format(
@@ -436,14 +441,14 @@ def render_html(payload):
     for scenario in payload["scenarios"]:
         out.append("<tr><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>"
                    .format(esc(scenario["name"]),
-                           esc(_money(scenario["pnl"], payload["currency"])),
-                           esc(_money(scenario["loss"], payload["currency"])),
-                           esc(_money(scenario["stressed_nav"],
+                           esc(money(scenario["pnl"], payload["currency"])),
+                           esc(money(scenario["loss"], payload["currency"])),
+                           esc(money(scenario["stressed_nav"],
                                       payload["currency"]))))
     out.append("</table>")
     for scenario in payload["scenarios"]:
         out.append("<h3>{}</h3>".format(esc(scenario["name"])))
-        out.append(_contribution_svg(scenario, payload["currency"]))
+        out.append(contribution_svg(scenario, payload["currency"]))
 
     out.append("<h2>Historical tail risk</h2>")
     tail = payload["tail"]
@@ -457,16 +462,16 @@ def render_html(payload):
                    "value {}.</p>".format(
                        tail["observations"], tail["confidence"] * 100,
                        tail["horizon_days"], tail["tail_probability_mass"],
-                       esc(_money(tail["portfolio_value"],
+                       esc(money(tail["portfolio_value"],
                                   payload["currency"]))))
         out.append("<table><tr><th>Measure</th><th>Value (loss positive)"
                    "</th></tr>")
         out.append("<tr><td>VaR</td><td>{}</td></tr>".format(
-            esc(_money(tail["var"], payload["currency"]))))
+            esc(money(tail["var"], payload["currency"]))))
         out.append("<tr><td>Expected Shortfall</td><td>{}</td></tr>".format(
-            esc(_money(tail["expected_shortfall"], payload["currency"]))))
+            esc(money(tail["expected_shortfall"], payload["currency"]))))
         out.append("</table>")
-        out.append(_tail_svg(tail, payload["currency"]))
+        out.append(tail_svg(tail, payload["currency"]))
         out.append('<p class="meta">Tail input source: {}</p>'.format(
             esc(tail["source"])))
 
