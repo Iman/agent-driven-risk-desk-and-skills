@@ -7,7 +7,8 @@ scenarios that carry no probability, and counterparty exposure and XVA
 through a local Open Source Risk Engine project. The CLI and 4 local MCP
 tools call the same runtime functions, so an agent and a person get the
 same numbers with the same provenance, units, assumptions and degraded
-flag attached. 5 plugin skills cover these tasks and setup.
+flag attached. A local dashboard reads the same results in a browser, and
+5 plugin skills cover these tasks and setup.
 
 [![Tests](https://img.shields.io/badge/tests-268%20collected-blue)](docs/IMPLEMENTATION.md)
 [![Unit coverage](https://img.shields.io/badge/unit%20coverage-86.06%25-blue)](#development)
