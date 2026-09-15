@@ -31,9 +31,12 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install the package and its development extra
         run: python -m pip install ".[dev]"
+      # The container tests are deselected here and run once in the gates
+      # job below. The image is python:3.13 whatever this matrix entry is,
+      # so building it three times would measure the same thing three times.
       - name: Run the tests
         run: >-
-          python -m pytest -q --color=no
+          python -m pytest -q --color=no -m "not docker"
           --junitxml=artifacts/tests-${{ matrix.python-version }}.xml
       - name: Keep the junit report
         if: always()
@@ -58,3 +61,7 @@ jobs:
           python -m coverage run -m pytest -q --color=no -m unit
           python -m coverage json -q
           python scripts/check_unit_coverage.py artifacts/coverage/unit.json
+      - name: Build the container and run its tests
+        run: python -m pytest -q --color=no -m docker
+      - name: Package the plugin
+        run: python scripts/package_plugin.py
