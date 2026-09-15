@@ -11,6 +11,28 @@ portfolio exposure, explicit stress scenarios, and an Open Source Risk
 Engine exposure and XVA adapter. One runtime under `src/riskdesk`, called
 by both the CLI and the MCP server. Five plugin skills.
 
+### Changed on 2026-09-15, shared design system
+
+- The report page and the dashboard now read the desk design tokens,
+  copied into `src/riskdesk/design.py` rather than imported, so the three
+  desks look like one product without this repository gaining a
+  dependency, a submodule or a runtime fetch.
+- Dark first, with a working light mode, both defined as tokens. Neither
+  surface writes a colour of its own any more: the report's stylesheet
+  had carried 22 literal colours, 11 of them chart rules.
+- `data_mode == "synthetic"` is now a state flag rather than grey prose.
+  `--od-stale` is declared and deliberately unpainted, because this
+  project has no freshness state and binding the small-sample warning to
+  it would paint a degraded page in the amber that means stale.
+
+### Measured on 2026-09-15, shared design system
+
+- Contrast measured on this project's own pairs, not inherited: 32 pairs
+  enforced across dark and light, 0 failures. Two pairs recorded as
+  decoration and not enforced, with the reason and the ratio kept visible.
+- 257 tests before, 267 after, none skipped. Unit line coverage 85.87
+  percent before, 86.03 percent after.
+
 ### Added on 2026-09-15, local dashboard
 
 - `riskdesk dashboard`, a local web view over the four tools: overview,

@@ -37,6 +37,41 @@ Not measured in the 2026-09-14/15 session, and therefore not claimed:
 
 ## VERIFIED
 
+Observed on 2026-09-15 London time, for the design system:
+
+- The desk design tokens were COPIED into `src/riskdesk/design.py`, not
+  imported: this repository is public, self-contained and adds no
+  dependency. The module records where they came from and that the two
+  must be kept in step.
+- Both surfaces now read the tokens and neither writes a colour. Before
+  this, `report.STYLE` carried 22 literal colours, 11 of them chart
+  rules, and the dashboard inlines that same string, which is why one
+  could not be restyled without the other.
+- Contrast was measured here rather than inherited from the 50-pair
+  result, which was measured on other markup: 32 pairs enforced across
+  both modes, 0 failures. Two further pairs are recorded as decoration
+  and not enforced: `--od-line` on `--od-ground` is 1.39 to 1 dark and
+  1.48 to 1 light. Table rules are neither a control boundary nor a
+  graphical object required to understand the content under WCAG 2.1 SC
+  1.4.11, and no token that clears 3 to 1 against the ground would leave
+  a dense table readable. The chart axis is enforced, not exempted, and
+  passes at 4.34 and 3.43.
+- `--od-stale` is declared and deliberately unpainted, with a test
+  pinning that. This project has no freshness state; the only "stale" in
+  the source is the ORE adapter's refusal to reuse an old cube.
+- `data_mode == "synthetic"` gained its own flag. It was already on the
+  page as grey prose and is a different fact from degraded.
+- The colour guard caught a bug in itself on its first run: `re.VERBOSE`
+  collapsed its alternation into a branch that matched the empty string,
+  so it reported a literal in files that had none. Found by the mutation
+  check written beside it.
+- The captures were rendering the LIGHT mode of a dark-first system,
+  because headless Chromium defaults to light. Both capture paths now set
+  the scheme and default to dark.
+- Tests: 257 collected before, 267 tests collected after, all passing and
+  none skipped. Unit coverage 778 of 906 lines before, 788 of 916 lines
+  after, 86.03 percent.
+
 Observed on 2026-09-15 London time, for the dashboard:
 
 - A local web view over the four tools, five modules under
@@ -73,8 +108,8 @@ Observed on 2026-09-15 London time, for the dashboard:
   above the 144,000 I estimated and inside the 220,293 available, so
   nothing was degraded and the two existing images were not touched.
   Images now total 472,739 of the 500,000 budget, 27,261 spare.
-- Tests: 148 collected before, 257 tests collected after, all passing and
-  none skipped, in 93.51s. By marker: 154 unit, 58 integration, 45
+- Tests: 148 collected before, 257 after, all passing and none skipped,
+  in 93.51s. By marker: 154 unit, 58 integration, 45
   validation, 11 docker.
 - Unit line coverage 472 of 539 lines before, 778 of 906 lines after,
   85.87 percent, still above the 80 percent gate. `dashboard/server.py` is
