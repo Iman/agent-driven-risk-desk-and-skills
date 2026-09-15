@@ -27,6 +27,7 @@ chromium`.
 """
 import argparse
 from pathlib import Path
+import re
 import subprocess
 import sys
 import tempfile
@@ -127,6 +128,95 @@ def main(argv=None):
     except ValueError:
         shown = output
     print("wrote {} ({} bytes)".format(shown, output.stat().st_size))
+    return 0
+
+
+def capture_dashboard(argv=None):
+    """Capture dashboard views from a server this script starts and stops.
+
+    The server runs as a subprocess of the project interpreter, because the
+    interpreter that has Playwright is not the one that has the project's
+    dependencies. That is also the more faithful capture: it photographs
+    the command a reader will actually run, over a real socket, rather than
+    a page rendered in memory.
+
+        python3 scripts/screenshot_report.py --python .venv/bin/python
+
+    Port 0, so a capture cannot collide with a dashboard already running.
+    """
+    parser = argparse.ArgumentParser(description="capture dashboard views")
+    parser.add_argument("--python", default=sys.executable)
+    parser.add_argument("--views", nargs="+",
+                        default=["overview", "exposure", "tail"])
+    parser.add_argument("--out-dir", default="docs/images")
+    parser.add_argument("--prefix", default="dashboard")
+    parser.add_argument("--width", type=int, default=1100)
+    parser.add_argument("--scale", type=float, default=1.25)
+    parser.add_argument("--colors", type=int, default=32)
+    args = parser.parse_args(argv)
+
+    try:
+        from playwright.sync_api import sync_playwright
+    except ImportError:
+        print("playwright is not importable in " + sys.executable)
+        print("pip install playwright && python -m playwright install chromium")
+        return 1
+
+    process = subprocess.Popen(
+        [args.python, "-m", "riskdesk.cli", "dashboard", "--port", "0"],
+        cwd=str(ROOT), stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+        text=True)
+    base = None
+    for _ in range(40):
+        line = process.stdout.readline()
+        if not line:
+            break
+        found = re.search(r"(http://127\.0\.0\.1:\d+)", line)
+        if found:
+            base = found.group(1)
+            break
+    if base is None:
+        process.terminate()
+        print("the dashboard did not report a URL")
+        print(process.stderr.read()[-2000:])
+        return 1
+
+    written = []
+    try:
+        with sync_playwright() as play:
+            browser = play.chromium.launch()
+            page = browser.new_page(viewport={"width": args.width,
+                                              "height": 900},
+                                    device_scale_factor=args.scale)
+            for view in args.views:
+                target = (ROOT / args.out_dir
+                          / "{}-{}.png".format(args.prefix, view))
+                target.parent.mkdir(parents=True, exist_ok=True)
+                page.goto("{}/{}".format(base, view))
+                page.screenshot(path=str(target), full_page=True)
+                written.append(target)
+            browser.close()
+    finally:
+        process.terminate()
+        process.wait(timeout=30)
+
+    try:
+        from PIL import Image
+    except ImportError:
+        pass
+    else:
+        for target in written:
+            with Image.open(target) as image:
+                image.convert("RGB").quantize(
+                    colors=args.colors,
+                    method=Image.Quantize.MEDIANCUT).save(target,
+                                                          optimize=True)
+    total = 0
+    for target in written:
+        size = target.stat().st_size
+        total += size
+        print("wrote {} ({} bytes)".format(target.relative_to(ROOT), size))
+    print("total {} bytes across {} views".format(total, len(written)))
     return 0
 
 
