@@ -2,24 +2,24 @@
  "note": "Figures quoted in the documentation, with where each came from. A measured figure was counted in this checkout when this file was written. A pinned figure came from a run against inputs that are not in this repository and was not re-measured. Written by scripts/evidence.py.",
  "figures": {
   "tests_collected": {
-   "value": 103,
+   "value": 117,
    "kind": "measured",
    "measured_by": "scripts/evidence.py record",
    "about": "tests pytest collects in this checkout",
    "documents": {
-    "README.md": "tests-103%20collected",
-    "docs/IMPLEMENTATION.md": "103 tests collected"
+    "README.md": "tests-117%20collected",
+    "docs/IMPLEMENTATION.md": "117 tests collected"
    }
   },
   "unit_coverage": {
-   "value": "85.65",
+   "value": "87.55",
    "kind": "measured",
    "measured_by": "scripts/evidence.py record",
    "about": "unit line coverage of src/riskdesk, percent",
    "documents": {
-    "README.md": "unit%20coverage-85.65%25",
-    "docs/IMPLEMENTATION.md": "85.65 percent",
-    "CHANGELOG.md": "85.65 percent"
+    "README.md": "unit%20coverage-87.55%25",
+    "docs/IMPLEMENTATION.md": "87.55 percent",
+    "CHANGELOG.md": "87.55 percent"
    }
   },
   "skills": {
@@ -65,6 +65,36 @@
    "about": "example input files under examples/",
    "documents": {
     "README.md": "6 example input files"
+   }
+  },
+  "energy_exposure_assets": {
+   "value": 6,
+   "kind": "measured",
+   "measured_by": "scripts/evidence.py record",
+   "about": "assets the exposure charts draw for the example book",
+   "documents": {
+    "README.md": "the 6 legs of the synthetic energy book",
+    "docs/IMPLEMENTATION.md": "6 assets"
+   }
+  },
+  "energy_gross_exposure": {
+   "value": "14,100,000.00",
+   "kind": "measured",
+   "measured_by": "scripts/evidence.py record",
+   "about": "gross exposure of examples/energy_book.json, in USD",
+   "documents": {
+    "docs/IMPLEMENTATION.md": "gross exposure 14,100,000.00 USD",
+    "CHANGELOG.md": "gross 14,100,000.00 USD"
+   }
+  },
+  "energy_net_exposure": {
+   "value": "6,000,000.00",
+   "kind": "measured",
+   "measured_by": "scripts/evidence.py record",
+   "about": "net exposure of examples/energy_book.json, in USD",
+   "documents": {
+    "docs/IMPLEMENTATION.md": "net exposure 6,000,000.00 USD",
+    "CHANGELOG.md": "net 6,000,000.00 USD"
    }
   },
   "ore_exposure_dates": {

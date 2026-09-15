@@ -9,20 +9,30 @@ tools call the same runtime functions, so an agent and a person get the
 same numbers with the same provenance, units, assumptions and degraded
 flag attached. 5 plugin skills cover these tasks and setup.
 
-[![Tests](https://img.shields.io/badge/tests-103%20collected-blue)](docs/IMPLEMENTATION.md)
-[![Unit coverage](https://img.shields.io/badge/unit%20coverage-85.65%25-blue)](#development)
+[![Tests](https://img.shields.io/badge/tests-117%20collected-blue)](docs/IMPLEMENTATION.md)
+[![Unit coverage](https://img.shields.io/badge/unit%20coverage-87.55%25-blue)](#development)
 [![Python](https://img.shields.io/badge/python-3.13%20tested-blue)](#get-started)
 [![License](https://img.shields.io/badge/license-PolyForm%20Noncommercial-blue)](LICENSE)
 
 ## See the desk
 
-![Stress contributions and a P&L distribution with VaR and Expected Shortfall marked, drawn from synthetic example inputs](docs/images/report-energy-stress.png)
+![Exposure, stress contributions and a P&L distribution with VaR and Expected Shortfall marked, drawn from synthetic example inputs](docs/images/report-energy-stress.png)
 
 One page, written by `riskdesk report`, from the synthetic energy book in
 `examples/`. Synthetic example inputs, not market data and not a record of
 any position. The page states its sign convention, prints its degraded
 flag whether or not it is set, and embeds its own styling and charts, so it
 opens with no network.
+
+### The exposure section, closer
+
+![A signed net exposure ladder with shorts left of the zero line and longs right of it, and an ordered share-of-gross concentration chart, drawn from synthetic example inputs](docs/images/report-energy-exposure.png)
+
+The same page, at the exposure section. Synthetic example inputs, not
+market data. The ladder puts the 6 legs of the synthetic energy book on
+the side of the zero line their sign says they are on, so a short reads as
+a short without anyone reading the minus sign, and the concentration chart
+is ordered and says what the shares are shares of.
 
 ## Get started
 
@@ -79,7 +89,8 @@ unknown fields and nonfinite numbers are rejected.
   scaling is applied and no observation is dropped.
 - **Exposure** requires signed linear-position market values already
   translated into one base currency. Gross counts absolute values before
-  offsetting; net does not. Leverage divides by the supplied NAV.
+  offsetting; net does not. Leverage divides by the supplied NAV. The
+  report draws it as [the two charts above](#the-exposure-section-closer).
 - **Stress** requires an explicit return shock for every asset in every
   scenario. It reports P&L, loss, stressed NAV and per-position
   contributions. It attaches no probability to a scenario.
@@ -113,7 +124,7 @@ valuation model for those, not this one.
 ## Development
 
 ```sh
-.venv/bin/python -m pytest -q --color=no          # 103 tests, none skipped
+.venv/bin/python -m pytest -q --color=no          # 117 tests, none skipped
 .venv/bin/python scripts/evidence.py check        # documents match the record
 .venv/bin/python -m coverage run -m pytest -q --color=no -m unit
 .venv/bin/python -m coverage json -q
@@ -147,8 +158,9 @@ recorder counted here are marked `measured`; the ORE regression values,
 which came from a run against an upstream checkout that is not part of this
 repository, are marked `pinned` with the date they were observed.
 
-`scripts/screenshot_report.py` regenerates the image above from a page it
-writes in the same run. It needs Playwright, which is not a project
+`scripts/screenshot_report.py` regenerates the images above from a page it
+writes in the same run, either whole or clipped to one section's own
+bounding box read from the live DOM. It needs Playwright, which is not a project
 dependency, so the image is committed and regenerating it is deliberate.
 
 See [CHANGELOG.md](CHANGELOG.md) for what changed and when it was

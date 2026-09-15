@@ -83,6 +83,28 @@ def measure_unit_coverage():
     return "{:.2f}".format(100 * covered / total)
 
 
+def _energy_exposure():
+    """The exposure result for the example book the README draws."""
+    sys.path.insert(0, str(ROOT / "src"))
+    from riskdesk.analytics import portfolio_exposure
+
+    payload = json.loads((ROOT / "examples" / "energy_book.json")
+                         .read_text(encoding="utf-8"))
+    return portfolio_exposure(payload)
+
+
+def measure_energy_gross_exposure():
+    return "{:,.2f}".format(_energy_exposure()["gross_exposure"])
+
+
+def measure_energy_net_exposure():
+    return "{:,.2f}".format(_energy_exposure()["net_exposure"])
+
+
+def measure_energy_exposure_assets():
+    return len(_energy_exposure()["net_by_asset"])
+
+
 def measure_skills():
     return len(sorted((ROOT / "plugins" / "risk-desk" / "skills")
                       .glob("*/SKILL.md")))
@@ -128,6 +150,9 @@ MEASURES = {
     "notice_files": measure_notice_files,
     "notice_distributions": measure_notice_distributions,
     "examples": measure_examples,
+    "energy_gross_exposure": measure_energy_gross_exposure,
+    "energy_net_exposure": measure_energy_net_exposure,
+    "energy_exposure_assets": measure_energy_exposure_assets,
 }
 
 
@@ -186,6 +211,33 @@ CLAIMS = [
         "measure": "examples",
         "about": "example input files under examples/",
         "documents": {"README.md": "%d example input files"},
+    },
+    {
+        "id": "energy_exposure_assets",
+        "measure": "energy_exposure_assets",
+        "about": "assets the exposure charts draw for the example book",
+        "documents": {
+            "README.md": "the %d legs of the synthetic energy book",
+            "docs/IMPLEMENTATION.md": "%d assets",
+        },
+    },
+    {
+        "id": "energy_gross_exposure",
+        "measure": "energy_gross_exposure",
+        "about": "gross exposure of examples/energy_book.json, in USD",
+        "documents": {
+            "docs/IMPLEMENTATION.md": "gross exposure %s USD",
+            "CHANGELOG.md": "gross %s USD",
+        },
+    },
+    {
+        "id": "energy_net_exposure",
+        "measure": "energy_net_exposure",
+        "about": "net exposure of examples/energy_book.json, in USD",
+        "documents": {
+            "docs/IMPLEMENTATION.md": "net exposure %s USD",
+            "CHANGELOG.md": "net %s USD",
+        },
     },
     {
         "id": "ore_exposure_dates",

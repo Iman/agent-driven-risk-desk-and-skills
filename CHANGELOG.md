@@ -11,7 +11,34 @@ portfolio exposure, explicit stress scenarios, and an Open Source Risk
 Engine exposure and XVA adapter. One runtime under `src/riskdesk`, called
 by both the CLI and the MCP server. Five plugin skills.
 
-### Added on 2026-09-15
+### Added on 2026-09-15, exposure charts
+
+- `riskdesk report --exposure PATH`, an optional third input beside the
+  stress and tail inputs. An absent exposure input is reported as absent,
+  in words that do not imply the exposure is zero, exactly as an absent
+  tail input already was.
+- Two inline SVG charts in the report page, in the same standard-library
+  style as the existing two. A signed net-by-asset ladder that puts longs
+  and shorts on opposite sides of a zero line, and an ordered
+  share-of-gross concentration chart. Both name the base currency, and the
+  exposure section carries the sign convention, the degraded flag, its own
+  input source and its own input SHA-256.
+- An exposure table beside the charts: NAV, gross exposure, net exposure
+  and both leverage figures. For `examples/energy_book.json` that is
+  gross 14,100,000.00 USD and net 6,000,000.00 USD on NAV 12,000,000.00
+  USD.
+- `docs/images/report-energy-exposure.png`, clipped to the exposure
+  section, and `--section` in `scripts/screenshot_report.py` to take such
+  a clip from the live DOM rather than a guessed rectangle.
+
+### Measured on 2026-09-15, exposure charts
+
+- 103 tests before, 117 after, all passing, none skipped.
+- Unit line coverage 85.65 percent before, 87.55 percent after.
+- Mutation harness unchanged: 31 of 33 detected, 2 equivalent, 0 survived.
+- Image budget: 216,280 plus 63,427 bytes, 279,707 of 300,000.
+
+### Added on 2026-09-15, first pass
 
 - `install.sh` and `demo.sh`, both POSIX sh, no colour, non-zero on any
   failure. install.sh creates the environment, installs the development
@@ -46,7 +73,7 @@ by both the CLI and the MCP server. Five plugin skills.
   been pushed.
 - `SECURITY.md`, `DISCLAIMER.md` and this file.
 
-### Changed on 2026-09-15
+### Changed on 2026-09-15, first pass
 
 - README.md rewritten. Every quoted figure is now recorded in
   `docs/evidence.json` and checked by the suite. The stray repository-name
@@ -57,7 +84,7 @@ by both the CLI and the MCP server. Five plugin skills.
   so `notices/`, `wheel-hashes.json` and the requirements lock are
   untouched.
 
-### Fixed on 2026-09-15
+### Fixed on 2026-09-15, first pass
 
 - The notice count was being taken from every file under `notices/`,
   including a stray `.DS_Store`, which would have put 80 into README.md for
@@ -68,7 +95,7 @@ by both the CLI and the MCP server. Five plugin skills.
   Two further mutations at the quantile boundary are recorded as
   equivalent, with the measurement that justifies it.
 
-### Measured on 2026-09-15
+### Measured on 2026-09-15, first pass
 
 - 103 tests collected, all passing, none skipped: 69 unit, 16 integration,
   18 validation.

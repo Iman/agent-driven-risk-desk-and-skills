@@ -18,10 +18,57 @@ Not measured in the 2026-09-14/15 session, and therefore not claimed:
 - Python 3.11 and 3.12 were not exercised. `pyproject.toml` declares 3.11
   or later; only CPython 3.13.14 was run.
 - No behaviour was observed on Linux or on Windows.
-- `.github/workflows/tests.yml` was written but has never run. Nothing was
-  pushed, so there is no CI result to point at and no badge for one.
+- The mutation harness has no case over `report.py`, so the sign handling
+  in the new exposure ladder is guarded by unit tests only. Adding
+  mutations there was outside the scope approved for this run and is not
+  claimed as done.
+- The screenshots were taken by one Chromium build at one device scale.
+  How the page renders in another browser was not observed.
+- `.github/workflows/tests.yml` is reported to have run for the first time
+  and succeeded in 1m4s, run 34911224128. That is a report, not an
+  observation made here: no CI log was read in this session, and the run
+  predates the exposure charts. No CI badge is claimed.
 
 ## VERIFIED
+
+Observed on 2026-09-15 London time, on macOS ARM64 (Darwin 25.6.0), for
+the exposure charts:
+
+- Before this change: 103 tests collected, all passing, none skipped; unit
+  line coverage 400 of 467 lines, 85.65 percent; `evidence.py check`
+  reported `14 figures checked, 0 problems`.
+- After this change: 117 tests collected, all passing, none skipped; unit
+  line coverage 471 of 538 lines, 87.55 percent, so the change raised
+  coverage rather than lowering it; `evidence.py check` reports
+  `17 figures checked, 0 problems`. Per file after: `models.py` 100.00%,
+  `report.py` 99.52%, `cli.py` 97.78%, `analytics.py` 94.64%,
+  `summaries.py` 92.45%, `server.py` 87.50%, `ore.py` 77.61%,
+  `ore_worker.py` 0.00%.
+- Mutation harness re-run, unchanged: 33 mutations, 31 detected by the test
+  file named for each, 0 detected only elsewhere, 2 equivalent, 0 survived,
+  0 skipped. The harness targets `analytics.py` and `models.py`; it has no
+  case over the new chart code, which is named under UNKNOWN below.
+- The exposure figures the charts draw, from
+  `examples/energy_book.json`: NAV 12,000,000.00 USD, gross exposure
+  14,100,000.00 USD at 1.175x NAV, net exposure 6,000,000.00 USD at 0.5x
+  NAV, over 6 assets. Net by asset, as the ladder orders it:
+  WTI_CRUDE_FUTURE 4,200,000.00, JKM_LNG 3,100,000.00, HENRY_HUB_GAS
+  1,800,000.00, PJM_WEST_POWER 950,000.00, TTF_GAS -1,450,000.00,
+  BRENT_CRUDE_FUTURE -2,600,000.00. Two of the six are negative and are
+  drawn on the short side of the zero line. Share of gross, as the
+  concentration chart orders it: 29.8%, 22.0%, 18.4%, 12.8%, 10.3%, 6.7%.
+- `riskdesk report` with all three inputs wrote 14,758 bytes; with stress
+  alone it wrote 4,775 bytes and the page states that no exposure result
+  and no tail result were supplied.
+- Images. `docs/images/report-energy-exposure.png` is new, clipped to the
+  exposure section's own bounding box read from the live DOM, 63,427
+  bytes. `docs/images/report-energy-stress.png` was regenerated, because
+  the page it documents now carries an exposure section and the old
+  capture no longer showed what that command writes; it is 216,280 bytes,
+  up from 158,998. To stay inside the 300,000 byte budget its palette was
+  reduced from 64 to 32 colours, which cost 22,836 bytes and left the text
+  legible; nothing was cropped away. Total 279,707 bytes, 20,293 under
+  budget.
 
 Observed overnight on 2026-09-14 into 2026-09-15 London time, on
 macOS ARM64 (Darwin 25.6.0):
