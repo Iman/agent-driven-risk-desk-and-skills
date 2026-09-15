@@ -19,7 +19,7 @@ live DOM, so the crop is the section rather than a guessed rectangle:
     python3 scripts/screenshot_report.py \\
         --python .venv/bin/python \\
         --section "Linear portfolio exposure" \\
-        --output docs/images/report-energy-exposure.png
+        --output /tmp/exposure-section.png
 
 Install the capture tool first, in any Python, not necessarily the project
 environment: `pip install playwright` then `python -m playwright install
@@ -152,7 +152,10 @@ def capture_dashboard(argv=None):
     parser = argparse.ArgumentParser(description="capture dashboard views")
     parser.add_argument("--python", default=sys.executable)
     parser.add_argument("--views", nargs="+",
-                        default=["overview", "exposure", "tail"])
+                        default=["overview", "exposure"],
+                        help="the views the README ships; a default that "
+                             "wrote an unreferenced file is how two of "
+                             "these got committed and linked from nowhere")
     parser.add_argument("--out-dir", default="docs/images")
     parser.add_argument("--prefix", default="dashboard")
     parser.add_argument("--width", type=int, default=1100)

@@ -11,6 +11,19 @@ portfolio exposure, explicit stress scenarios, and an Open Source Risk
 Engine exposure and XVA adapter. One runtime under `src/riskdesk`, called
 by both the CLI and the MCP server. Five plugin skills.
 
+### Removed on 2026-09-15, README images
+
+- `docs/images/report-energy-exposure.png`. A crop of the report's
+  exposure section, duplicating the dashboard exposure view once both
+  shared one token set.
+- `docs/images/dashboard-tail.png`. Its histogram is already in the full
+  report page image. It and the overview had been committed while the
+  README referenced neither, so 130,658 bytes shipped unreferenced; the
+  overview is now linked and the capture script no longer defaults to
+  writing a view the README does not use.
+- Images: 4 shipped before at 472,739 bytes, 3 after at 406,433, every one
+  referenced.
+
 ### Changed on 2026-09-15, shared design system
 
 - The report page and the dashboard now read the desk design tokens,

@@ -37,6 +37,31 @@ Not measured in the 2026-09-14/15 session, and therefore not claimed:
 
 ## VERIFIED
 
+Observed on 2026-09-15 London time, for the README images:
+
+- The four restyled images were re-rendered dark at 64 colours and
+  measured, not carried over from the earlier pass: report-energy-stress
+  252,296, dashboard-exposure 81,820, dashboard-overview 72,317,
+  dashboard-tail 58,341, totalling 464,774 against the 500,000 cap. The
+  figures matched the earlier measurement exactly.
+- `report-energy-exposure.png` was deleted. It was a crop of the report's
+  exposure section showing the same two charts and the same numbers as
+  the dashboard exposure view, and once both surfaces shared one token
+  set the dashboard view carried strictly more: the navigation, the state
+  flags and the counts line.
+- A second finding, and the larger one. `dashboard-overview.png` and
+  `dashboard-tail.png` were referenced by NOTHING. They had been
+  committed with the dashboard work while the README linked only the
+  exposure view, so 130,658 bytes, 28 percent of the budget, shipped for
+  no reader. The overview is now linked, because it is the only image
+  showing the navigation and the per-view input state. The tail view was
+  deleted, because its histogram is already visible in the full report
+  page image.
+- The shipped set is now 3 images, every one of them referenced:
+  252,296 plus 72,317 plus 81,820, totalling 406,433, with 93,567 spare.
+- The capture script's default view list was the cause and is fixed: it
+  defaulted to three views while the README linked one.
+
 Observed on 2026-09-15 London time, for the design system:
 
 - The desk design tokens were COPIED into `src/riskdesk/design.py`, not
@@ -311,7 +336,8 @@ the exposure charts:
   and no tail result were supplied. Both figures were first taken before
   the page title changed and were 20 bytes lower; they are re-measured
   here rather than carried forward.
-- Images. `docs/images/report-energy-exposure.png` is new, clipped to the
+- Images. `docs/images/report-energy-exposure.png` is new (and was
+  removed later the same day, see the README images entry above), clipped to the
   exposure section's own bounding box read from the live DOM, 63,427
   bytes. `docs/images/report-energy-stress.png` was regenerated, because
   the page it documents now carries an exposure section and the old
