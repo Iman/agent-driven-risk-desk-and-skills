@@ -67,6 +67,12 @@ RUN chmod +x /usr/local/bin/docker-entrypoint.sh /opt/risk-desk/demo.sh
 
 # Not root. This tool reads files and writes files and opens no socket to
 # the outside; none of that needs privileges.
+#
+# The consequence, which is documented rather than worked around: on Linux
+# a bind mount keeps the host's ownership, so writing into a directory
+# owned by somebody else fails for this uid. Run with
+# --user "$(id -u):$(id -g)". Docker Desktop on macOS remaps that
+# ownership and hides the problem, which is how it reached CI unnoticed.
 RUN useradd --create-home --uid 10001 desk \
  && mkdir -p /artifacts \
  && chown -R desk:desk /artifacts /opt/risk-desk
