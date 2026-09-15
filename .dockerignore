@@ -1,0 +1,13 @@
+.git
+.github
+.venv
+dist
+artifacts
+docs/images
+research
+.coverage
+.codegraph
+.pytest_cache
+**/__pycache__
+**/*.pyc
+.DS_Store
