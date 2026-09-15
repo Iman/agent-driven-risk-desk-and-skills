@@ -11,6 +11,12 @@
       "description": "Portfolio risk an agent can drive: historical VaR and Expected Shortfall from supplied P&L, signed linear exposure, explicit stress scenarios that carry no probability, and counterparty exposure and XVA through a local Open Source Risk Engine project. Research software, not investment advice.",
       "source": "./plugins/risk-desk",
       "category": "finance"
+    },
+    {
+      "name": "risk-desk-hosted",
+      "description": "Portfolio risk over the hosted Risk Desk MCP at riskdesk.avidquant.com: historical VaR and Expected Shortfall from P&L you supply, signed linear exposure, and explicit stress scenarios that carry no probability. No market data is fetched and no local install is needed. The endpoint is not live yet. Counterparty XVA is local only. Research software, not investment advice.",
+      "source": "./plugins/risk-desk-hosted",
+      "category": "finance"
     }
   ]
 }

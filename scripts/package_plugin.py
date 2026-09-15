@@ -5,9 +5,20 @@ from zipfile import ZipFile, ZIP_DEFLATED
 
 root=Path(__file__).resolve().parents[1]
 plugin=root/'plugins/risk-desk'
+hosted=root/'plugins/risk-desk-hosted'
 for name in ('LICENSE','THIRD-PARTY.md','dependency-inventory.json','wheel-hashes.json'):
     shutil.copyfile(root/name,plugin/name)
 shutil.copytree(root/'notices',plugin/'notices',dirs_exist_ok=True)
+
+# The hosted plugin's skills are copies of openai-skills/. Two hand-edited
+# copies of the same instructions drift, and the one nobody opens is the
+# one that ships, so the copies are rebuilt here and a validation test
+# fails the suite if they stop matching.
+if (root/'openai-skills').is_dir():
+    shutil.rmtree(hosted/'skills',ignore_errors=True)
+    shutil.copytree(root/'openai-skills',hosted/'skills',
+                    ignore=shutil.ignore_patterns('.DS_Store','__pycache__'))
+    shutil.copyfile(root/'LICENSE',hosted/'LICENSE')
 target=root/'dist/risk-desk-plugin.zip'
 target.parent.mkdir(exist_ok=True)
 def publishable(path):
