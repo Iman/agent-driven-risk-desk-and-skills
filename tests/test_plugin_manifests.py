@@ -394,15 +394,26 @@ def test_the_reviewer_is_required_to_say_when_it_finds_nothing():
     assert "always finds something is noise" in body
 
 
+@pytest.mark.integration
 def test_the_packager_ships_the_commands_and_agents():
     """They are part of the plugin, so they have to reach the zip. The
     packager globs recursively, and this is the test that notices if that
-    ever narrows."""
+    ever narrows.
+
+    It runs the packager rather than skipping when no archive is on disk.
+    An earlier version skipped in a clean clone, which is the state every
+    reviewer and every CI job starts from, so the one place it mattered
+    was the one place it did not run.
+    """
+    import sys
     import zipfile
 
+    built = subprocess.run([sys.executable, "scripts/package_plugin.py"],
+                           capture_output=True, text=True, cwd=str(ROOT),
+                           timeout=300)
+    assert built.returncode == 0, built.stdout + built.stderr
     archive = ROOT / "dist" / "risk-desk-plugin.zip"
-    if not archive.exists():
-        pytest.skip("run scripts/package_plugin.py first")
+    assert archive.is_file()
     names = set(zipfile.ZipFile(archive).namelist())
     for name in COMMANDS:
         assert "commands/{}.md".format(name) in names, name

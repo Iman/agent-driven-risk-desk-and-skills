@@ -61,7 +61,11 @@ Observed on 2026-09-16 London time, for the commands and agents:
 - The hosted plugin was deliberately left alone. All six commands run a
   local CLI, which a remote endpoint cannot do, so none of them makes
   sense there.
-- 288 tests collected, all passing and none skipped, up from 279. Unit
+- 288 tests collected, all passing and none skipped, up from 279. The
+  packager test skipped in a clean clone on its first version, because
+  no archive exists until the packager has run, so the one state every
+  reviewer and every CI job starts from was the one state it did not
+  run in. It now runs the packager and asserts the archive. Unit
   coverage unchanged at 86.06 percent. Evidence 18 figures to 20, with
   the command and agent counts added.
 

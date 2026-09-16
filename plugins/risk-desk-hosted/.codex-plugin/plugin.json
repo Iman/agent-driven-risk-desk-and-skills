@@ -39,6 +39,8 @@
       "Apply these shocks to my book and show the worst contributions."
     ],
     "logo": "./assets/openai-directory-icon.png",
-    "composerIcon": "./assets/openai-composer-icon.png"
+    "composerIcon": "./assets/openai-composer-icon.png",
+    "privacyPolicyURL": "https://riskdesk.avidquant.com/privacy",
+    "termsOfServiceURL": "https://riskdesk.avidquant.com/terms"
   }
 }

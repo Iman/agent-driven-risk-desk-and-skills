@@ -86,3 +86,16 @@ through the API's supported skill workflow.
 Before sending a real portfolio, establish permission to share it with
 both services. The public endpoint has no hosted XVA, market-data feed,
 broker connection or order-placement tool.
+
+## Hosted submission URLs
+
+Use these public pages in the submission form:
+
+- Website: https://riskdesk.avidquant.com/
+- Privacy policy: https://riskdesk.avidquant.com/privacy
+- Terms of service: https://riskdesk.avidquant.com/terms
+- Support: https://riskdesk.avidquant.com/support
+
+The hosted manifest declares the privacy and terms URLs. Enter the support
+URL in the portal separately; the local plugin validator does not accept
+an `interface.supportURL` field.
