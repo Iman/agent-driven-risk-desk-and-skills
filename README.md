@@ -10,7 +10,7 @@ same numbers with the same provenance, units, assumptions and degraded
 flag attached. A local dashboard reads the same results in a browser, and
 5 plugin skills cover these tasks and setup.
 
-[![Tests](https://img.shields.io/badge/tests-279%20collected-blue)](docs/IMPLEMENTATION.md)
+[![Tests](https://img.shields.io/badge/tests-288%20collected-blue)](docs/IMPLEMENTATION.md)
 [![Unit coverage](https://img.shields.io/badge/unit%20coverage-86.06%25-blue)](#development)
 [![Python](https://img.shields.io/badge/python-3.13%20tested-blue)](#get-started)
 [![License](https://img.shields.io/badge/license-PolyForm%20Noncommercial-blue)](LICENSE)
@@ -151,6 +151,26 @@ With the plugin installed, these are things a person types.
 Each skill states the sign convention and the degraded status before the
 numbers, because a loss figure without them is unreadable.
 
+### Commands and agents
+
+The plugin also carries 6 commands and 2 agents, discovered by directory
+rather than declared in the manifest.
+
+| Command | What it insists on before a number |
+| --- | --- |
+| `/risk-tail` | The observation count and tail mass, and degraded said plainly |
+| `/risk-exposure` | Gross before net, and the largest share of gross named |
+| `/risk-stress` | The sign convention first, and no probability attached |
+| `/risk-xva` | ORE's error level first, and a refusal rather than a quote |
+| `/risk-report` | That an absent input is not a measure of zero |
+| `/risk-dashboard` | Loopback only, and what each refusal code means |
+
+The agents are `risk-data-auditor`, which checks whether the inputs
+support any conclusion at all, and `risk-reviewer`, which attacks whether
+the number is trustworthy rather than whether the arithmetic is right. The
+reviewer is required to say plainly when it finds no reason to doubt a
+result, because an adversary that always finds something is noise.
+
 ### Read it in a browser
 
 `riskdesk dashboard` serves the synthetic energy book by default, from
@@ -219,7 +239,7 @@ valuation model for those, not this one.
 ## Development
 
 ```sh
-.venv/bin/python -m pytest -q --color=no          # 279 tests, none skipped
+.venv/bin/python -m pytest -q --color=no          # 288 tests, none skipped
 .venv/bin/python scripts/evidence.py check        # documents match the record
 .venv/bin/python -m coverage run -m pytest -q --color=no -m unit
 .venv/bin/python -m coverage json -q

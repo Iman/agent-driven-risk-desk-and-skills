@@ -105,6 +105,16 @@ def measure_energy_exposure_assets():
     return len(_energy_exposure()["net_by_asset"])
 
 
+def measure_commands():
+    return len(sorted((ROOT / "plugins" / "risk-desk" / "commands")
+                      .glob("*.md")))
+
+
+def measure_agents():
+    return len(sorted((ROOT / "plugins" / "risk-desk" / "agents")
+                      .glob("*.md")))
+
+
 def measure_skills():
     return len(sorted((ROOT / "plugins" / "risk-desk" / "skills")
                       .glob("*/SKILL.md")))
@@ -146,6 +156,8 @@ MEASURES = {
     "tests_collected": measure_tests_collected,
     "unit_coverage": measure_unit_coverage,
     "skills": measure_skills,
+    "commands": measure_commands,
+    "agents": measure_agents,
     "mcp_tools": measure_mcp_tools,
     "notice_files": measure_notice_files,
     "notice_distributions": measure_notice_distributions,
@@ -193,6 +205,18 @@ CLAIMS = [
         "measure": "skills",
         "about": "skill directories both plugin manifests point at",
         "documents": {"README.md": "point at the same %d skill directories"},
+    },
+    {
+        "id": "commands",
+        "measure": "commands",
+        "about": "slash commands under plugins/risk-desk/commands",
+        "documents": {"README.md": "%d commands and"},
+    },
+    {
+        "id": "agents",
+        "measure": "agents",
+        "about": "agents under plugins/risk-desk/agents",
+        "documents": {"README.md": "and %d agents"},
     },
     {
         "id": "mcp_tools",

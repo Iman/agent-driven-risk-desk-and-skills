@@ -159,6 +159,17 @@ what was not measured, including things it would be convenient to imply,
 such as which Python versions were exercised locally and which were only
 reported by CI.
 
+### Can I run this on a loop or a schedule
+
+There is nothing to poll. This software fetches no data, so nothing
+changes between two runs unless you change a file, and a scheduled run
+would recompute the same answer from the same input and report it as news.
+
+The six commands are single-shot by design: each one runs, reports, and
+ends. There is no goal-based loop because there is no completion criterion
+to check. If a number matters enough to watch, the thing that changes is
+your book, and that change happens in your systems rather than here.
+
 ### Who wrote this
 
 One person. There is no team, no support contract and no roadmap

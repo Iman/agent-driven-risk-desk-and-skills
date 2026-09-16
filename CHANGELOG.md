@@ -11,6 +11,34 @@ portfolio exposure, explicit stress scenarios, and an Open Source Risk
 Engine exposure and XVA adapter. One runtime under `src/riskdesk`, called
 by both the CLI and the MCP server. Five plugin skills.
 
+### Added on 2026-09-16, commands and agents
+
+- `plugins/risk-desk/commands/`, six of them: risk-tail, risk-exposure,
+  risk-stress, risk-xva, risk-report and risk-dashboard. Each wraps a CLI
+  command that exists and states what to read before quoting a number,
+  which is the point: the discipline goes where an agent hits it.
+- `plugins/risk-desk/agents/`, two: risk-data-auditor, which establishes
+  whether the inputs support any conclusion, and risk-reviewer, which is
+  adversarial about whether the number is trustworthy rather than whether
+  the arithmetic is right. The reviewer must say plainly when it finds no
+  reason to doubt a result.
+- Tests: the command and agent sets are pinned, every agent names itself
+  after its file, every option a command names was checked against the CLI
+  sources, and the packager is checked to ship all eight files.
+
+### Not added on 2026-09-16, and why
+
+- No manifest key for commands or agents. Neither manifest in the sibling
+  project declares them and the runtime discovers them by directory, so
+  declaring one would look like configuration and do nothing. A test keeps
+  the key absent.
+- Nothing in `plugins/risk-desk-hosted`. All six commands run a local CLI,
+  which a remote endpoint cannot do.
+- LOOPS.md. There are commands now, but the honest content is one
+  paragraph saying this software fetches no data, so nothing changes
+  between runs and there is nothing to poll. That is an FAQ entry, not a
+  root document.
+
 ### Added on 2026-09-16, project documentation
 
 - CLA.md, CODE_OF_CONDUCT.md, CONTRIBUTING.md, CONTRIBUTORS.md, FAQ.md,

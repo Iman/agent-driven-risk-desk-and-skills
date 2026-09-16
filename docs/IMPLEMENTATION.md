@@ -37,6 +37,34 @@ Not measured in the 2026-09-14/15 session, and therefore not claimed:
 
 ## VERIFIED
 
+Observed on 2026-09-16 London time, for the commands and agents:
+
+- `plugins/risk-desk/` gained `commands/` with 6 files and `agents/` with
+  2. Each command wraps a CLI command that exists and states what to read
+  before quoting a number, which is the point of them: the discipline is
+  put where an agent hits it rather than in prose it may never read.
+- Neither manifest declares them, and no key was invented. The sibling
+  project's two manifests do not mention `commands` or `agents` either,
+  so the runtime discovers them by directory. A test asserts the key
+  stays absent, so nobody adds configuration that does nothing.
+- The packager already shipped them. `scripts/package_plugin.py` globs the
+  plugin recursively, so no change was needed; verified by reading the zip
+  rather than the script, and a test now pins all eight files in the
+  archive.
+- Every option a command file names was checked against the CLI sources:
+  `--input`, `--output`, `--tail`, `--exposure`, `--xva`, `--host`,
+  `--port`, `--project`, `--config`, `--data-mode`. The check is static so
+  it starts no process, and it proves a flag exists rather than that it
+  belongs to the subcommand beside it; the test says so. Its mutation
+  check asserts `--horizon`, `--draws`, `--symbols` and `--band`, all real
+  flags in the sibling project, are absent here.
+- The hosted plugin was deliberately left alone. All six commands run a
+  local CLI, which a remote endpoint cannot do, so none of them makes
+  sense there.
+- 288 tests collected, all passing and none skipped, up from 279. Unit
+  coverage unchanged at 86.06 percent. Evidence 18 figures to 20, with
+  the command and agent counts added.
+
 Observed on 2026-09-16 London time, for the project documentation:
 
 - Eight root documents added: CLA.md, CODE_OF_CONDUCT.md,
@@ -51,7 +79,7 @@ Observed on 2026-09-16 London time, for the project documentation:
   immediately. LOOPS.md documents slash commands and loop patterns;
   `plugins/risk-desk/` contains no `commands/` and no `agents/`
   directory, so there is nothing to document.
-- 279 tests collected, all passing and none skipped, up from 268. Unit
+- 279 tests collected then, all passing and none skipped, up from 268. Unit
   coverage unchanged at 86.06 percent, since the additions are documents
   and validation tests. Unit
 - 10 validation tests check the documents against the repository: every
