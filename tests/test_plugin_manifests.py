@@ -136,9 +136,7 @@ def test_the_marketplace_parses_and_points_at_plugins_that_exist():
         assert "not investment advice" in entry["description"]
 
 
-# One documented placeholder, in one place. The service does not exist yet,
-# so a hostname that drifts between manifests would be published by a
-# directory before anybody could notice the difference.
+# Keep the hosted endpoint consistent across the packaged clients.
 ENDPOINT = "https://riskdesk.avidquant.com"
 HOSTED_SKILLS = ["risk-portfolio", "risk-stress", "risk-tail"]
 
@@ -168,7 +166,19 @@ def test_no_other_hostname_reaches_the_hosted_plugin():
     for path in sorted(hosted.rglob("*")):
         if not path.is_file():
             continue
-        text = path.read_text(encoding="utf-8")
+        if path.parent == hosted / "assets" and path.name in {
+                "openai-directory-icon.png", "openai-composer-icon.png"}:
+            assert path.read_bytes() == (ROOT / "assets" / path.name).read_bytes()
+            continue
+        try:
+            text = path.read_text(encoding="utf-8")
+        except UnicodeDecodeError:
+            # Any other binary. The branch above pins the two icons the
+            # packager generates today by comparing bytes; a third one
+            # added later would otherwise crash this scan rather than
+            # failing it, which is how it broke once already. A hostname
+            # cannot hide in a file that is not text.
+            continue
         for found in re.findall(r"https://[^\s\"'),\]]+", text):
             assert found.startswith(allowed), "{}: {}".format(path, found)
         for secret in ("api_key", "apiKey", "Authorization", "Bearer ",
@@ -293,3 +303,26 @@ def test_the_readme_and_the_image_label_name_this_repository():
     assert "Iman/agent-driven-risk-desk-and-skills`" in readme
     dockerfile = (ROOT / "Dockerfile").read_text(encoding="utf-8")
     assert 'image.source="{}"'.format(REPOSITORY) in dockerfile
+
+
+def test_the_manifest_icons_a_runtime_will_fetch_exist():
+    """A manifest naming an icon that is not in the tree shows a broken
+    image wherever a directory renders it, and nothing in a build notices.
+    The packager generates these into the plugin, so they have to be
+    committed as well as generated."""
+    for plugin in ("risk-desk", "risk-desk-hosted"):
+        manifest = load(PLUGINS / plugin / ".codex-plugin" / "plugin.json")
+        interface = manifest.get("interface", {})
+        for key in ("logo", "composerIcon"):
+            reference = interface.get(key)
+            if reference is None:
+                continue
+            target = PLUGINS / plugin / reference.removeprefix("./")
+            assert target.is_file(), "{} {} -> {}".format(plugin, key,
+                                                          reference)
+            assert target.stat().st_size > 0
+            tracked = subprocess.run(
+                ["git", "ls-files", "--error-unmatch", str(target)],
+                capture_output=True, cwd=str(ROOT))
+            assert tracked.returncode == 0, \
+                "{} is generated but not committed".format(target)

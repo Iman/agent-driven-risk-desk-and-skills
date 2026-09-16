@@ -10,7 +10,7 @@ same numbers with the same provenance, units, assumptions and degraded
 flag attached. A local dashboard reads the same results in a browser, and
 5 plugin skills cover these tasks and setup.
 
-[![Tests](https://img.shields.io/badge/tests-278%20collected-blue)](docs/IMPLEMENTATION.md)
+[![Tests](https://img.shields.io/badge/tests-279%20collected-blue)](docs/IMPLEMENTATION.md)
 [![Unit coverage](https://img.shields.io/badge/unit%20coverage-86.06%25-blue)](#development)
 [![Python](https://img.shields.io/badge/python-3.13%20tested-blue)](#get-started)
 [![License](https://img.shields.io/badge/license-PolyForm%20Noncommercial-blue)](LICENSE)
@@ -219,7 +219,7 @@ valuation model for those, not this one.
 ## Development
 
 ```sh
-.venv/bin/python -m pytest -q --color=no          # 278 tests, none skipped
+.venv/bin/python -m pytest -q --color=no          # 279 tests, none skipped
 .venv/bin/python scripts/evidence.py check        # documents match the record
 .venv/bin/python -m coverage run -m pytest -q --color=no -m unit
 .venv/bin/python -m coverage json -q

@@ -51,9 +51,9 @@ Observed on 2026-09-16 London time, for the project documentation:
   immediately. LOOPS.md documents slash commands and loop patterns;
   `plugins/risk-desk/` contains no `commands/` and no `agents/`
   directory, so there is nothing to document.
-- 278 tests collected, all passing and none skipped, up from 268. Unit
+- 279 tests collected, all passing and none skipped, up from 268. Unit
   coverage unchanged at 86.06 percent, since the additions are documents
-  and validation tests.
+  and validation tests. Unit
 - 10 validation tests check the documents against the repository: every
   local link resolves, the README points at each document, no document
   carries the sibling project's options vocabulary except to deny it, no
@@ -74,6 +74,20 @@ Observed on 2026-09-16 London time, for the project documentation:
   negation aware. One asserted DISCLAIMER.md contained "no order" when the
   document says "places, routes or executes an order". One compared a
   lowercase phrase against text that was not lowercased.
+- One test broke and one was committed red, both worth recording. The
+  hostname scan over the hosted plugin reads every file as UTF-8, and the
+  branding commit made the packager generate PNG icons into that
+  directory. It pins the two icons it knows by name and crashes on any
+  other binary, which is what a third icon would be; it now skips
+  anything that is not text and keeps the byte comparison for the two.
+  Separately, a `git commit` in this session ran after a `pytest` whose
+  exit code was masked by a pipe to `tail`, so 694dd61 was committed with
+  the suite red. The suite is green at the commit after it, and the
+  lesson is that a pipeline hides the exit code that matters.
+- A gap that incident revealed is now covered: both Codex manifests name
+  `./assets/openai-directory-icon.png` and `./assets/openai-composer-icon.png`,
+  which the packager generates, and a test asserts each one exists, is
+  non-empty and is committed rather than only generated.
 - Claims verified against the code before being written down: 33
   mutations; the supply-dislocation scenario really does report a negative
   loss of -1,843,000.00 USD; the dashboard really does refuse
