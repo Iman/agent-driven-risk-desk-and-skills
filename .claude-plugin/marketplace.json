@@ -14,7 +14,7 @@
     },
     {
       "name": "risk-desk-hosted",
-      "description": "Portfolio risk over the hosted Risk Desk MCP at riskdesk.avidquant.com: historical VaR and Expected Shortfall from P&L you supply, signed linear exposure, and explicit stress scenarios that carry no probability. No market data is fetched and no local install is needed. The endpoint is not live yet. Counterparty XVA is local only. Research software, not investment advice.",
+      "description": "Portfolio risk over the hosted Risk Desk MCP at riskdesk.avidquant.com: historical VaR and Expected Shortfall from P&L you supply, signed linear exposure, and explicit stress scenarios that carry no probability. No market data is fetched and no local install is needed. Counterparty XVA is local only. Research software, not investment advice.",
       "source": "./plugins/risk-desk-hosted",
       "category": "finance"
     }

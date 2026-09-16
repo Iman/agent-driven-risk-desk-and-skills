@@ -11,6 +11,31 @@ portfolio exposure, explicit stress scenarios, and an Open Source Risk
 Engine exposure and XVA adapter. One runtime under `src/riskdesk`, called
 by both the CLI and the MCP server. Five plugin skills.
 
+### Added on 2026-09-16, project documentation
+
+- CLA.md, CODE_OF_CONDUCT.md, CONTRIBUTING.md, CONTRIBUTORS.md, FAQ.md,
+  INSTALL.md, LICENSES.md and PRIVACY.md. Adapted to this project's scope
+  and voice, not copied: a validation test fails the build if the sibling
+  project's options vocabulary returns except to deny it.
+- A documentation table in README.md pointing at each of them.
+- 10 validation tests over the documents: links resolve, the licence is
+  identical everywhere it is stated, the notice counts agree with the
+  directory on disk, and every riskdesk command a document names exists.
+
+### Not added on 2026-09-16, and why
+
+- GEMINI.md. In the sibling project it is generated from its SKILL.md
+  files by a tool this repository does not have, so a hand-written copy
+  would drift from the five skills immediately.
+- LOOPS.md. It documents slash commands and loop patterns; this plugin
+  has no commands and no agents directory, so there is nothing to
+  document. A file existing only to match a list is worse than no file.
+
+### Measured on 2026-09-16, project documentation
+
+- 268 tests before, 278 after, none skipped. Unit coverage unchanged at
+  86.06 percent.
+
 ### Fixed on 2026-09-15, charts on a narrow screen
 
 - Charts were unreadable at phone width. An inline SVG at width 100%

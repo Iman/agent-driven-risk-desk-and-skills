@@ -10,7 +10,7 @@ same numbers with the same provenance, units, assumptions and degraded
 flag attached. A local dashboard reads the same results in a browser, and
 5 plugin skills cover these tasks and setup.
 
-[![Tests](https://img.shields.io/badge/tests-268%20collected-blue)](docs/IMPLEMENTATION.md)
+[![Tests](https://img.shields.io/badge/tests-278%20collected-blue)](docs/IMPLEMENTATION.md)
 [![Unit coverage](https://img.shields.io/badge/unit%20coverage-86.06%25-blue)](#development)
 [![Python](https://img.shields.io/badge/python-3.13%20tested-blue)](#get-started)
 [![License](https://img.shields.io/badge/license-PolyForm%20Noncommercial-blue)](LICENSE)
@@ -219,7 +219,7 @@ valuation model for those, not this one.
 ## Development
 
 ```sh
-.venv/bin/python -m pytest -q --color=no          # 268 tests, none skipped
+.venv/bin/python -m pytest -q --color=no          # 278 tests, none skipped
 .venv/bin/python scripts/evidence.py check        # documents match the record
 .venv/bin/python -m coverage run -m pytest -q --color=no -m unit
 .venv/bin/python -m coverage json -q
@@ -258,9 +258,27 @@ writes in the same run, either whole or clipped to one section's own
 bounding box read from the live DOM. It needs Playwright, which is not a project
 dependency, so the image is committed and regenerating it is deliberate.
 
-See [CHANGELOG.md](CHANGELOG.md) for what changed and when it was
-measured, [SECURITY.md](SECURITY.md) for what is in scope and how to report
-privately, and [DISCLAIMER.md](DISCLAIMER.md) for the terms of use.
+## Documentation
+
+| Document | What it answers |
+| --- | --- |
+| [INSTALL.md](INSTALL.md) | The seven install routes, and which need the runtime first |
+| [FAQ.md](FAQ.md) | What it does not do, which is usually the deciding question |
+| [DISCLAIMER.md](DISCLAIMER.md) | Terms of use, and why none of this is advice |
+| [PRIVACY.md](PRIVACY.md) | What leaves your machine, which at runtime is nothing |
+| [SECURITY.md](SECURITY.md) | What is in scope, and how to report privately |
+| [LICENSES.md](LICENSES.md) | What the licence permits and what needs an agreement |
+| [THIRD-PARTY.md](THIRD-PARTY.md) | Upstream credits and notices |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | The gates a change has to pass |
+| [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) | How to disagree here |
+| [CLA.md](CLA.md) | What a contribution grants, and why |
+| [CHANGELOG.md](CHANGELOG.md) | What changed, and when it was measured |
+| [docs/IMPLEMENTATION.md](docs/IMPLEMENTATION.md) | The evidence ledger, VERIFIED and UNKNOWN |
+| [docs/ORE.md](docs/ORE.md) | Reproducing the pinned XVA example |
+| [docs/OPENAI.md](docs/OPENAI.md) | Connecting ChatGPT and Codex to the hosted service |
+
+Start with `docs/IMPLEMENTATION.md` if you want to know what has actually
+been measured and what has not. Its UNKNOWN section is the honest part.
 
 ## Licensing
 

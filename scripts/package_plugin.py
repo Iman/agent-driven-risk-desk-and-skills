@@ -6,6 +6,11 @@ from zipfile import ZipFile, ZIP_DEFLATED
 root=Path(__file__).resolve().parents[1]
 plugin=root/'plugins/risk-desk'
 hosted=root/'plugins/risk-desk-hosted'
+for target_plugin in (plugin, hosted):
+    assets = target_plugin / 'assets'
+    assets.mkdir(exist_ok=True)
+    for name in ('openai-directory-icon.png', 'openai-composer-icon.png'):
+        shutil.copyfile(root / 'assets' / name, assets / name)
 for name in ('LICENSE','THIRD-PARTY.md','dependency-inventory.json','wheel-hashes.json'):
     shutil.copyfile(root/name,plugin/name)
 shutil.copytree(root/'notices',plugin/'notices',dirs_exist_ok=True)

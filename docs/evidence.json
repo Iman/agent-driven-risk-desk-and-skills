@@ -2,13 +2,13 @@
  "note": "Figures quoted in the documentation, with where each came from. A measured figure was counted in this checkout when this file was written. A pinned figure came from a run against inputs that are not in this repository and was not re-measured. Written by scripts/evidence.py.",
  "figures": {
   "tests_collected": {
-   "value": 268,
+   "value": 278,
    "kind": "measured",
    "measured_by": "scripts/evidence.py record",
    "about": "tests pytest collects in this checkout",
    "documents": {
-    "README.md": "tests-268%20collected",
-    "docs/IMPLEMENTATION.md": "268 tests collected"
+    "README.md": "tests-278%20collected",
+    "docs/IMPLEMENTATION.md": "278 tests collected"
    }
   },
   "unit_coverage": {
