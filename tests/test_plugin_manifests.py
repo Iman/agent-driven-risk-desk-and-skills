@@ -326,3 +326,85 @@ def test_the_manifest_icons_a_runtime_will_fetch_exist():
                 capture_output=True, cwd=str(ROOT))
             assert tracked.returncode == 0, \
                 "{} is generated but not committed".format(target)
+
+
+# Commands and agents are discovered by directory, not declared. Neither
+# manifest in the sibling project names them and neither does this one:
+# the runtime reads plugins/<name>/commands and plugins/<name>/agents by
+# convention. A key was not invented for them here.
+COMMANDS = ["risk-dashboard", "risk-exposure", "risk-report", "risk-stress",
+            "risk-tail", "risk-xva"]
+AGENTS = ["risk-data-auditor", "risk-reviewer"]
+
+
+def front_matter(path):
+    body = path.read_text(encoding="utf-8")
+    assert body.startswith("---\n"), "{} has no front matter".format(path.name)
+    block = body.split("---", 2)[1]
+    fields = {}
+    for line in block.splitlines():
+        if ": " in line and not line.startswith(" "):
+            key, value = line.split(": ", 1)
+            fields[key.strip()] = value.strip()
+    return fields
+
+
+def test_the_commands_and_agents_on_disk_are_the_expected_set():
+    plugin = PLUGINS / "risk-desk"
+    assert sorted(p.stem for p in (plugin / "commands").glob("*.md")) == COMMANDS
+    assert sorted(p.stem for p in (plugin / "agents").glob("*.md")) == AGENTS
+
+
+def test_no_manifest_declares_commands_or_agents():
+    """They are discovered by directory. Declaring a key the format does
+    not read would look like configuration and do nothing, which is worse
+    than leaving it out."""
+    for runtime in (".claude-plugin", ".codex-plugin"):
+        manifest = load(PLUGINS / "risk-desk" / runtime / "plugin.json")
+        assert "commands" not in manifest, runtime
+        assert "agents" not in manifest, runtime
+
+
+def test_every_command_declares_a_description():
+    for path in sorted((PLUGINS / "risk-desk" / "commands").glob("*.md")):
+        fields = front_matter(path)
+        assert fields.get("description"), path.name
+        assert len(fields["description"]) > 30, path.name
+
+
+def test_every_agent_names_itself_after_its_file():
+    """The runtime keys an agent by the name in its front matter, so a
+    file renamed without it silently ships two names."""
+    for path in sorted((PLUGINS / "risk-desk" / "agents").glob("*.md")):
+        fields = front_matter(path)
+        assert fields.get("name") == path.stem, path.name
+        assert fields.get("description"), path.name
+        assert fields.get("tools"), path.name
+
+
+def test_the_reviewer_is_required_to_say_when_it_finds_nothing():
+    """An adversary that always finds something is noise, and a reader who
+    learns to discount it has lost the signal."""
+    # Whitespace collapsed first. These documents are hard wrapped, so a
+    # sentence is routinely split across two lines and matching the raw
+    # text would fail on a reflow rather than on a real change.
+    body = " ".join((PLUGINS / "risk-desk" / "agents"
+                     / "risk-reviewer.md").read_text(encoding="utf-8").split())
+    assert "say so plainly" in body
+    assert "always finds something is noise" in body
+
+
+def test_the_packager_ships_the_commands_and_agents():
+    """They are part of the plugin, so they have to reach the zip. The
+    packager globs recursively, and this is the test that notices if that
+    ever narrows."""
+    import zipfile
+
+    archive = ROOT / "dist" / "risk-desk-plugin.zip"
+    if not archive.exists():
+        pytest.skip("run scripts/package_plugin.py first")
+    names = set(zipfile.ZipFile(archive).namelist())
+    for name in COMMANDS:
+        assert "commands/{}.md".format(name) in names, name
+    for name in AGENTS:
+        assert "agents/{}.md".format(name) in names, name

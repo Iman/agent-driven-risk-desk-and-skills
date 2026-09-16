@@ -203,3 +203,84 @@ def test_no_document_names_an_assistant_as_an_author():
     contributors = text(ROOT / "CONTRIBUTORS.md")
     assert contributors.count("-") >= 1
     assert "Iman Samizadeh" in contributors
+
+
+COMMAND_DIR = ROOT / "plugins" / "risk-desk" / "commands"
+
+
+def defined_options():
+    """Every long option the CLI defines, read from its sources.
+
+    Static, so this stays a validation test and starts no process. It
+    proves a flag EXISTS somewhere in the CLI, not that it belongs to the
+    subcommand it is written beside; binding those would mean
+    reconstructing argparse's subparser graph, and the failure worth
+    catching is an invented flag, which this catches.
+    """
+    sources = "".join(
+        (ROOT / "src" / "riskdesk" / name).read_text(encoding="utf-8")
+        for name in ("cli.py", "dashboard/app.py"))
+    flags = set(re.findall(r'add_argument\(\s*"(--[a-z][a-z-]*)"', sources))
+    # xva builds its four from a tuple of bare names.
+    for field in re.findall(r'for field in \(([^)]*)\)', sources):
+        flags.update("--" + name.strip().strip("\"'")
+                     for name in field.split(",") if name.strip())
+    return flags
+
+
+def subcommands():
+    source = (ROOT / "src" / "riskdesk" / "cli.py").read_text(encoding="utf-8")
+    named = set(re.findall(r'add_parser\("([a-z]+)"', source))
+    named |= set(re.findall(r'"([a-z]+)": \w+', source.split(
+        "HANDLERS = {")[1].split("}")[0]))
+    return named
+
+
+def test_every_option_a_command_file_names_exists():
+    """An invented flag in a command file is worse than one in prose: an
+    agent will run it."""
+    flags, commands = defined_options(), subcommands()
+    assert {"--input", "--output", "--tail", "--exposure", "--xva",
+            "--host", "--port", "--project", "--config",
+            "--data-mode"} <= flags, sorted(flags)
+    invented = []
+    for path in sorted(COMMAND_DIR.glob("*.md")):
+        body = path.read_text(encoding="utf-8")
+        code = "\n".join(re.findall(r"```[a-z]*\n(.*?)```", body, re.S))
+        code += "\n" + "\n".join(re.findall(r"`([^`]+)`", body, re.S))
+        for name in re.findall(r"\briskdesk ([a-z]+)", code):
+            if name not in commands:
+                invented.append("{}: riskdesk {}".format(path.name, name))
+        for flag in re.findall(r"(--[a-z][a-z-]+)", code):
+            if flag not in flags:
+                invented.append("{}: {}".format(path.name, flag))
+    assert not invented, "names that do not exist: " + ", ".join(invented)
+
+
+def test_the_option_check_would_catch_an_invented_flag():
+    """Mutation check, so the test above is known to be able to fail."""
+    flags = defined_options()
+    assert "--input" in flags
+    for invented in ("--horizon", "--draws", "--symbols", "--band"):
+        assert invented not in flags, invented
+
+
+def test_every_command_file_states_what_to_read_before_a_number():
+    """The point of these files is to put the project's discipline where
+    an agent hits it. A command that only runs a CLI is a shell alias."""
+    required = {
+        "risk-tail.md": ("observations", "degraded", "not a forecast"),
+        "risk-exposure.md": ("gross before net", "never negative",
+                             "supplied"),
+        "risk-stress.md": ("sign convention", "no probability",
+                           "not a forecast"),
+        "risk-xva.md": ("error level first", "not a real-world loss",
+                        "Never add them together"),
+        "risk-report.md": ("absent", "recomputes nothing"),
+        "risk-dashboard.md": ("loopback", "no authentication"),
+    }
+    for name, phrases in required.items():
+        body = " ".join((COMMAND_DIR / name).read_text(
+            encoding="utf-8").split())
+        for phrase in phrases:
+            assert phrase in body, "{} does not say {!r}".format(name, phrase)
