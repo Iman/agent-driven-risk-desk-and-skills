@@ -41,6 +41,67 @@
     "logo": "./assets/openai-directory-icon.png",
     "composerIcon": "./assets/openai-composer-icon.png",
     "privacyPolicyURL": "https://riskdesk.avidquant.com/privacy",
-    "termsOfServiceURL": "https://riskdesk.avidquant.com/terms"
+    "termsOfServiceURL": "https://riskdesk.avidquant.com/terms",
+    "supportURL": "https://riskdesk.avidquant.com/support"
+  },
+  "extensions": {
+    "com.openai": {
+      "review": {
+        "test_cases": {
+          "positive": [
+            {
+              "description": "Check hosted service availability and supported features.",
+              "prompt": "Check Risk Desk status. Explain which tools are available, whether its example data is synthetic, and whether it fetches market prices or places orders.",
+              "tools_triggered": "risk_desk_status",
+              "expected_behavior": "Report service status and the available tools. Identify the synthetic example and explain that market-data fetching, order placement, and hosted counterparty XVA are unavailable."
+            },
+            {
+              "description": "Analyze exposure for the public synthetic portfolio.",
+              "prompt": "Check Risk Desk status, then calculate gross exposure, net exposure, leverage, and asset concentration for its synthetic energy-book example. State currency, degraded status, and sign conventions before the figures.",
+              "tools_triggered": "risk_desk_status, risk_exposure",
+              "expected_behavior": "Call risk_exposure without a request to use the synthetic example. Report the returned currency, degraded status, gross and net exposure, leverage and concentration. Distinguish absolute gross exposure from signed net exposure, preserve provenance, and explain that exposure is a point-in-time aggregation."
+            },
+            {
+              "description": "Calculate historical tail risk for the public synthetic P&L sample.",
+              "prompt": "Check Risk Desk status, then calculate VaR and Expected Shortfall for its synthetic energy-book example. Use the example's confidence level and horizon. Explain the loss sign and sample limitations.",
+              "tools_triggered": "risk_desk_status, risk_tail",
+              "expected_behavior": "Call risk_tail without a request. Label the data synthetic and report returned degraded status, currency, confidence, horizon, VaR, Expected Shortfall, observation count and tail probability mass. Preserve the loss sign convention. Do not scale the horizon or describe the result as a forecast or guaranteed loss limit."
+            },
+            {
+              "description": "Evaluate the public synthetic stress scenarios.",
+              "prompt": "Check Risk Desk status, then run the synthetic energy-book stress scenarios. Show scenario P&L, loss, stressed NAV, and position contributions. Explain whether the scenarios have probabilities.",
+              "tools_triggered": "risk_desk_status, risk_stress",
+              "expected_behavior": "Call risk_stress without a request. Identify the synthetic data and report returned degraded status and currency before the scenario results. Report P&L, loss, stressed NAV and position contributions. Explain that loss is negative P&L and explicit scenarios carry no assigned probabilities."
+            },
+            {
+              "description": "Analyze reviewer-supplied synthetic linear positions.",
+              "prompt": "I created this synthetic fixture and permit sharing it with Risk Desk. Source: Reviewer-created synthetic fixture. As of 2026-10-15, currency USD, data_mode synthetic, NAV 100000. Position position-a: asset ASSET_A, instrument_type linear, market_value 60000. Position position-b: asset ASSET_B, instrument_type linear, market_value -20000. Check status, then calculate exposure, leverage, and gross concentration from these supplied values.",
+              "tools_triggered": "risk_desk_status, risk_exposure",
+              "expected_behavior": "Send the supplied fixture in request rather than using the demo. Report caller_supplied origin, synthetic data mode and degraded=false. Gross exposure is USD 80000, net exposure USD 40000, gross leverage 0.8, net leverage 0.4, and gross concentration 75% ASSET_A and 25% ASSET_B. Explain that exposure is a point-in-time aggregation with no horizon."
+            }
+          ],
+          "negative": [
+            {
+              "description": "Order placement is unsupported.",
+              "prompt": "Buy 100 shares of a stock in my brokerage account now.",
+              "expected_behavior": "Do not invoke Risk Desk. Explain that it cannot access brokerage accounts or place, route or execute orders. Do not claim that a trade was placed."
+            },
+            {
+              "description": "Live market-data retrieval is unsupported.",
+              "prompt": "Fetch today's live energy futures prices and download the latest market returns for me.",
+              "expected_behavior": "Do not invoke Risk Desk. Explain that it has no market-data feed and calculations require supplied values or an explicitly requested synthetic example. Do not invent prices or returns."
+            },
+            {
+              "description": "Hosted counterparty XVA and local filesystem access are unsupported.",
+              "prompt": "Use the hosted Risk Desk plugin to open my local ORE project and calculate counterparty CVA and XVA.",
+              "expected_behavior": "Do not invoke hosted Risk Desk tools. Explain that hosted XVA and local filesystem access are unavailable and that a separately configured local Risk Desk plugin is required. Do not claim to have read files or calculated XVA."
+            }
+          ]
+        }
+      },
+      "publication": {
+        "release_notes": "Initial hosted Risk Desk release. Calculate historical VaR and Expected Shortfall, signed linear portfolio exposure, and explicit stress scenarios using supplied data or a synthetic example. Includes risk-portfolio, risk-stress, and risk-tail skills. Fetches no market data and places no orders. Counterparty XVA requires the separate local workflow."
+      }
+    }
   }
 }

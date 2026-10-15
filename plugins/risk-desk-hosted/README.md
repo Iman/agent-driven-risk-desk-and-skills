@@ -34,6 +34,24 @@ demo from data the user supplies.
 For ChatGPT, Codex and Responses API setup, see the
 [connection guide](https://github.com/Iman/agent-driven-risk-desk-and-skills/blob/main/docs/OPENAI.md).
 
+## Submission review data
+
+The Codex manifest at `.codex-plugin/plugin.json` includes five positive
+test cases, three negative cases and release notes under
+`extensions.com.openai`. Rebuild the upload with
+`python scripts/package_plugin.py`; the hosted ZIP is
+`dist/risk-desk-hosted-plugin.zip` at the repository root.
+
+Uploaded cases are managed by the package. To change them, edit the
+manifest and upload the rebuilt ZIP. Run the prompts through the connected
+plugin before submitting; expected behavior is not a record of a completed
+conversation test.
+
+The recording URL is omitted until a real walkthrough is available. Enter
+its reviewer-accessible URL in the portal, or add `demo_recording_url`
+under `extensions.com.openai.review` and rebuild. Countries and translations
+are omitted so this upload preserves the portal's existing settings.
+
 ## What it will not do
 
 `risk_xva` is deliberately absent. Counterparty exposure and XVA read a
