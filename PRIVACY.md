@@ -1,6 +1,6 @@
 # Privacy
 
-Last updated 2026-09-16.
+Last updated 2026-10-16.
 
 ## The short version
 
@@ -62,8 +62,15 @@ its own deployment and its own policy. **This repository ships only the
 client side of it**: the `risk-desk-hosted` plugin is manifests and skill
 files that tell an agent where the endpoint is. No code here runs there.
 
-What the service states about data it receives, which you should confirm
-against its own policy rather than this file:
+Read the hosted [privacy policy](https://riskdesk.avidquant.com/privacy),
+[terms](https://riskdesk.avidquant.com/terms) and
+[support page](https://riskdesk.avidquant.com/support) before sending data.
+Use that privacy URL for the hosted plugin submission. This document
+describes local software and does not replace the hosted policy.
+
+The hosted policy distinguishes MCP calculations from browser reports.
+An MCP calculation processes supplied values without creating a stored
+browser report. The separate browser upload feature has these terms:
 
 - It accepts position and P&L data through a browser upload.
 - It holds that data in memory for one hour.

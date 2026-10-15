@@ -96,6 +96,7 @@ Use these public pages in the submission form:
 - Terms of service: https://riskdesk.avidquant.com/terms
 - Support: https://riskdesk.avidquant.com/support
 
-The hosted manifest declares the privacy and terms URLs. Enter the support
-URL in the portal separately; the local plugin validator does not accept
-an `interface.supportURL` field.
+The hosted manifest declares the support, privacy and terms URLs under
+`interface`. Use the hosted privacy policy for this submission. The
+repository's `PRIVACY.md` describes local software and does not replace the
+policy for data sent to the remote service.

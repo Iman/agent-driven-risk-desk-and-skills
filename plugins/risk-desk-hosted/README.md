@@ -34,6 +34,22 @@ demo from data the user supplies.
 For ChatGPT, Codex and Responses API setup, see the
 [connection guide](https://github.com/Iman/agent-driven-risk-desk-and-skills/blob/main/docs/OPENAI.md).
 
+## Hosted privacy and support
+
+Read the [hosted privacy policy](https://riskdesk.avidquant.com/privacy)
+before sending data. It covers supplied inputs, service providers,
+retention, diagnostics and deletion. The repository's local-software
+privacy statement does not replace it.
+
+An MCP calculation does not create a stored browser report. The separate
+browser upload feature holds reports in memory, expires access after
+one hour and offers early deletion. Your chat provider handles messages
+and tool results under its own policy.
+
+[Terms of service](https://riskdesk.avidquant.com/terms) and
+[support](https://riskdesk.avidquant.com/support) apply to the hosted
+service. Use these public URLs when submitting the plugin.
+
 ## Submission review data
 
 The Codex manifest at `.codex-plugin/plugin.json` includes five positive
