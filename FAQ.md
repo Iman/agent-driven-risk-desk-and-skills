@@ -77,9 +77,12 @@ moves.
 ### What is the degraded flag
 
 It means the result was computed with something the project considers
-insufficient. Today it has exactly one cause: fewer than 20 observations
-of tail probability mass. It is a reporting threshold, not a confidence
-test and not a statement that the number is wrong.
+insufficient. For historical tail risk the one cause is fewer than 20
+observations of tail probability mass. The v0.2 tools add their own
+causes, for example a GARCH-t fit that did not converge or an exposure
+grid with no one-year date, and `degraded_reason` names each one. It is
+a reporting flag, not a confidence test and not a statement that the
+number is wrong.
 
 It is printed whether or not it is set, on every surface, because a page
 that mentions degradation only when degraded teaches a reader to stop
@@ -108,7 +111,7 @@ checkout, recorded with the date it was observed.
 Only for `riskdesk xva`. Its wheel does not exist for every platform: it
 resolves on macOS ARM64 and on linux/amd64 under CPython 3.13, and not on
 linux/arm64. The installer attempts it and says plainly what happened.
-Without it you still have tail risk, exposure and stress.
+Without it, every other command and tool still works.
 
 ### The plugin is installed but the agent lists no tools
 
@@ -169,7 +172,7 @@ There is nothing to poll. This software fetches no data, so nothing
 changes between two runs unless you change a file, and a scheduled run
 would recompute the same answer from the same input and report it as news.
 
-The six commands are single-shot by design: each one runs, reports, and
+The 10 commands are single-shot by design: each one runs, reports, and
 ends. There is no goal-based loop because there is no completion criterion
 to check. If a number matters enough to watch, the thing that changes is
 your book, and that change happens in your systems rather than here.

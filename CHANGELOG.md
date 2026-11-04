@@ -57,7 +57,7 @@ called by the CLI and the MCP server alike. Fourteen plugin skills.
   commit `4a282d9`, because an earlier wheel with the same version lacks
   the rho fix. It is on PyPI, and on 4 November 2026 the wheel there had
   the recorded sha256.
-- 809 tests collected; unit line coverage of src/riskdesk is 93.84
+- 810 tests collected; unit line coverage of src/riskdesk is 93.85
   percent.
 
 ## 0.1.0, unreleased

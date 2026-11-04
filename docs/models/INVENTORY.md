@@ -420,8 +420,9 @@ below names a row of that area's `report.md`.
   artifact path.
 - Key assumptions: ASSUMPTIONS.md rows for M29.
 - Limitations: risk-neutral valuation; Risk Desk does not check ORE's numbers.
-- Validation evidence: tests/test_ore.py (4 tests: fresh cube, inactive simulation refused, path escape
-  refused, backend errors rejected). These test the adapter's safety, not ORE's numbers. The pinned ORE
+- Validation evidence: tests/test_ore.py (5 tests: fresh cube, inactive simulation refused, path escape
+  refused, backend errors rejected, the XVA result checker catches tampering). These test the adapter's
+  safety, not ORE's numbers. The pinned ORE
   example (AGENTS.md) was not run in this review.
 - Sources: Open Source Risk Engine (THIRD-PARTY.md, docs/ORE.md).
 - Status: not validated. Risk Desk validates the adapter contract only; ORE's exposure and XVA figures have no

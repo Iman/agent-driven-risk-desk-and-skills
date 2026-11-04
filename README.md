@@ -14,8 +14,8 @@ same numbers with the same provenance, units, assumptions and degraded
 flag attached. A local dashboard reads the core results in a browser, and
 14 plugin skills cover these tasks and setup.
 
-[![Tests](https://img.shields.io/badge/tests-809%20collected-blue)](docs/IMPLEMENTATION.md)
-[![Unit coverage](https://img.shields.io/badge/unit%20coverage-93.84%25-blue)](#development)
+[![Tests](https://img.shields.io/badge/tests-810%20collected-blue)](docs/IMPLEMENTATION.md)
+[![Unit coverage](https://img.shields.io/badge/unit%20coverage-93.85%25-blue)](#development)
 [![Python](https://img.shields.io/badge/python-3.13%20tested-blue)](#get-started)
 [![License](https://img.shields.io/badge/license-PolyForm%20Noncommercial-blue)](LICENSE)
 
@@ -254,7 +254,7 @@ are rejected.
 - **Exposure** requires signed linear-position market values already
   translated into one base currency. Gross counts absolute values before
   offsetting; net does not. Leverage divides by the supplied NAV. The
-  report draws it as [the two charts above](#the-exposure-section-closer).
+  report draws it as [the two charts above](#the-dashboard).
   Exposure, stress and the linear tools take linear positions only; for a
   book with options use `risk_derivatives_greeks`, `risk_derivatives_grid`
   and `risk_derivatives_historical`.

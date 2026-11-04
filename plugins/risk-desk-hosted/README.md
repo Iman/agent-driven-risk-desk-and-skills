@@ -23,7 +23,7 @@ the only one that can run `risk_xva`.
 /plugin install risk-desk-hosted --marketplace Iman/agent-driven-risk-desk-and-skills
 ```
 
-## What it will be
+## What the 0.2 plugin carries
 
 One remote MCP server, `https://riskdesk.avidquant.com/mcp`, carrying the
 twelve skills in `skills/`. It is built from `openai-skills/` at the
