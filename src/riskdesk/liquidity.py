@@ -4,7 +4,7 @@ import math
 
 from pydantic import Field, model_validator
 
-from riskdesk.analytics import envelope, tail_risk
+from riskdesk.analytics import envelope, fsum, tail_risk
 from riskdesk.models import PortfolioRequest, StrictModel
 
 # The same ten-year ceiling TailRequest places on horizon_days; beyond it an input is
@@ -50,8 +50,8 @@ def liquidity_risk(payload):
             cost_of_liquidity=0.5*value*(inputs.mean_relative_spread
                                          + request.spread_multiplier*inputs.spread_volatility))
     longest = max(row["days_to_liquidate"] for row in by_asset.values())
-    cost = math.fsum(row["cost_of_liquidity"] for row in by_asset.values())
-    total = math.fsum(gross.values())
+    cost = fsum(row["cost_of_liquidity"] for row in by_asset.values())
+    total = fsum(gross.values())
     if not all(math.isfinite(v) for v in (longest, cost, total)):
         raise ValueError("liquidity calculation exceeded numerical limits")
     if longest > MAX_SCHEDULE_DAYS:
@@ -59,7 +59,7 @@ def liquidity_risk(payload):
                          "average_daily_value".format(longest, MAX_SCHEDULE_DAYS))
     schedule = []
     for day in range(math.ceil(longest) + 1):
-        held = math.fsum(max(0.0, r["gross_value"] - r["daily_capacity"]*day) for r in by_asset.values())
+        held = fsum(max(0.0, r["gross_value"] - r["daily_capacity"]*day) for r in by_asset.values())
         schedule.append(dict(day=day, held_value=held, held_fraction=held/total if total else 0.0,
                              assets_held=sum(r["gross_value"] > r["daily_capacity"]*day
                                              for r in by_asset.values())))

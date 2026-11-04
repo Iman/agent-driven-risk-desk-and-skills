@@ -13,7 +13,7 @@ from typing import Literal
 from pydantic import Field, model_validator
 from scipy.stats import norm
 
-from riskdesk.analytics import envelope
+from riskdesk.analytics import envelope, fsum
 from riskdesk.models import Provenance, StrictModel
 
 ALPHA = 1.4                  # CRE52.1
@@ -146,8 +146,8 @@ def _delta(trade, volatility):
 
 def _single_factor(addons):
     """CRE52.61 step 4, CRE52.66 step 4, CRE52.70 step 5: [(sum rho*A)^2 + sum (1-rho^2)*A^2]^0.5."""
-    systematic = math.fsum(rho * a for a, rho in addons) ** 2
-    return math.sqrt(systematic + math.fsum((1 - rho ** 2) * a * a for a, rho in addons))
+    systematic = fsum(rho * a for a, rho in addons) ** 2
+    return math.sqrt(systematic + fsum((1 - rho ** 2) * a * a for a, rho in addons))
 
 
 def _consistent(groups, what):
@@ -189,15 +189,15 @@ def _netting_set(request, margined):
                              bucket_effective_notionals=[d1, d2, d3],
                              effective_notional=en, addon=IR_SF * en))
         hedging_sets += rows
-        addon_by_class["interest_rate"] = math.fsum(r["addon"] for r in rows)
+        addon_by_class["interest_rate"] = fsum(r["addon"] for r in rows)
     if "fx" in by_class:  # CRE52.59
         pairs = defaultdict(list)
         for t in by_class["fx"]:
             pairs[t.hedging_set].append(effective[t.id])
-        rows = [dict(asset_class="fx", hedging_set=pair, effective_notional=math.fsum(values),
-                     addon=FX_SF * abs(math.fsum(values))) for pair, values in sorted(pairs.items())]
+        rows = [dict(asset_class="fx", hedging_set=pair, effective_notional=fsum(values),
+                     addon=FX_SF * abs(fsum(values))) for pair, values in sorted(pairs.items())]
         hedging_sets += rows
-        addon_by_class["fx"] = math.fsum(r["addon"] for r in rows)
+        addon_by_class["fx"] = fsum(r["addon"] for r in rows)
     for cls in ("credit", "equity"):  # CRE52.61, CRE52.66: one hedging set, entity level offset
         if cls not in by_class:
             continue
@@ -210,8 +210,8 @@ def _netting_set(request, margined):
         rows = []
         for name, values in sorted(entities.items()):
             sf, rho, _ = next(iter(params[name]))
-            addons.append((sf * math.fsum(values), rho))
-            rows.append(dict(reference=name, effective_notional=math.fsum(values),
+            addons.append((sf * fsum(values), rho))
+            rows.append(dict(reference=name, effective_notional=fsum(values),
                              addon=addons[-1][0], correlation=rho))
         addon_by_class[cls] = _single_factor(addons)
         hedging_sets.append(dict(asset_class=cls, hedging_set=cls, entities=rows,
@@ -227,16 +227,16 @@ def _netting_set(request, margined):
             keys = sorted(k for k in types if k[0] == hs)
             if not keys:
                 continue
-            rows = [dict(reference=k[1], effective_notional=math.fsum(types[k]),
-                         addon=next(iter(params[k]))[0] * math.fsum(types[k]),
+            rows = [dict(reference=k[1], effective_notional=fsum(types[k]),
+                         addon=next(iter(params[k]))[0] * fsum(types[k]),
                          correlation=next(iter(params[k]))[1]) for k in keys]
             addon = _single_factor([(r["addon"], r["correlation"]) for r in rows])
             hedging_sets.append(dict(asset_class="commodity", hedging_set=hs, entities=rows,
                                      addon=addon))
             total.append(addon)
-        addon_by_class["commodity"] = math.fsum(total)
-    addon = math.fsum(addon_by_class.values())  # CRE52.25
-    v = math.fsum(t.market_value for t in request.trades)
+        addon_by_class["commodity"] = fsum(total)
+    addon = fsum(addon_by_class.values())  # CRE52.25
+    v = fsum(t.market_value for t in request.trades)
     c = request.collateral
     rc = max(v - c, 0.0)  # CRE52.10
     if margined:  # CRE52.18
@@ -334,8 +334,8 @@ def exposure_profile_summary(payload):
         raise ValueError("no exposure date falls within the first year")
     horizon = rows[window[-1]].Time
     weights = [rows[k].Time - rows[k - 1].Time for k in window]  # CRE53.13, dt_k = t_k - t_(k-1)
-    epe = math.fsum(rows[k].BaselEE * w for k, w in zip(window, weights)) / horizon  # CRE50.30
-    eepe = math.fsum(effective[k] * w for k, w in zip(window, weights)) / horizon    # CRE50.31
+    epe = fsum(rows[k].BaselEE * w for k, w in zip(window, weights)) / horizon  # CRE50.30
+    eepe = fsum(effective[k] * w for k, w in zip(window, weights)) / horizon    # CRE50.31
     warnings = []
     if horizon < 1.0 and window[-1] < len(rows) - 1:
         warnings.append(f"the grid has no date at one year; EPE and Effective EPE average the "

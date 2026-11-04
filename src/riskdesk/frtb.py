@@ -14,7 +14,7 @@ import numpy as np
 from pydantic import Field, model_validator
 from scipy.stats import ks_2samp, spearmanr
 
-from riskdesk.analytics import envelope
+from riskdesk.analytics import envelope, fsum
 from riskdesk.models import Provenance, StrictModel
 
 NonNegative = Annotated[float, Field(ge=0)]
@@ -46,14 +46,6 @@ SPECIFIED_FX = frozenset("USD EUR JPY GBP AUD CAD CHF MXN CNY NZD RUB HKD SGD TR
 def _refuse_non_finite(values, what):
     if not all(math.isfinite(v) for v in values):
         raise ValueError(what + " exceeded numerical limits")
-
-
-def _fsum(values):
-    """math.fsum raises OverflowError on an infinite sum; the contract is ValueError."""
-    try:
-        return math.fsum(values)
-    except OverflowError:
-        raise ValueError("a sum exceeded numerical limits") from None
 
 
 # ---------------------------------------------------------------- MAR33 IMA
@@ -99,7 +91,7 @@ def frtb_imcc(payload):
     request = ImccRequest.model_validate(payload)
     portfolio = _scaled_es(request.portfolio, "portfolio")
     classes = {name: _scaled_es(es_set, name) for name, es_set in request.risk_classes.items()}
-    constrained = _fsum(c["imcc"] for c in classes.values())
+    constrained = fsum(c["imcc"] for c in classes.values())
     imcc = RHO_IMCC * portfolio["imcc"] + (1 - RHO_IMCC) * constrained
     _refuse_non_finite([imcc, constrained, portfolio["imcc"]], "IMCC")
     result = envelope(request, "FRTB IMA liquidity-adjusted, stress-calibrated ES and IMCC (MAR33.4, MAR33.6, MAR33.15)", [
@@ -157,8 +149,8 @@ def frtb_ima_capital(payload):
     c_a = max(request.imcc_latest + request.ses_latest, m_c * request.imcc_average_60d + request.ses_average_60d)  # MAR33.41
     drc = max(request.drc_average_12w, request.drc_latest)  # MAR33.22
     ima_ga = c_a + drc  # MAR33.43
-    amber = _fsum(d.sa for d in request.desks if d.pla_zone == "amber")
-    total_sa = _fsum(d.sa for d in request.desks)
+    amber = fsum(d.sa for d in request.desks if d.pla_zone == "amber")
+    total_sa = fsum(d.sa for d in request.desks)
     if amber > 0 and total_sa == 0:
         raise ValueError("desk standardised charges sum to zero, so k in MAR33.45 is undefined")
     k = SURCHARGE_K * amber / total_sa if amber > 0 else 0.0
@@ -343,7 +335,7 @@ def _net(entries, key):
     netted = {}
     for entry in entries:
         netted.setdefault(key(entry), []).append(entry.sensitivity)
-    return {k: _fsum(v) for k, v in sorted(netted.items())}
+    return {k: fsum(v) for k, v in sorted(netted.items())}
 
 
 def frtb_sbm_fx(payload):

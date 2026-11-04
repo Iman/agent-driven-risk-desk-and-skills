@@ -117,3 +117,51 @@ def test_two_scenarios_cannot_share_a_name():
         {"name":"down", "shocks":{"A":-.1,"B":-.2}},
         {"name":"down", "shocks":{"A":-.2,"B":-.3}}]
     with pytest.raises(ValueError): stress_test(request)
+
+
+def _overflowing(name, mutate):
+    import json
+    from pathlib import Path
+    payload = json.loads((Path(__file__).resolve().parent.parent / "examples" / name)
+                         .read_text(encoding="utf-8"))
+    mutate(payload)
+    return payload
+
+
+def _huge_values(payload):
+    for position in payload["positions"]:
+        position["market_value"] = 1e308
+
+
+def _huge_stress(payload):
+    _huge_values(payload)
+    for scenario in payload["scenarios"]:
+        scenario["shocks"] = {asset: 1.0 for asset in scenario["shocks"]}
+
+
+def _huge_obligors(payload):
+    for obligor in payload["obligors"]:
+        obligor["exposure"] = 1e308
+
+
+def _huge_trades(payload):
+    for trade in payload["trades"]:
+        trade["market_value"] = 1e308
+
+
+@pytest.mark.parametrize("module,function,example,mutate", [
+    ("analytics", "portfolio_exposure", "portfolio.json", _huge_values),
+    ("analytics", "stress_test", "stress.json", _huge_stress),
+    ("liquidity", "liquidity_risk", "liquidity_book.json", _huge_values),
+    ("limits", "what_if", "limits_what_if.json", _huge_values),
+    ("credit", "asrf_credit_var", "credit_asrf.json", _huge_obligors),
+    ("counterparty", "saccr_ead", "counterparty_saccr.json", _huge_trades),
+])
+def test_a_sum_that_overflows_is_a_value_error(module, function, example, mutate):
+    """Finite inputs whose sum is infinite are refused with ValueError, the
+    contract every other numerical limit uses. math.fsum raises
+    OverflowError instead, which was leaking out of these functions."""
+    import importlib
+    call = getattr(importlib.import_module("riskdesk." + module), function)
+    with pytest.raises(ValueError, match="numerical limits"):
+        call(_overflowing(example, mutate))

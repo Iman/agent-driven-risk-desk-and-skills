@@ -6,7 +6,7 @@ from typing import Literal
 
 from pydantic import Field, model_validator
 
-from riskdesk.analytics import envelope, portfolio_exposure, stress_test, tail_risk
+from riskdesk.analytics import envelope, fsum, portfolio_exposure, stress_test, tail_risk
 from riskdesk.models import PortfolioRequest, Provenance, Scenario, StrictModel
 
 # metric -> (result payload it is read from, key in that payload)
@@ -205,7 +205,7 @@ def what_if(payload):
         if request.asset_returns:
             net = results["exposure"]["net_by_asset"]
             count = len(next(iter(request.asset_returns.values())))
-            pnl = [math.fsum(value*request.asset_returns[asset][t] for asset, value in net.items())
+            pnl = [fsum(value*request.asset_returns[asset][t] for asset, value in net.items())
                    for t in range(count)]
             results["tail"] = tail_risk(dict(meta, pnl=pnl, confidence=request.confidence,
                                              horizon_days=request.horizon_days, portfolio_value=request.nav))

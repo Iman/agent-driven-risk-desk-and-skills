@@ -13,6 +13,17 @@ from riskdesk import __version__
 from riskdesk.models import TailRequest, PortfolioRequest, StressRequest
 
 
+def fsum(values):
+    """math.fsum, with the ValueError contract every numerical limit uses.
+
+    math.fsum raises OverflowError when finite inputs sum past the float range.
+    """
+    try:
+        return math.fsum(values)
+    except OverflowError:
+        raise ValueError("a sum exceeded numerical limits") from None
+
+
 def envelope(request, method, assumptions, warnings=()):
     raw = request.model_dump(mode="json")
     return dict(schema_version=1, riskdesk_version=__version__, method=method,
@@ -61,8 +72,8 @@ def portfolio_exposure(payload):
     for position in request.positions:
         gross_by_asset[position.asset] += abs(position.market_value)
         net_by_asset[position.asset] += position.market_value
-    gross = math.fsum(gross_by_asset.values())
-    net = math.fsum(net_by_asset.values())
+    gross = fsum(gross_by_asset.values())
+    net = fsum(net_by_asset.values())
     if not math.isfinite(gross) or not math.isfinite(net) or not math.isfinite(gross/request.nav):
         raise ValueError("aggregated exposure exceeds numerical limits")
     result = envelope(request, "signed base-currency linear position exposure", [
@@ -83,7 +94,7 @@ def stress_test(payload):
     rows = []
     for scenario in request.scenarios:
         contributions = {p.id: p.market_value*scenario.shocks[p.asset] for p in request.positions}
-        pnl = math.fsum(contributions.values())
+        pnl = fsum(contributions.values())
         if not math.isfinite(pnl) or not math.isfinite(request.nav+pnl):
             raise ValueError("stressed P&L exceeds numerical limits")
         rows.append(dict(name=scenario.name, pnl=pnl, loss=-pnl, stressed_nav=request.nav+pnl,

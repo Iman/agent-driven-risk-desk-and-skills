@@ -13,7 +13,7 @@ from scipy.optimize import minimize
 from scipy.stats import norm
 
 from riskdesk import __version__
-from riskdesk.analytics import envelope, stress_test
+from riskdesk.analytics import envelope, fsum, stress_test
 from riskdesk.models import PortfolioRequest, Scenario
 
 BOOK = {"as_of", "currency", "source", "data_mode", "nav", "positions"}
@@ -178,7 +178,7 @@ class ReverseStressRequest(PortfolioRequest):
 def reverse_stress(payload):
     request = ReverseStressRequest.model_validate(payload)
     assets, loss = request.assets, request.target_loss
-    w = np.array([math.fsum(p.market_value for p in request.positions if p.asset == a) for a in assets])
+    w = np.array([fsum(p.market_value for p in request.positions if p.asset == a) for a in assets])
     sigma = np.array(request.covariance)
     if not np.allclose(sigma, sigma.T, rtol=1e-10, atol=0):
         raise ValueError("covariance must be symmetric")
@@ -196,7 +196,7 @@ def reverse_stress(payload):
     shocks = -loss * sigma_w / variance
     method = "closed form"
     if (shocks < floors).any():
-        reachable = math.inf if (w < 0).any() else -math.fsum(w * floors)
+        reachable = math.inf if (w < 0).any() else -fsum(w * floors)
         if loss > reachable:
             raise ValueError(f"target loss exceeds the largest loss reachable within the floors ({reachable:g})")
         solved = minimize(lambda s: float(s @ cho_solve((chol, True), s)), np.maximum(shocks, floors),

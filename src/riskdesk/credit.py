@@ -10,7 +10,7 @@ import numpy as np
 from pydantic import Field, model_validator
 from scipy.stats import norm
 
-from riskdesk.analytics import envelope, tail_risk
+from riskdesk.analytics import envelope, fsum, tail_risk
 from riskdesk.models import Provenance, StrictModel
 
 MAX_DRAWS = 200_000_000  # scenarios x obligors; bounds run time and memory per call
@@ -69,8 +69,8 @@ def asrf_credit_var(payload):
     conditional = norm.cdf((norm.ppf(pd) + np.sqrt(rho) * norm.ppf(request.confidence))
                            / np.sqrt(1 - rho))
     contributions = weight * conditional
-    var = math.fsum(contributions)
-    expected = math.fsum(weight * pd)
+    var = fsum(contributions)
+    expected = fsum(weight * pd)
     if not all(math.isfinite(x) for x in (var, expected)):
         raise ValueError("credit VaR exceeded numerical limits")
     result = envelope(request, "asymptotic single risk factor (Vasicek) credit VaR", [
@@ -84,7 +84,7 @@ def asrf_credit_var(payload):
         "(CRE31.7) is applied.",
         "Rating migration is not modelled: default mode only."])
     result.update(confidence=request.confidence, horizon_days=request.horizon_days,
-                  total_exposure=math.fsum(o.exposure for o in request.obligors),
+                  total_exposure=fsum(o.exposure for o in request.obligors),
                   expected_loss=expected, credit_var=var, unexpected_loss=var - expected,
                   contributions={o.id: float(c) for o, c in zip(request.obligors, contributions)})
     return result
@@ -105,7 +105,7 @@ def copula_credit_var(payload):
         factor = rng.standard_normal(size)
         assets = loading * factor[:, None] + idiosyncratic * rng.standard_normal((size, n))
         losses[start:start + size] = (assets < threshold) @ weight
-    total = math.fsum(o.exposure for o in request.obligors)
+    total = fsum(o.exposure for o in request.obligors)
     # One VaR and ES mechanism for the desk: the historical tail on simulated P&L.
     tail = tail_risk(dict(as_of=request.as_of.isoformat(), currency=request.currency,
                           source=request.source, data_mode=request.data_mode,
@@ -126,7 +126,7 @@ def copula_credit_var(payload):
     result.update(confidence=request.confidence, horizon_days=request.horizon_days,
                   scenarios=request.scenarios, seed=request.seed, total_exposure=total,
                   expected_loss=expected,
-                  analytic_expected_loss=math.fsum(o.exposure * o.lgd * o.pd for o in request.obligors),
+                  analytic_expected_loss=fsum(o.exposure * o.lgd * o.pd for o in request.obligors),
                   loss_standard_deviation=float(losses.std(ddof=1)),
                   credit_var=tail["var"], expected_shortfall=tail["expected_shortfall"],
                   unexpected_loss=tail["var"] - expected,

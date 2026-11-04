@@ -16,7 +16,7 @@ from optiondesk_engine.pricing.black_scholes import DAYS_PER_YEAR, bs_price, int
 from optiondesk_engine.pricing.forwards import black76_greeks, black76_price
 from optiondesk_engine.pricing.greeks_full import all_greeks, net_greeks
 
-from riskdesk.analytics import envelope, tail_risk
+from riskdesk.analytics import envelope, fsum, tail_risk
 from riskdesk.models import Provenance, StrictModel
 
 MAX_REVALUATIONS = 2_000_000  # about one second of pure Python engine pricing
@@ -193,15 +193,15 @@ def book_greeks(payload):
         S = request.underlyings[name].price
         opts = [p for p in request.positions if p.underlying == name and p.instrument_type == "option"]
         row = dict(price=S, price_type=request.underlyings[name].price_type,
-                   option_model_value=math.fsum(_value(request, p, S) * p.quantity * p.multiplier for p in opts),
-                   linear_notional=math.fsum(p.quantity * p.multiplier * S for p in request.positions
+                   option_model_value=fsum(_value(request, p, S) * p.quantity * p.multiplier for p in opts),
+                   linear_notional=fsum(p.quantity * p.multiplier * S for p in request.positions
                                              if p.underlying == name and p.instrument_type == "linear"),
                    cash_delta=net["delta"] * S, cash_gamma_1pct=net["gamma"] * S * S / 100,
                    vega_per_vol_point=net["vega"] / 100, theta_per_day=net["theta"],
                    rho_per_rate_point=net["rho"] / 100, positions=net["legs"])
         _finite(*(row[k] for k in keys))
         rows[name] = row
-    total = {k: math.fsum(r[k] for r in rows.values()) for k in keys}
+    total = {k: fsum(r[k] for r in rows.values()) for k in keys}
     _finite(*total.values())
     result = envelope(request, "book Greeks via optiondesk_engine", CONVENTIONS + [
         "Totals add per-underlying figures: total gamma ignores cross-gamma, total vega is a parallel shift of every vol."])
@@ -217,7 +217,7 @@ def _revalue(request, returns, vol_changes, elapsed_years=0.0):
         new = _value(request, p, S * (1 + returns[p.underlying]), vol_changes.get(p.underlying, 0.0), elapsed_years)
         old = _value(request, p, S)
         pnl.append((new - old) * p.quantity * p.multiplier)
-    return math.fsum(pnl)
+    return fsum(pnl)
 
 
 def scenario_grid(payload):
@@ -228,8 +228,8 @@ def scenario_grid(payload):
         for dv in request.vol_shocks:
             full = _revalue(request, dict.fromkeys(request.underlyings, ds), dict.fromkeys(request.underlyings, dv))
             moves = {u: request.underlyings[u].price * ds for u in nets}
-            dg = math.fsum(n["delta"] * moves[u] + 0.5 * n["gamma"] * moves[u] ** 2 for u, n in nets.items())
-            dgv = dg + math.fsum(n["vega"] * dv for n in nets.values())
+            dg = fsum(n["delta"] * moves[u] + 0.5 * n["gamma"] * moves[u] ** 2 for u, n in nets.items())
+            dgv = dg + fsum(n["vega"] * dv for n in nets.values())
             _finite(full, dg, dgv)
             cells.append(dict(spot_shock=ds, vol_shock=dv, full_pnl=full, full_loss=-full,
                               delta_gamma_pnl=dg, delta_gamma_vega_pnl=dgv,
