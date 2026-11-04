@@ -1,0 +1,34 @@
+{
+ "as_of": "2026-11-04",
+ "currency": "USD",
+ "data_mode": "synthetic",
+ "source": "Synthetic, not market data: hand-chosen capital inputs to exercise MAR33.41 to MAR33.46; no bank's figures.",
+ "imcc_latest": 7400000,
+ "ses_latest": 900000,
+ "imcc_average_60d": 7100000,
+ "ses_average_60d": 850000,
+ "bankwide_backtesting_exceptions": 6,
+ "qualitative_addon": 0.0,
+ "drc_latest": 1200000,
+ "drc_average_12w": 1350000,
+ "desks": [
+  {
+   "desk": "rates",
+   "pla_zone": "green",
+   "sa": 9000000
+  },
+  {
+   "desk": "equity_derivatives",
+   "pla_zone": "amber",
+   "sa": 6000000
+  },
+  {
+   "desk": "fx_options",
+   "pla_zone": "green",
+   "sa": 3000000
+  }
+ ],
+ "sa_green_amber": 16500000,
+ "sa_out_of_scope": 2500000,
+ "sa_all_desks": 19500000
+}

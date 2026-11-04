@@ -1,0 +1,57 @@
+{
+  "as_of": "2026-09-12",
+  "currency": "USD",
+  "data_mode": "synthetic",
+  "nav": 1000000,
+  "source": "synthetic: hand-written price levels, not market data",
+  "positions": [
+    {
+      "id": "equity-long",
+      "asset": "EQUITY",
+      "market_value": 700000,
+      "instrument_type": "linear"
+    },
+    {
+      "id": "bond-long",
+      "asset": "BOND",
+      "market_value": 500000,
+      "instrument_type": "linear"
+    },
+    {
+      "id": "credit-short",
+      "asset": "CREDIT",
+      "market_value": -200000,
+      "instrument_type": "linear"
+    }
+  ],
+  "scenario_name": "synthetic five-day window",
+  "start": "2025-01-06",
+  "end": "2025-01-10",
+  "measure": "end_over_start",
+  "proxies": {
+    "CREDIT": "CREDIT_INDEX"
+  },
+  "prices": {
+    "EQUITY": {
+      "2025-01-06": 100,
+      "2025-01-07": 96,
+      "2025-01-08": 88,
+      "2025-01-09": 91,
+      "2025-01-10": 90
+    },
+    "BOND": {
+      "2025-01-06": 100,
+      "2025-01-07": 101,
+      "2025-01-08": 99,
+      "2025-01-09": 97,
+      "2025-01-10": 98
+    },
+    "CREDIT_INDEX": {
+      "2025-01-06": 50,
+      "2025-01-07": 49,
+      "2025-01-08": 46,
+      "2025-01-09": 47,
+      "2025-01-10": 47
+    }
+  }
+}

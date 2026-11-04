@@ -1,0 +1,52 @@
+{
+  "as_of": "2026-11-04",
+  "currency": "USD",
+  "data_mode": "synthetic",
+  "source": "synthetic example: six-obligor loan book",
+  "confidence": 0.999,
+  "horizon_days": 365,
+  "obligors": [
+    {
+      "id": "A1",
+      "exposure": 2000000,
+      "pd": 0.003,
+      "lgd": 0.45,
+      "correlation": 0.12
+    },
+    {
+      "id": "A2",
+      "exposure": 1500000,
+      "pd": 0.004,
+      "lgd": 0.45,
+      "correlation": 0.12
+    },
+    {
+      "id": "B1",
+      "exposure": 1000000,
+      "pd": 0.012,
+      "lgd": 0.4,
+      "correlation": 0.12
+    },
+    {
+      "id": "B2",
+      "exposure": 800000,
+      "pd": 0.015,
+      "lgd": 0.4,
+      "correlation": 0.12
+    },
+    {
+      "id": "B3",
+      "exposure": 750000,
+      "pd": 0.02,
+      "lgd": 0.35,
+      "correlation": 0.12
+    },
+    {
+      "id": "C1",
+      "exposure": 500000,
+      "pd": 0.05,
+      "lgd": 0.6,
+      "correlation": 0.12
+    }
+  ]
+}

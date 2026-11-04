@@ -1,0 +1,124 @@
+{
+ "as_of": "2026-11-04",
+ "currency": "USD",
+ "data_mode": "synthetic",
+ "source": "Synthetic, not market data: hand-chosen 10-day ES values per liquidity-horizon subset, neither fitted nor observed.",
+ "base_horizon_days": 10,
+ "portfolio": {
+  "reduced_stressed": [
+   4200000,
+   2600000,
+   1500000,
+   600000,
+   150000
+  ],
+  "full_current": [
+   3100000,
+   1900000,
+   1100000,
+   450000,
+   100000
+  ],
+  "reduced_current": [
+   2600000,
+   1600000,
+   900000,
+   380000,
+   90000
+  ]
+ },
+ "risk_classes": {
+  "interest_rate": {
+   "reduced_stressed": [
+    2500000,
+    1500000,
+    900000,
+    400000,
+    0
+   ],
+   "full_current": [
+    1800000,
+    1100000,
+    650000,
+    300000,
+    0
+   ],
+   "reduced_current": [
+    1500000,
+    900000,
+    550000,
+    250000,
+    0
+   ]
+  },
+  "equity": {
+   "reduced_stressed": [
+    2100000,
+    1400000,
+    700000,
+    300000,
+    0
+   ],
+   "full_current": [
+    1500000,
+    1000000,
+    500000,
+    200000,
+    0
+   ],
+   "reduced_current": [
+    1600000,
+    1050000,
+    520000,
+    210000,
+    0
+   ]
+  },
+  "fx": {
+   "reduced_stressed": [
+    900000,
+    500000,
+    250000,
+    0,
+    0
+   ],
+   "full_current": [
+    700000,
+    400000,
+    200000,
+    0,
+    0
+   ],
+   "reduced_current": [
+    600000,
+    350000,
+    180000,
+    0,
+    0
+   ]
+  },
+  "credit_spread": {
+   "reduced_stressed": [
+    1200000,
+    900000,
+    700000,
+    400000,
+    150000
+   ],
+   "full_current": [
+    800000,
+    600000,
+    450000,
+    250000,
+    100000
+   ],
+   "reduced_current": [
+    700000,
+    520000,
+    400000,
+    220000,
+    90000
+   ]
+  }
+ }
+}

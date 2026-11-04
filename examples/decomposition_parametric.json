@@ -1,0 +1,51 @@
+{
+ "as_of": "2026-11-04",
+ "currency": "USD",
+ "source": "synthetic: sample covariance (T-1) of the returns in examples/decomposition_covariance.json, rounded to 12 dp; that file's recipe: synthetic: rng=numpy.random.default_rng(20261104); F=rng.normal(0,[0.01,0.004],(1000,2)) for MKT,RATES; B=[[1.1,-0.2],[0.9,0.1],[0.05,-0.8]]; R=F@B.T+rng.normal(0,[0.006,0.007,0.001],(1000,3)) for EQ_US,EQ_EU,BOND; R and F rounded to 6 dp; 1-day rows, oldest first",
+ "data_mode": "synthetic",
+ "nav": 1000000,
+ "positions": [
+  {
+   "id": "us-long",
+   "asset": "EQ_US",
+   "market_value": 600000,
+   "instrument_type": "linear"
+  },
+  {
+   "id": "eu-long",
+   "asset": "EQ_EU",
+   "market_value": 300000,
+   "instrument_type": "linear"
+  },
+  {
+   "id": "bond-short",
+   "asset": "BOND",
+   "market_value": -200000,
+   "instrument_type": "linear"
+  }
+ ],
+ "assets": [
+  "EQ_US",
+  "EQ_EU",
+  "BOND"
+ ],
+ "covariance": [
+  [
+   0.000163160647,
+   0.00010633901,
+   1.0533456e-05
+  ],
+  [
+   0.00010633901,
+   0.000136968962,
+   4.987277e-06
+  ],
+  [
+   1.0533456e-05,
+   4.987277e-06,
+   1.1819966e-05
+  ]
+ ],
+ "confidence": 0.99,
+ "horizon_days": 1
+}

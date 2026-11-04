@@ -1,0 +1,138 @@
+{
+  "as_of": "2026-09-12",
+  "currency": "USD",
+  "data_mode": "synthetic",
+  "source": "synthetic example: limits checked against the results of examples/portfolio.json, stress.json and tail.json",
+  "limits": [
+    {
+      "name": "gross_cap",
+      "metric": "gross_exposure",
+      "direction": "max",
+      "limit": 1000,
+      "warning": 750
+    },
+    {
+      "name": "net_cap",
+      "metric": "net_exposure",
+      "direction": "max",
+      "limit": 500
+    },
+    {
+      "name": "asset_a_share",
+      "metric": "gross_share",
+      "asset": "A",
+      "direction": "max",
+      "limit": 0.7
+    },
+    {
+      "name": "var_cap",
+      "metric": "var",
+      "direction": "max",
+      "limit": 60,
+      "warning": 45
+    },
+    {
+      "name": "es_cap",
+      "metric": "expected_shortfall",
+      "direction": "max",
+      "limit": 100
+    },
+    {
+      "name": "combined_down_loss",
+      "metric": "stress_loss",
+      "scenario": "combined_down",
+      "direction": "max",
+      "limit": 50
+    }
+  ],
+  "results": {
+    "exposure": {
+      "schema_version": 1,
+      "riskdesk_version": "0.1.0",
+      "method": "signed base-currency linear position exposure",
+      "currency": "USD",
+      "as_of": "2026-09-12",
+      "source": "synthetic example",
+      "data_mode": "synthetic",
+      "input_sha256": "ce48863b01241edd9b0a1e6704d21f6ab535238d0c5a35624d728c1317c70c1c",
+      "degraded": false,
+      "degraded_reason": null,
+      "assumptions": [
+        "Market values are signed and already translated into the stated currency.",
+        "Gross concentration uses absolute position values before offsetting; leverage divides by supplied NAV.",
+        "Positions are linear assets; derivative Greeks and counterparty netting are separate calculations."
+      ],
+      "disclaimer": "Research software; model results are not guarantees.",
+      "nav": 1000.0,
+      "gross_exposure": 800.0,
+      "net_exposure": 400.0,
+      "gross_leverage": 0.8,
+      "net_leverage": 0.4,
+      "net_by_asset": {
+        "A": 600.0,
+        "B": -200.0
+      },
+      "gross_shares": {
+        "A": 0.75,
+        "B": 0.25
+      }
+    },
+    "stress": {
+      "schema_version": 1,
+      "riskdesk_version": "0.1.0",
+      "method": "linear full-position scenario revaluation",
+      "currency": "USD",
+      "as_of": "2026-09-12",
+      "source": "synthetic example",
+      "data_mode": "synthetic",
+      "input_sha256": "e071191dd32faefa7520552cef967fc982fde8eb09c4e3b3f5f0c04bbb5e6a86",
+      "degraded": false,
+      "degraded_reason": null,
+      "assumptions": [
+        "Shocks are simple asset returns; all assets must have explicit shocks.",
+        "No probability is attached to a scenario. Derivatives and financing costs are outside this model."
+      ],
+      "disclaimer": "Research software; model results are not guarantees.",
+      "scenarios": [
+        {
+          "name": "combined_down",
+          "pnl": -20.0,
+          "loss": 20.0,
+          "stressed_nav": 980.0,
+          "contributions": {
+            "long": -60.0,
+            "short": 40.0
+          }
+        }
+      ]
+    },
+    "tail": {
+      "schema_version": 1,
+      "riskdesk_version": "0.1.0",
+      "method": "historical VaR and Expected Shortfall via skfolio",
+      "currency": "USD",
+      "as_of": "2026-09-12",
+      "source": "synthetic example",
+      "data_mode": "synthetic",
+      "input_sha256": "9467b7c6f0d6706b111f75b6f8cd466bf17ca4ae059341399119637d0f23d261",
+      "degraded": true,
+      "degraded_reason": "Fewer than 20 observations of tail probability mass; this reporting threshold is not a confidence test.",
+      "assumptions": [
+        "Each P&L sample already spans the stated horizon; no square-root-of-time scaling.",
+        "Equally weighted empirical distribution; sample dependence and forecast validity are not tested.",
+        "Loss is positive; negative VaR or ES denotes a gain. Values are not floored at zero.",
+        "VaR uses skfolio's empirical order statistic; ES integrates fractional tail mass."
+      ],
+      "disclaimer": "Research software; model results are not guarantees.",
+      "var": 50.0,
+      "expected_shortfall": 83.33333333333334,
+      "confidence": 0.625,
+      "horizon_days": 1,
+      "backend_confidence": 0.625,
+      "portfolio_value": 1000.0,
+      "observations": 4,
+      "tail_probability_mass": 1.5,
+      "skfolio_version": "1.1.0"
+    }
+  }
+}
