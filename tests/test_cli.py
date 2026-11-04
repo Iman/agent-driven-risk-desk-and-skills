@@ -222,41 +222,12 @@ TOOLS = {"risk_tail": "tail", "risk_exposure": "exposure", "risk_stress": "stres
          "risk_frtb_sbm_fx": "frtb-sbm-fx"}
 
 
-def registered_tools():
-    import asyncio
-    from riskdesk.server import server
-    return {t.name: t for t in asyncio.run(server.list_tools())}
-
-
-def test_every_tool_is_registered_and_only_xva_writes():
-    tools = registered_tools()
-    assert set(tools) == set(TOOLS) | {"risk_scenario_library", "risk_desk_status", "risk_xva"}
-    for name, tool in tools.items():
-        hints = tool.annotations
-        assert hints.readOnlyHint is (name != "risk_xva"), name
-        assert hints.destructiveHint is False and hints.openWorldHint is False, name
-        assert hints.idempotentHint is (name != "risk_xva"), name
-        assert tool.description, name
-
-
 @pytest.mark.parametrize("tool,command", sorted(TOOLS.items()))
 def test_each_tool_returns_what_its_command_returns(tool, command):
     from riskdesk import server
     example = {c: e for c, e, _ in CASES}[command]
     request = json.loads((EXAMPLES / example).read_text(encoding="utf-8"))
     assert getattr(server, tool)(request) == cli.HANDLERS[command](request)
-
-
-def test_the_status_tool_lists_every_tool_and_the_conventions():
-    import asyncio
-    from riskdesk import __version__, server
-    status = asyncio.run(server.risk_desk_status())
-    assert status["status"] == "available" and status["market_data"] is False
-    assert status["riskdesk_version"] == __version__
-    assert status["tools"] == sorted(registered_tools())
-    assert status["data_modes"] == ["synthetic", "user-licensed"]
-    assert status["xva_data_modes"] == ["synthetic", "user-licensed", "upstream-example"]
-    assert any("Loss is positive" in line for line in status["conventions"])
 
 
 def test_the_scenario_library_tool_is_the_command():

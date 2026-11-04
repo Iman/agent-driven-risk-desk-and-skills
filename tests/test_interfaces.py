@@ -4,6 +4,7 @@ import subprocess
 import sys
 import pytest
 from riskdesk.server import server
+from test_cli import TOOLS
 
 pytestmark = pytest.mark.integration
 
@@ -44,3 +45,30 @@ def test_real_mcp_stdio_process_returns_typed_risk_result():
                 bad=await session.call_tool('risk_tail',{'request':{}})
                 assert bad.isError
     asyncio.run(check())
+
+
+def registered_tools():
+    return {t.name: t for t in asyncio.run(server.list_tools())}
+
+
+def test_every_tool_is_registered_and_only_xva_writes():
+    tools = registered_tools()
+    assert set(tools) == set(TOOLS) | {"risk_scenario_library", "risk_desk_status", "risk_xva"}
+    for name, tool in tools.items():
+        hints = tool.annotations
+        assert hints.readOnlyHint is (name != "risk_xva"), name
+        assert hints.destructiveHint is False and hints.openWorldHint is False, name
+        assert hints.idempotentHint is (name != "risk_xva"), name
+        assert tool.description, name
+
+
+def test_the_status_tool_lists_every_tool_and_the_conventions():
+    from riskdesk import __version__
+    from riskdesk.server import risk_desk_status
+    status = asyncio.run(risk_desk_status())
+    assert status["status"] == "available" and status["market_data"] is False
+    assert status["riskdesk_version"] == __version__
+    assert status["tools"] == sorted(registered_tools())
+    assert status["data_modes"] == ["synthetic", "user-licensed"]
+    assert status["xva_data_modes"] == ["synthetic", "user-licensed", "upstream-example"]
+    assert any("Loss is positive" in line for line in status["conventions"])
