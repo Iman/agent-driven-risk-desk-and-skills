@@ -4,6 +4,52 @@ This file records what changed and what was observed, with the date of the
 observation. A figure that appears here was measured; one that was not
 measured is named as not measured.
 
+## 0.2.0, unreleased
+
+Ten new calculation areas on the same runtime, all read-only and all
+called by the CLI and the MCP server alike. Fourteen plugin skills.
+
+### Added on 2026-11-04
+
+- Tail models beside historical VaR and ES (`risk_tail_models`), and
+  VaR and ES backtests (`risk_backtest`).
+- Books with European options: Greeks, spot and vol grids and historical
+  full revaluation (`risk_derivatives_greeks`, `_grid`, `_historical`),
+  priced by the Option Desk engine.
+- Covariance, Euler VaR and ES attribution and factor exposure
+  (`risk_covariance`, `risk_var_attribution`, `risk_es_attribution`,
+  `risk_factor_exposure`).
+- Limits and pre-trade what-if (`risk_limits`, `risk_what_if`) and
+  liquidity-adjusted VaR (`risk_liquidity`).
+- Historical replay, the dated scenario library, reverse stress and
+  scenario scaling (`risk_stress_replay`, `risk_scenario_library`,
+  `risk_reverse_stress`, `risk_scenario_scale`).
+- SA-CCR and exposure profiles (`risk_saccr`, `risk_exposure_profile`),
+  ASRF and copula credit VaR (`risk_credit_asrf`, `risk_credit_copula`),
+  and FRTB IMCC, IMA capital, PLA, backtesting and FX SBM
+  (`risk_frtb_*`). SA-CCR FX and equity add-ons are labelled partially
+  verified.
+- A local `risk_desk_status` tool: version, registered tools, accepted
+  data modes and reporting conventions.
+- Commands `/risk-backtest`, `/risk-limits`, `/risk-whatif` and
+  `/risk-daily`; agents `risk-model-validator` and
+  `stress-scenario-designer`; skill `risk-data-import`.
+- `scripts/evidence.py check` re-counts the cheap figures instead of
+  trusting the record.
+
+### Changed on 2026-11-04
+
+- A sum that overflows is refused with `ValueError` in every module,
+  where six functions raised `OverflowError`.
+- Black-76 rho comes from the engine; Risk Desk's own copy of the
+  correction is removed.
+- numpy, scipy, scikit-learn and optiondesk-engine are declared. The
+  engine is identified by the sha256 of the wheel built from option-desk
+  commit `4a282d9`, because an earlier wheel with the same version lacks
+  the rho fix. It is on no package index; INSTALL.md gives the route.
+- 747 tests collected; unit line coverage of src/riskdesk is 93.64
+  percent.
+
 ## 0.1.0, unreleased
 
 First working scope: historical VaR and Expected Shortfall, linear

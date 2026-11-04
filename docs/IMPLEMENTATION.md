@@ -37,6 +37,57 @@ Not measured in the 2026-09-14/15 session, and therefore not claimed:
 
 ## VERIFIED
 
+Observed on 2026-11-04, for the v0.2 integration on branch `feat/v0.2`:
+
+- Ten modules joined the runtime under `src/riskdesk`: `tail_models`
+  (normal, Student-t, EVT, GARCH filtered historical, GARCH-EVT and GARCH-t
+  Monte Carlo beside historical VaR and ES), `backtest` (Kupiec,
+  Christoffersen, Basel zone, Acerbi-Szekely Z2), `derivatives` (Greeks,
+  spot and vol grids and historical full revaluation for European options
+  through `optiondesk_engine`), `decomposition` (covariance estimators,
+  Euler VaR and ES contributions, factor exposure), `limits` (limit
+  grading and pre-trade what-if), `liquidity` (liquidation schedule and
+  liquidity-adjusted VaR), `scenarios` (historical replay, the dated
+  library, reverse stress, scaling), `counterparty` (SA-CCR, exposure
+  profiles), `credit` (ASRF and Gaussian copula credit VaR) and `frtb`
+  (IMCC, IMA capital, PLA, backtesting, FX SBM).
+- `asyncio.run(server.list_tools())` returns 30 tools: the four of v0.1,
+  25 new read-only tools and a local `risk_desk_status`. Only `risk_xva`
+  is not read-only. Every new tool calls the same function as its CLI
+  command, and a unit test compares the two on each shipped example.
+- 747 tests collected. Unit line coverage of src/riskdesk is 93.64
+  percent, measured by `scripts/evidence.py record`.
+- `analytics.portfolio_exposure`, `stress_test`, `liquidity_risk`,
+  `what_if`, `asrf_credit_var` and `saccr_ead` raised `OverflowError` on
+  finite inputs whose sum overflows. A parametrised test failed with
+  `OverflowError` on all six, then passed once `analytics.fsum` wrapped
+  `math.fsum` and every module, `frtb` included, called it.
+- Black-76 rho now comes from the engine (option-desk commit `4a282d9`).
+  The two `test_derivatives.py` tests that check it pass against a wheel
+  built from that commit and fail against the engine wheel of 13
+  September, which carries the same version number 0.3.0.
+- That wheel, built twice from a clean `git archive` of the commit with
+  hatchling 1.33.0, gave the same sha256 both times; it is recorded in
+  `wheel-hashes.json`. `pip install --dry-run` of this checkout fails with
+  `No matching distribution found for optiondesk-engine==0.3.0` without
+  it and resolves to that hash with `PIP_FIND_LINKS` pointing at it.
+- The tested dependency tree now has 48 upstream distributions with 80
+  notice files; the Option Desk engine's licence notice is the one added.
+
+UNKNOWN for v0.2, and not claimed:
+
+- `optiondesk-engine` is on no package index, and commit `4a282d9` was not
+  on the public option-desk repository on 2026-11-04. Until it is
+  published, `pip install .` fails for anyone without the maintainer's
+  checkout (measured with `--dry-run`). `./install.sh`, the CI workflow and
+  the container build all run `pip install .` the same way and were not
+  run here.
+- The container tests were not run (`-m docker` needs a daemon and the
+  image build cannot resolve the engine).
+- SA-CCR FX and equity add-ons are partially verified: constants checked
+  against CRE52.72, with no published worked example to reproduce.
+- The hosted endpoint was not changed and still advertises its four tools.
+
 Observed on 2026-09-16 London time, for the commands and agents:
 
 - `plugins/risk-desk/` gained `commands/` with 6 files and `agents/` with

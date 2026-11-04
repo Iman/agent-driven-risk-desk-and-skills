@@ -21,9 +21,12 @@ measured the problem first. If you are fixing something, show it failing.
 
 ## The scope, which is deliberately narrow
 
-The approved scope is historical VaR and Expected Shortfall, signed linear
-exposure, explicit stress scenarios, and counterparty exposure and XVA
-through a local Open Source Risk Engine project.
+The approved scope is historical and model VaR and Expected Shortfall
+with backtests, signed linear exposure, European option Greeks and full
+revaluation, VaR and ES attribution, limits and what-if, liquidity,
+explicit, historical and reverse stress scenarios, SA-CCR and exposure
+profiles, portfolio credit VaR, FRTB capital pieces, and counterparty
+exposure and XVA through a local Open Source Risk Engine project.
 
 A pull request that adds a risk model, a market-data client or broker
 connectivity will be declined however good it is, not because it is

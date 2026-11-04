@@ -2,96 +2,96 @@
  "note": "Figures quoted in the documentation, with where each came from. A measured figure was counted in this checkout when this file was written. A pinned figure came from a run against inputs that are not in this repository and was not re-measured. Written by scripts/evidence.py.",
  "figures": {
   "tests_collected": {
-   "value": 288,
+   "value": 747,
    "kind": "measured",
    "measured_by": "scripts/evidence.py record",
    "about": "tests pytest collects in this checkout",
    "documents": {
-    "README.md": "tests-288%20collected",
-    "docs/IMPLEMENTATION.md": "288 tests collected"
+    "README.md": "tests-747%20collected",
+    "docs/IMPLEMENTATION.md": "747 tests collected"
    }
   },
   "unit_coverage": {
-   "value": "86.06",
+   "value": "93.64",
    "kind": "measured",
    "measured_by": "scripts/evidence.py record",
    "about": "unit line coverage of src/riskdesk, percent",
    "documents": {
-    "README.md": "unit%20coverage-86.06%25",
-    "docs/IMPLEMENTATION.md": "86.06 percent",
-    "CHANGELOG.md": "86.06 percent"
+    "README.md": "unit%20coverage-93.64%25",
+    "docs/IMPLEMENTATION.md": "93.64 percent",
+    "CHANGELOG.md": "93.64 percent"
    }
   },
   "skills": {
-   "value": 5,
+   "value": 14,
    "kind": "measured",
    "measured_by": "scripts/evidence.py record",
    "about": "plugin skills under plugins/risk-desk/skills",
    "documents": {
-    "README.md": "5 plugin skills cover these tasks"
+    "README.md": "14 plugin skills cover these tasks"
    }
   },
   "skills_in_manifest": {
-   "value": 5,
+   "value": 14,
    "kind": "measured",
    "measured_by": "scripts/evidence.py record",
    "about": "skill directories both plugin manifests point at",
    "documents": {
-    "README.md": "point at the same 5 skill directories"
+    "README.md": "point at the same 14 skill directories"
    }
   },
   "commands": {
-   "value": 6,
+   "value": 10,
    "kind": "measured",
    "measured_by": "scripts/evidence.py record",
    "about": "slash commands under plugins/risk-desk/commands",
    "documents": {
-    "README.md": "6 commands and"
+    "README.md": "10 commands and"
    }
   },
   "agents": {
-   "value": 2,
+   "value": 4,
    "kind": "measured",
    "measured_by": "scripts/evidence.py record",
    "about": "agents under plugins/risk-desk/agents",
    "documents": {
-    "README.md": "and 2 agents"
+    "README.md": "and 4 agents"
    }
   },
   "mcp_tools": {
-   "value": 4,
+   "value": 30,
    "kind": "measured",
    "measured_by": "scripts/evidence.py record",
    "about": "tools the local MCP server registers",
    "documents": {
-    "README.md": "4 local MCP tools call the same runtime"
+    "README.md": "30 local MCP tools call the same runtime"
    }
   },
   "notice_files": {
-   "value": 79,
+   "value": 80,
    "kind": "measured",
    "measured_by": "scripts/evidence.py record",
    "about": "upstream notice files retained under notices/",
    "documents": {
-    "README.md": "79 upstream notice files"
+    "README.md": "80 upstream notice files"
    }
   },
   "notice_distributions": {
-   "value": 47,
+   "value": 48,
    "kind": "measured",
    "measured_by": "scripts/evidence.py record",
    "about": "upstream distributions with a retained notice",
    "documents": {
-    "README.md": "from 47 distributions"
+    "README.md": "from 48 distributions"
    }
   },
   "examples": {
-   "value": 6,
+   "value": 29,
    "kind": "measured",
    "measured_by": "scripts/evidence.py record",
    "about": "example input files under examples/",
    "documents": {
-    "README.md": "6 example input files"
+    "README.md": "29 example input files"
    }
   },
   "energy_exposure_assets": {

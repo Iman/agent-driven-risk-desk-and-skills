@@ -4,7 +4,7 @@
 # getting the same interpreter every time. It is the right choice on a
 # machine with no Python, on Windows, and in CI.
 #
-# WHAT IT CANNOT DO, and this is a large part of the project. The five
+# WHAT IT CANNOT DO, and this is a large part of the project. The
 # skills are markdown that has to sit where the HOST's agent looks for it,
 # because the host's agent is what reads them. The MCP server is a stdio
 # process that an agent runtime launches itself, and a runtime outside this
@@ -87,6 +87,6 @@ ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["doctor"]
 
 LABEL org.opencontainers.image.title="risk desk" \
-      org.opencontainers.image.description="Historical VaR and Expected Shortfall, linear exposure, explicit stress and local ORE XVA. Research software, not investment advice." \
+      org.opencontainers.image.description="VaR and Expected Shortfall with backtests, linear exposure, option Greeks, attribution, limits, stress, SA-CCR, credit VaR, FRTB capital pieces and local ORE XVA. Research software, not investment advice." \
       org.opencontainers.image.licenses="PolyForm-Noncommercial-1.0.0" \
       org.opencontainers.image.source="https://github.com/Iman/agent-driven-risk-desk-and-skills"

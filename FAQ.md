@@ -8,11 +8,12 @@ to read here than to discover in a week.
 
 ### What is it, in one sentence
 
-A small, auditable risk calculator that computes historical VaR and
-Expected Shortfall, signed linear exposure and explicit stress scenarios
-over files you supply, exposes the same functions to an agent over MCP,
-and adapts a local Open Source Risk Engine project for counterparty
-exposure and XVA.
+A small, auditable risk calculator that computes VaR and Expected
+Shortfall with backtests, signed linear exposure, Greeks for European
+options, attribution, limits, liquidity, stress scenarios, SA-CCR,
+credit VaR and FRTB capital pieces over files you supply, exposes the
+same functions to an agent over MCP, and adapts a local Open Source Risk
+Engine project for counterparty exposure and XVA.
 
 ### Is this a risk system
 
@@ -30,9 +31,12 @@ not a replacement for anything a bank runs.
 
 - No market data. It fetches none, and there is no provider to configure.
 - No orders. It opens no broker connection and has no path to one.
-- No option pricing, no Greeks, no volatility surface. Those do not fit
-  the linear contract and are refused rather than approximated.
-- No credit migration, no nonlinear margin, no liquidity modelling.
+- No option pricing beyond European calls and puts with one flat vol each:
+  no American or exotic options, no implied volatility solving, no
+  volatility surface. The linear tools refuse options rather than
+  approximating them; `risk_derivatives_*` values the European ones.
+- No credit migration and no nonlinear margin. Liquidity is a spread cost
+  and a participation-rate schedule, not market impact.
 - No forecast. Everything it produces describes a sample you supplied or
   a scenario you specified.
 

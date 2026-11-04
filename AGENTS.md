@@ -1,7 +1,12 @@
 # Risk Desk repository guidance
 
 The approved initial scope is historical VaR/Expected Shortfall, linear
-portfolio exposure and stress, and the ORE exposure/XVA adapter. The runtime
+portfolio exposure and stress, and the ORE exposure/XVA adapter. v0.2
+(approved by the maintainer on 2026-11-04) adds tail models and VaR/ES
+backtests, European option Greeks and revaluation through the Option Desk
+engine, covariance and VaR/ES attribution, limits and what-if, liquidity,
+historical replay and reverse stress, SA-CCR and exposure profiles,
+portfolio credit VaR, and FRTB capital pieces. The runtime
 is under `src/riskdesk`; CLI and MCP use the same functions. Skills live in
 `plugins/risk-desk/skills`.
 

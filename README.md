@@ -1,17 +1,21 @@
 # Risk Desk
 
 Risk Desk measures the loss side of a book and shows its working. It
-calculates historical VaR and Expected Shortfall from supplied P&L,
-gross and net exposure for signed linear positions, explicit stress
-scenarios that carry no probability, and counterparty exposure and XVA
-through a local Open Source Risk Engine project. The CLI and 4 local MCP
-tools call the same runtime functions, so an agent and a person get the
+calculates historical and model VaR and Expected Shortfall from supplied
+P&L and backtests a forecast record, gross and net exposure for signed
+linear positions, Greeks and full revaluation for books with European
+options, VaR and ES attribution, limits and a pre-trade what-if,
+liquidity-adjusted VaR, explicit, historical and reverse stress scenarios
+that carry no probability, SA-CCR exposure, portfolio credit VaR, FRTB
+capital pieces from a bank's own figures, and counterparty exposure and
+XVA through a local Open Source Risk Engine project. The CLI and 30 local
+MCP tools call the same runtime functions, so an agent and a person get the
 same numbers with the same provenance, units, assumptions and degraded
-flag attached. A local dashboard reads the same results in a browser, and
-5 plugin skills cover these tasks and setup.
+flag attached. A local dashboard reads the core results in a browser, and
+14 plugin skills cover these tasks and setup.
 
-[![Tests](https://img.shields.io/badge/tests-288%20collected-blue)](docs/IMPLEMENTATION.md)
-[![Unit coverage](https://img.shields.io/badge/unit%20coverage-86.06%25-blue)](#development)
+[![Tests](https://img.shields.io/badge/tests-747%20collected-blue)](docs/IMPLEMENTATION.md)
+[![Unit coverage](https://img.shields.io/badge/unit%20coverage-93.64%25-blue)](#development)
 [![Python](https://img.shields.io/badge/python-3.13%20tested-blue)](#get-started)
 [![License](https://img.shields.io/badge/license-PolyForm%20Noncommercial-blue)](LICENSE)
 
@@ -71,8 +75,11 @@ Then, for the web view:
 
 `install.sh` creates `.venv`, installs the package with its development
 extra, attempts the optional ORE extra and says plainly whether that
-worked, then runs the tests. `demo.sh` runs every command over the 6
-example input files and prints what each result means. Neither script
+worked, then runs the tests. The package needs the Option Desk engine,
+which is not on a package index yet; [INSTALL.md](INSTALL.md) gives the
+build-and-verify route. `demo.sh` runs the core commands over the
+example books and prints what each result means; the 29 example input
+files cover every command. Neither script
 prints colour, neither reaches the network beyond pip, and both exit
 non-zero on any failure.
 
@@ -132,7 +139,7 @@ that launches the agent or by pointing the client at
 | Any MCP client | Add `.mcp.json`'s single stdio server, or run `riskdesk-mcp` yourself | [.mcp.json](plugins/risk-desk/.mcp.json) |
 | Hosted | The endpoint is live at `https://riskdesk.avidquant.com/mcp` and advertises 3 risk tools plus a status tool. It serves synthetic demo data only, and it cannot run `risk_xva`. | [risk-desk-hosted](plugins/risk-desk-hosted/README.md) |
 
-Both manifests describe the same plugin, both point at the same 5 skill
+Both manifests describe the same plugin, both point at the same 14 skill
 directories, and a validation test fails the build if either stops
 matching what is on disk. Installing the plugin does not install the
 runtime.
@@ -147,13 +154,18 @@ With the plugin installed, these are things a person types.
 | "Take `examples/energy_book.json`. What is my gross and net exposure, my leverage against NAV, and which asset is the biggest share of gross?" | `risk-portfolio` | `risk_exposure` |
 | "Apply the two shapes in `examples/energy_stress.json` and tell me the loss, the stressed NAV, and the three positions that hurt most in each." | `risk-stress` | `risk_stress` |
 | "Run this ORE project and give me the CVA and DVA. Tell me first whether ORE reported any error and which adjustments were actually enabled." | `risk-xva` | `risk_xva` |
+| "Put the historical VaR beside the normal, Student-t, EVT and GARCH estimates for this P&L, and backtest last year's VaR forecasts." | `risk-tail`, `risk-backtest` | `risk_tail_models`, `risk_backtest` |
+| "My book holds calls and puts on two futures. What are its cash delta, gamma and vega, and what does a 10% fall with vol up five points do?" | `risk-derivatives` | `risk_derivatives_greeks`, `risk_derivatives_grid` |
+| "Which positions drive the VaR, am I inside my limits, and what would selling half the largest leg do to them?" | `risk-attribution`, `risk-limits` | `risk_var_attribution`, `risk_limits`, `risk_what_if` |
+| "Replay the 2022 gilt window on my prices, and find the most plausible move that loses 5 million." | `risk-stress` | `risk_stress_replay`, `risk_reverse_stress` |
+| "Here is a CSV of my positions with market values in a column called MV. Turn it into a request and tell me what you had to repair." | `risk-data-import` | the tool for that contract |
 
 Each skill states the sign convention and the degraded status before the
 numbers, because a loss figure without them is unreadable.
 
 ### Commands and agents
 
-The plugin also carries 6 commands and 2 agents, discovered by directory
+The plugin also carries 10 commands and 4 agents, discovered by directory
 rather than declared in the manifest.
 
 | Command | What it insists on before a number |
@@ -164,12 +176,20 @@ rather than declared in the manifest.
 | `/risk-xva` | ORE's error level first, and a refusal rather than a quote |
 | `/risk-report` | That an absent input is not a measure of zero |
 | `/risk-dashboard` | Loopback only, and what each refusal code means |
+| `/risk-backtest` | Exceptions against expected, and a high p-value is not proof |
+| `/risk-limits` | Breaches first, and not evaluated is not within |
+| `/risk-whatif` | Before beside after, and nothing is placed |
+| `/risk-daily` | Every degraded result and breach before any figure, and which inputs were synthetic |
 
 The agents are `risk-data-auditor`, which checks whether the inputs
-support any conclusion at all, and `risk-reviewer`, which attacks whether
-the number is trustworthy rather than whether the arithmetic is right. The
-reviewer is required to say plainly when it finds no reason to doubt a
-result, because an adversary that always finds something is noise.
+support any conclusion at all, `risk-reviewer`, which attacks whether
+the number is trustworthy rather than whether the arithmetic is right,
+`risk-model-validator`, which re-derives a model result, backtests it and
+compares challenger models, and `stress-scenario-designer`, which builds
+historical, hypothetical and reverse scenarios from the caller's data and
+the dated library. The reviewer and the validator are required to say
+plainly when they find no reason to doubt a result, because an adversary
+that always finds something is noise.
 
 ### Read it in a browser
 
@@ -194,8 +214,9 @@ reprints a result the adapter already wrote, or explains what is missing.
 
 The input contracts are in
 [plugins/risk-desk/references/contracts.md](plugins/risk-desk/references/contracts.md).
-The Pydantic models in `src/riskdesk/models.py` are the executable version;
-unknown fields and nonfinite numbers are rejected.
+The Pydantic models in `src/riskdesk/models.py` and in each calculation
+module are the executable version; unknown fields and nonfinite numbers
+are rejected.
 
 - **Tail risk** consumes monetary P&L observations that already span the
   stated horizon. It uses skfolio's empirical quantile and fractional-tail
@@ -206,6 +227,29 @@ unknown fields and nonfinite numbers are rejected.
   translated into one base currency. Gross counts absolute values before
   offsetting; net does not. Leverage divides by the supplied NAV. The
   report draws it as [the two charts above](#the-exposure-section-closer).
+  Exposure, stress and the linear tools take linear positions only; for a
+  book with options use `risk_derivatives_greeks`, `risk_derivatives_grid`
+  and `risk_derivatives_historical`.
+- **Tail models and backtests.** `risk_tail_models` puts normal,
+  Student-t, EVT, GARCH filtered historical, GARCH-EVT and GARCH-t Monte
+  Carlo estimates beside the historical one; `risk_backtest` tests a VaR
+  and ES forecast record (Kupiec, Christoffersen, Basel zone,
+  Acerbi-Szekely Z2).
+- **Derivatives** values European calls and puts on spot
+  (Black-Scholes-Merton) or futures (Black-76) underlyings through the
+  Option Desk engine, and reports cash Greeks, spot and vol grids and
+  historical full-revaluation P&L.
+- **Attribution, limits and liquidity**: covariance estimators, Euler VaR
+  and ES contributions, factor exposure, limit grading, a pre-trade
+  what-if, and liquidation horizons with liquidity-adjusted VaR.
+- **Stress beyond explicit shocks**: replay of a dated window on the
+  caller's prices, a dated scenario library with sources and no prices,
+  reverse stress under a supplied covariance, and scenario scaling.
+- **Counterparty, credit and FRTB**: SA-CCR exposure at default for one
+  netting set (FX and equity add-ons partially verified), exposure-profile
+  summaries, ASRF and Gaussian copula credit VaR, and FRTB IMA, PLA,
+  backtesting and FX SBM capital pieces computed from figures the bank
+  supplies.
 - **Stress** requires an explicit return shock for every asset in every
   scenario. It reports P&L, loss, stressed NAV and per-position
   contributions. It attaches no probability to a scenario.
@@ -227,19 +271,20 @@ forecast validation.
 This is research tooling. It reads files you give it, writes files, and
 places no orders; it opens no broker connection and fetches no market data.
 
-The scope is historical VaR and Expected Shortfall, linear exposure,
-explicit stress, and the ORE adapter. It does not establish regulatory
-compliance, forecast skill, wrong-way-risk calibration, liquidity survival,
-SIMM permissions, or coverage of every instrument ORE supports. A
+It does not establish regulatory compliance, forecast skill,
+wrong-way-risk calibration, liquidity survival, SIMM permissions, or
+coverage of every instrument ORE supports. An SA-CCR or FRTB figure is a
+calculation over supplied inputs, not a regulatory submission. A
 historical loss measure is not risk-neutral valuation, and a regression
-value that reproduces is not model validation. Options, nonlinear margin
-and credit migration do not fit the linear contract; use a configured
-valuation model for those, not this one.
+value that reproduces is not model validation. The linear tools refuse
+options; `risk_derivatives_*` covers European calls and puts only, so
+American and exotic options, implied volatility solving, nonlinear margin
+and credit migration need a configured valuation model, not this one.
 
 ## Development
 
 ```sh
-.venv/bin/python -m pytest -q --color=no          # 288 tests, none skipped
+.venv/bin/python -m pytest -q --color=no -m "not docker"   # docker tests need a daemon
 .venv/bin/python scripts/evidence.py check        # documents match the record
 .venv/bin/python -m coverage run -m pytest -q --color=no -m unit
 .venv/bin/python -m coverage json -q
@@ -304,7 +349,7 @@ been measured and what has not. Its UNKNOWN section is the honest part.
 
 Risk Desk's own code is source-available under
 [PolyForm Noncommercial 1.0.0](LICENSE). Upstream software keeps its own
-licence, copyright notice and disclaimer: 79 upstream notice files from 47
+licence, copyright notice and disclaimer: 80 upstream notice files from 48
 distributions are retained unchanged in [notices/](notices/) and travel in
 the wheel, the source archive and the plugin package. See
 [THIRD-PARTY.md](THIRD-PARTY.md) for the credits, and note that market-data
