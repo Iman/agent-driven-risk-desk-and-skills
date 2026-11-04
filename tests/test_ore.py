@@ -43,3 +43,28 @@ def test_backend_errors_never_produce_accepted_xva(tmp_path,monkeypatch):
     monkeypatch.setattr('riskdesk.ore.subprocess.run',worker)
     with pytest.raises(RuntimeError,match='reported errors'):run_ore(root,'Input/ore.xml',out,'synthetic')
     assert not (out/'riskdesk-xva.json').exists()
+
+
+def test_the_xva_checker_passes_an_adapter_result_and_catches_tampering(tmp_path, monkeypatch, capsys):
+    import importlib.util
+    path = Path(__file__).resolve().parent.parent / "plugins/risk-desk/skills/risk-xva/scripts/check_artifact.py"
+    spec = importlib.util.spec_from_file_location("risk_xva_check", path)
+    checker = importlib.util.module_from_spec(spec); spec.loader.exec_module(checker)
+    root = project(tmp_path); out = tmp_path / "out"
+    xva = {"columns": ["Level", "CVA", "MVA"], "rows": [{"Level": "set", "CVA": 1.5, "MVA": None},
+                                                       {"Level": "trade", "CVA": 1.5, "MVA": None}]}
+    def worker(*args, **kwargs):     # the worker's own fields (ore_worker.py), synthetic values
+        (out / "ore-result.json").write_text(json.dumps(dict(
+            backend="Open Source Risk Engine", backend_version="test", backend_git_hash="test", currency="EUR",
+            as_of="2016-02-05", requested_xva_flags={"cva": "Y"}, errors=[], reports={"xva": xva})))
+        return SimpleNamespace(returncode=0)
+    monkeypatch.setattr("riskdesk.ore.subprocess.run", worker)
+    result = run_ore(root, "Input/ore.xml", out, "synthetic")
+    assert checker.check(result) == []
+    assert checker.main(result["artifact"]) == 0
+    line = capsys.readouterr().out
+    assert line.startswith("OK EUR as of 2016-02-05, 2 XVA row(s)") and "null (unavailable) in: MVA" in line
+    assert checker.check(dict(result, errors=["missing spread"])) == [
+        "ORE reported errors; the adapter never accepts such a run"]
+    result["reports"]["xva"]["rows"][1]["DVA"] = 0.0
+    assert checker.check(result) == ["report xva row 1: keys differ from its columns"]
