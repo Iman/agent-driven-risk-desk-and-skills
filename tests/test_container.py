@@ -10,6 +10,7 @@ both of which otherwise look like success: a report written into a
 container with no volume and discarded on exit, and an xva run against an
 ORE backend the image does not have.
 """
+import asyncio
 import json
 import os
 from pathlib import Path
@@ -17,6 +18,11 @@ import shutil
 import subprocess
 
 import pytest
+
+from riskdesk.server import server
+
+# Read from the registry: a literal count outlived v0.2.
+MCP_TOOLS = "{} MCP tools".format(len(asyncio.run(server.list_tools())))
 
 ROOT = Path(__file__).resolve().parent.parent
 TAG = os.environ.get("RISKDESK_IMAGE_TAG", "risk-desk:pytest")
@@ -117,7 +123,7 @@ def test_the_entrypoint_runs_the_demo_and_keeps_what_it_wrote(image, tmp_path):
                      "loss is positive",
                      "WTI_CRUDE_FUTURE",
                      "worst three positions by P&L",
-                     "4 MCP tools",
+                     MCP_TOOLS,
                      "carries no probability and is not a forecast"):
         assert expected in out, expected
     page = artifacts / "report.html"
@@ -192,7 +198,7 @@ def test_the_documented_fix_for_that_mount_actually_works(
     finished = docker("run", "--rm", "--user", "1001:1001", "-v",
                       unwritable_volume + ":/artifacts", image, "demo")
     assert finished.returncode == 0, finished.stdout[-2000:] + finished.stderr
-    assert "4 MCP tools" in finished.stdout
+    assert MCP_TOOLS in finished.stdout
 
 
 def test_a_failing_command_says_why_on_stderr(image):
