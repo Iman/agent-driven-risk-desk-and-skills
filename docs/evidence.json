@@ -2,24 +2,24 @@
  "note": "Figures quoted in the documentation, with where each came from. A measured figure was counted in this checkout when this file was written. A pinned figure came from a run against inputs that are not in this repository and was not re-measured. Written by scripts/evidence.py.",
  "figures": {
   "tests_collected": {
-   "value": 747,
+   "value": 804,
    "kind": "measured",
    "measured_by": "scripts/evidence.py record",
    "about": "tests pytest collects in this checkout",
    "documents": {
-    "README.md": "tests-747%20collected",
-    "docs/IMPLEMENTATION.md": "747 tests collected"
+    "README.md": "tests-804%20collected",
+    "docs/IMPLEMENTATION.md": "804 tests collected"
    }
   },
   "unit_coverage": {
-   "value": "93.64",
+   "value": "93.68",
    "kind": "measured",
    "measured_by": "scripts/evidence.py record",
    "about": "unit line coverage of src/riskdesk, percent",
    "documents": {
-    "README.md": "unit%20coverage-93.64%25",
-    "docs/IMPLEMENTATION.md": "93.64 percent",
-    "CHANGELOG.md": "93.64 percent"
+    "README.md": "unit%20coverage-93.68%25",
+    "docs/IMPLEMENTATION.md": "93.68 percent",
+    "CHANGELOG.md": "93.68 percent"
    }
   },
   "skills": {

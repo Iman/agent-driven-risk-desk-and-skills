@@ -1,0 +1,20 @@
+[project]
+name = "riskdesk-agent"
+version = "0.2.0"
+description = "LangChain tools read from the Risk Desk MCP registry, tool results as documents, and a grounded LangGraph answer routine"
+requires-python = ">=3.11"
+license = "PolyForm-Noncommercial-1.0.0"
+authors = [{name = "Iman Samizadeh"}]
+# langchain-core 1.7.3 and later require certifi>=2026.10.19, which would move
+# a package in the Risk Desk lock; 1.7.2 installs without changing any of them.
+dependencies = ["riskdesk==0.2.0", "langchain-core==1.7.2"]
+
+[project.optional-dependencies]
+graph = ["langgraph==1.2.19"]
+
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/riskdesk_agent"]

@@ -36,6 +36,10 @@ called by the CLI and the MCP server alike. Fourteen plugin skills.
   `stress-scenario-designer`; skill `risk-data-import`.
 - `scripts/evidence.py check` re-counts the cheap figures instead of
   trusting the record.
+- `riskdesk-agent` 0.2.0 under `agent/`: LangChain tools read from the
+  MCP server's registry, tool results as documents, and a LangGraph
+  answer routine that withholds any answer with a number in no tool
+  result.
 
 ### Changed on 2026-11-04
 
@@ -47,7 +51,7 @@ called by the CLI and the MCP server alike. Fourteen plugin skills.
   engine is identified by the sha256 of the wheel built from option-desk
   commit `4a282d9`, because an earlier wheel with the same version lacks
   the rho fix. It is on no package index; INSTALL.md gives the route.
-- 747 tests collected; unit line coverage of src/riskdesk is 93.64
+- 804 tests collected; unit line coverage of src/riskdesk is 93.68
   percent.
 
 ## 0.1.0, unreleased

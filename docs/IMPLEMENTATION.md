@@ -55,7 +55,7 @@ Observed on 2026-11-04, for the v0.2 integration on branch `feat/v0.2`:
   25 new read-only tools and a local `risk_desk_status`. Only `risk_xva`
   is not read-only. Every new tool calls the same function as its CLI
   command, and a unit test compares the two on each shipped example.
-- 747 tests collected. Unit line coverage of src/riskdesk is 93.64
+- 804 tests collected. Unit line coverage of src/riskdesk is 93.68
   percent, measured by `scripts/evidence.py record`.
 - `analytics.portfolio_exposure`, `stress_test`, `liquidity_risk`,
   `what_if`, `asrf_credit_var` and `saccr_ead` raised `OverflowError` on

@@ -14,8 +14,8 @@ same numbers with the same provenance, units, assumptions and degraded
 flag attached. A local dashboard reads the core results in a browser, and
 14 plugin skills cover these tasks and setup.
 
-[![Tests](https://img.shields.io/badge/tests-747%20collected-blue)](docs/IMPLEMENTATION.md)
-[![Unit coverage](https://img.shields.io/badge/unit%20coverage-93.64%25-blue)](#development)
+[![Tests](https://img.shields.io/badge/tests-804%20collected-blue)](docs/IMPLEMENTATION.md)
+[![Unit coverage](https://img.shields.io/badge/unit%20coverage-93.68%25-blue)](#development)
 [![Python](https://img.shields.io/badge/python-3.13%20tested-blue)](#get-started)
 [![License](https://img.shields.io/badge/license-PolyForm%20Noncommercial-blue)](LICENSE)
 
@@ -209,6 +209,34 @@ for an input that fails its contract, 73 for a port already in use.
 The XVA view never runs ORE. The adapter needs a trusted local project
 directory, a fresh output directory and a separate process, so the view
 reprints a result the adapter already wrote, or explains what is missing.
+
+### Use it from LangChain or LangGraph
+
+[agent/](agent/pyproject.toml) is a separate package, `riskdesk-agent`
+0.2.0, the Risk Desk port of Option Desk's agent layer. It is not a
+dependency of `riskdesk`.
+
+```sh
+python -m pip install -e ./agent
+python -m pip install "langgraph==1.2.19"   # only for the graph
+```
+
+- `desk_tools()` turns the tools `riskdesk-mcp` registers into LangChain
+  tools. Names, descriptions and input schemas are read from the server,
+  and every call goes through the server's own validation, so there is no
+  second tool list to keep in step.
+- `ask(question, model=...)` runs a three-node LangGraph routine. The
+  model picks read-only tools, the tools run, and the model answers under
+  the reporting rules `risk_desk_status` returns. A tool call with a
+  number the question does not contain is refused before it runs. An
+  answer with a number that is in no tool result is withheld, and the
+  tool results are returned in its place.
+
+The tested versions are `langchain-core==1.7.2` and `langgraph==1.2.19`,
+with every wheel installed for them on CPython 3.13 and macOS ARM64, and
+its sha256, in [agent/wheel-hashes.json](agent/wheel-hashes.json). They
+install on top of the Risk Desk wheels without changing any of them. The tests use a scripted chat model and need no network and no API
+key.
 
 ## What it computes
 

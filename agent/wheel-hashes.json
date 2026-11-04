@@ -1,0 +1,158 @@
+[
+  {
+    "name": "charset-normalizer",
+    "version": "3.5.2",
+    "wheel": "charset_normalizer-3.5.2-cp313-cp313-macosx_10_13_universal2.whl",
+    "sha256": "6045373d5a89a5ec71afde535db987ca28e76dfa276c2d4c818265b375d4b055"
+  },
+  {
+    "name": "distro",
+    "version": "1.9.0",
+    "wheel": "distro-1.9.0-py3-none-any.whl",
+    "sha256": "7bffd925d65168f85027d8da9af6bddab658135b840670a223589bc0c8ef02b2"
+  },
+  {
+    "name": "httpcore2",
+    "version": "2.16.0",
+    "wheel": "httpcore2-2.16.0-py3-none-any.whl",
+    "sha256": "5c4358319f2602d984ad93182c9fee5160f22e9da7babdda870a5e7c4e2dc34f"
+  },
+  {
+    "name": "httpx2",
+    "version": "2.16.0",
+    "wheel": "httpx2-2.16.0-py3-none-any.whl",
+    "sha256": "fd2c5d7909e8d86fe92d53020c310ca0e4e431b838c207c5754b9bbf0308d49a"
+  },
+  {
+    "name": "jsonpatch",
+    "version": "1.42",
+    "wheel": "jsonpatch-1.42-py3-none-any.whl",
+    "sha256": "0a94e8725b8b53cafdf3eba3112a7ccd31ea420bb04e6374096d9d17bf4563e9"
+  },
+  {
+    "name": "jsonpointer",
+    "version": "3.8",
+    "wheel": "jsonpointer-3.8-py3-none-any.whl",
+    "sha256": "d69af85adaea202111bbc931067ead68dc16bca4592c74e1a1953152e2a330ab"
+  },
+  {
+    "name": "langchain-core",
+    "version": "1.7.2",
+    "wheel": "langchain_core-1.7.2-py3-none-any.whl",
+    "sha256": "61988091e36f074aaac595232180b5aa6e80cb63fb026b02b69843f07a57fdcf"
+  },
+  {
+    "name": "langchain-protocol",
+    "version": "0.0.20",
+    "wheel": "langchain_protocol-0.0.20-py3-none-any.whl",
+    "sha256": "3c935e5e46b0f6f9cb52f45ba7cfa53d1b9fa80c82c4a277d47f03e07f7385b1"
+  },
+  {
+    "name": "langgraph",
+    "version": "1.2.19",
+    "wheel": "langgraph-1.2.19-py3-none-any.whl",
+    "sha256": "6094a5cbed52a77d8c74c276fcd2056abde7b2836eab1c7a6b74bacbd1a269b3"
+  },
+  {
+    "name": "langgraph-checkpoint",
+    "version": "4.3.1",
+    "wheel": "langgraph_checkpoint-4.3.1-py3-none-any.whl",
+    "sha256": "215a826935c8db4d9676e79fd95943e5b3847d78604390898e1d98581cc594e5"
+  },
+  {
+    "name": "langgraph-prebuilt",
+    "version": "1.1.1",
+    "wheel": "langgraph_prebuilt-1.1.1-py3-none-any.whl",
+    "sha256": "fae17c22562e501940eb7aa052a15c58a431febbabf33f8ad172e1b44354a7e4"
+  },
+  {
+    "name": "langgraph-sdk",
+    "version": "0.4.12",
+    "wheel": "langgraph_sdk-0.4.12-py3-none-any.whl",
+    "sha256": "cfc2e659a3daa615062a29cfa39eea00b5ea58d2683dbf2f4487fc4244a98078"
+  },
+  {
+    "name": "langsmith",
+    "version": "0.14.17",
+    "wheel": "langsmith-0.14.17-py3-none-any.whl",
+    "sha256": "0aa2c79936c93c7cea9c55656f05e21cc5da715fecbdbda439d084adc08429be"
+  },
+  {
+    "name": "orjson",
+    "version": "3.13.0",
+    "wheel": "orjson-3.13.0-cp313-cp313-macosx_15_0_arm64.whl",
+    "sha256": "ded33b972cffdaf4ca0ac917338ab61d2bb10d68987dbcae641c313fbfdbf499"
+  },
+  {
+    "name": "ormsgpack",
+    "version": "1.13.0",
+    "wheel": "ormsgpack-1.13.0-cp313-cp313-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl",
+    "sha256": "a50285a1910d8fd334b1b8c0108cd7574a0b50c7cde6581aea5bf23622b167ad"
+  },
+  {
+    "name": "PyYAML",
+    "version": "6.0.3",
+    "wheel": "pyyaml-6.0.3-cp313-cp313-macosx_11_0_arm64.whl",
+    "sha256": "2283a07e2c21a2aa78d9c4442724ec1eb15f5e42a723b99cb3d822d48f5f7ad1"
+  },
+  {
+    "name": "requests",
+    "version": "2.34.2",
+    "wheel": "requests-2.34.2-py3-none-any.whl",
+    "sha256": "2a0d60c172f83ac6ab31e4554906c0f3b3588d37b5cb939b1c061f4907e278e0"
+  },
+  {
+    "name": "requests-toolbelt",
+    "version": "1.0.0",
+    "wheel": "requests_toolbelt-1.0.0-py2.py3-none-any.whl",
+    "sha256": "cccfdd665f0a24fcf4726e690f65639d272bb0637b9b92dfd91a5568ccf6bd06"
+  },
+  {
+    "name": "sniffio",
+    "version": "1.3.1",
+    "wheel": "sniffio-1.3.1-py3-none-any.whl",
+    "sha256": "2f6da418d1f1e0fddd844478f41680e794e6051915791a034ff65e5f100525a2"
+  },
+  {
+    "name": "tenacity",
+    "version": "9.2.1",
+    "wheel": "tenacity-9.2.1-py3-none-any.whl",
+    "sha256": "9e56f17539296baab7beabb08b92f6ee3d7be92d8be72d763360677c2ad6580e"
+  },
+  {
+    "name": "truststore",
+    "version": "0.10.5",
+    "wheel": "truststore-0.10.5-py3-none-any.whl",
+    "sha256": "9aaaedaefaf06d8b206278cf8b5012bc897f485a874503501e12d776df78951c"
+  },
+  {
+    "name": "urllib3",
+    "version": "2.8.0",
+    "wheel": "urllib3-2.8.0-py3-none-any.whl",
+    "sha256": "0cf3cae568d36aa9576b28dfb35f11328f1cb974ca7647d9475ebb86c75ac6e3"
+  },
+  {
+    "name": "uuid_utils",
+    "version": "0.19.0",
+    "wheel": "uuid_utils-0.19.0-cp310-abi3-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl",
+    "sha256": "84929d8c594381c6f1444afa2a25cce9ff7edac99d35e071ebc48275bae83730"
+  },
+  {
+    "name": "websockets",
+    "version": "17.4",
+    "wheel": "websockets-17.4-cp313-cp313-macosx_11_0_arm64.whl",
+    "sha256": "74e46409666c358b93fce0d8c6f4cb107d8dd7cba1302a38d49adf6fa8193c7e"
+  },
+  {
+    "name": "xxhash",
+    "version": "4.0.2",
+    "wheel": "xxhash-4.0.2-cp313-cp313-macosx_11_0_arm64.whl",
+    "sha256": "f64380470531ca49aceb15179ea47dd7be2fc38e41207eca4f7d05e4d6c9f795"
+  },
+  {
+    "name": "zstandard",
+    "version": "0.25.0",
+    "wheel": "zstandard-0.25.0-cp313-cp313-macosx_11_0_arm64.whl",
+    "sha256": "a1a4ae2dec3993a32247995bdfe367fc3266da832d82f8438c8570f989753de1"
+  }
+]

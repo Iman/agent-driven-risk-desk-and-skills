@@ -29,8 +29,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install the package and its development extra
-        run: python -m pip install ".[dev]"
+      - name: Install the package, its development extra and the agent package
+        run: python -m pip install ".[dev]" "./agent[graph]"
       # The container tests are deselected here and run once in the gates
       # job below. The image is python:3.13 whatever this matrix entry is,
       # so building it three times would measure the same thing three times.
@@ -52,8 +52,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
-      - name: Install the package and its development extra
-        run: python -m pip install ".[dev]"
+      - name: Install the package, its development extra and the agent package
+        run: python -m pip install ".[dev]" "./agent[graph]"
       - name: Check the documents against the recorded figures
         run: python scripts/evidence.py check
       - name: Unit line coverage gate

@@ -13,6 +13,17 @@ from riskdesk.tail_models import tail_models
 server = FastMCP("Risk Desk")
 READ = ToolAnnotations(readOnlyHint=True, destructiveHint=False, idempotentHint=True, openWorldHint=False)
 WRITE = ToolAnnotations(readOnlyHint=False, destructiveHint=False, idempotentHint=False, openWorldHint=False)
+# One list, read by risk_desk_status and by the riskdesk-agent answer prompt.
+CONVENTIONS = (
+    "Report degraded and degraded_reason before any figure.",
+    "Loss is positive; a negative VaR, ES or loss is a gain and is not floored at zero.",
+    "Amounts are in the stated currency; no FX translation is performed.",
+    "Each P&L or return sample already spans the stated horizon and is not rescaled by "
+    "square-root-of-time; the one exception is the stated FRTB MAR33.4 liquidity-horizon rule.",
+    "Preserve as_of, source, data_mode and input_sha256 when citing a result.",
+    "data_mode is the caller's declaration, not a rights certificate; Risk Desk fetches no market data.",
+    "Historical loss forecasts are not risk-neutral valuation; regulatory figures are not a submission.",
+    "Research software; not investment advice.")
 
 
 @server.tool(annotations=READ)
@@ -22,16 +33,7 @@ async def risk_desk_status() -> dict:
                 tools=sorted(t.name for t in await server.list_tools()),
                 data_modes=list(get_args(Provenance.model_fields["data_mode"].annotation)),
                 xva_data_modes=list(DATA_MODES),
-                conventions=[
-                    "Report degraded and degraded_reason before any figure.",
-                    "Loss is positive; a negative VaR, ES or loss is a gain and is not floored at zero.",
-                    "Amounts are in the stated currency; no FX translation is performed.",
-                    "Each P&L or return sample already spans the stated horizon and is not rescaled by "
-                    "square-root-of-time; the one exception is the stated FRTB MAR33.4 liquidity-horizon rule.",
-                    "Preserve as_of, source, data_mode and input_sha256 when citing a result.",
-                    "data_mode is the caller's declaration, not a rights certificate; Risk Desk fetches no market data.",
-                    "Historical loss forecasts are not risk-neutral valuation; regulatory figures are not a submission.",
-                    "Research software; not investment advice."])
+                conventions=list(CONVENTIONS))
 
 
 @server.tool(annotations=READ)
