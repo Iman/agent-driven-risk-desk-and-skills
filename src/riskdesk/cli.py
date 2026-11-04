@@ -3,12 +3,26 @@ import argparse
 import json
 from pathlib import Path
 import sys
+from riskdesk import backtest, counterparty, credit, decomposition, derivatives, frtb, limits, liquidity, scenarios
 from riskdesk.analytics import tail_risk, portfolio_exposure, stress_test
 from riskdesk.dashboard import app as dashboard_app
 from riskdesk.ore import run_ore
 from riskdesk.report import build_report
+from riskdesk.tail_models import tail_models
 
-HANDLERS = {"tail": tail_risk, "exposure": portfolio_exposure, "stress": stress_test}
+HANDLERS = {"tail": tail_risk, "exposure": portfolio_exposure, "stress": stress_test,
+            "tail-models": tail_models, "backtest": backtest.var_backtest,
+            "derivatives-greeks": derivatives.book_greeks, "derivatives-grid": derivatives.scenario_grid,
+            "derivatives-historical": derivatives.historical_pnl,
+            "covariance": decomposition.covariance_estimate, "var-attribution": decomposition.parametric_var,
+            "es-attribution": decomposition.historical_es, "factors": decomposition.factor_exposure,
+            "limits": limits.check_limits, "what-if": limits.what_if, "liquidity": liquidity.liquidity_risk,
+            "replay": scenarios.historical_replay, "reverse-stress": scenarios.reverse_stress,
+            "scale-scenario": scenarios.scale_scenario,
+            "saccr": counterparty.saccr_ead, "exposure-profile": counterparty.exposure_profile_summary,
+            "credit-asrf": credit.asrf_credit_var, "credit-copula": credit.copula_credit_var,
+            "frtb-imcc": frtb.frtb_imcc, "frtb-capital": frtb.frtb_ima_capital, "frtb-pla": frtb.frtb_pla,
+            "frtb-backtest": frtb.frtb_backtest, "frtb-sbm-fx": frtb.frtb_sbm_fx}
 
 
 def write_report(stress_path, output_path, tail_path=None, exposure_path=None):
@@ -34,6 +48,7 @@ def main(argv=None):
     for command in HANDLERS:
         sub = commands.add_parser(command)
         sub.add_argument("--input", required=True, type=Path)
+    commands.add_parser("scenarios")  # the dated scenario library takes no input
     ore = commands.add_parser("xva")
     for field in ("project", "config", "output", "data-mode"):
         ore.add_argument("--"+field, required=True)
@@ -54,7 +69,9 @@ def main(argv=None):
     if args.command == "dashboard":
         return dashboard_app.run(args)
     try:
-        if args.command == "xva":
+        if args.command == "scenarios":
+            result = scenarios.scenario_library()
+        elif args.command == "xva":
             result = run_ore(args.project, args.config, args.output, args.data_mode)
         elif args.command == "report":
             result = write_report(args.input, args.output, args.tail, args.exposure)

@@ -22,11 +22,38 @@ def read(capsys):
     return json.loads(capsys.readouterr().out)
 
 
-@pytest.mark.parametrize("command,example,key", [
+CASES = [
     ("tail", "tail.json", "var"),
     ("exposure", "portfolio.json", "gross_exposure"),
     ("stress", "stress.json", "scenarios"),
-])
+    ("tail-models", "tail.json", "methods"),
+    ("backtest", "var_backtest_energy.json", "exceptions"),
+    ("derivatives-greeks", "derivatives_book.json", "by_underlying"),
+    ("derivatives-grid", "derivatives_grid.json", "cells"),
+    ("derivatives-historical", "derivatives_historical.json", "tail"),
+    ("covariance", "decomposition_covariance.json", "covariance"),
+    ("var-attribution", "decomposition_parametric.json", "var"),
+    ("es-attribution", "decomposition_historical.json", "expected_shortfall"),
+    ("factors", "decomposition_factor.json", "systematic_share"),
+    ("limits", "limits_check.json", "overall_status"),
+    ("what-if", "limits_what_if.json", "limits_after"),
+    ("liquidity", "liquidity_book.json", "liquidity_adjusted_var"),
+    ("replay", "stress_replay.json", "shocks"),
+    ("reverse-stress", "stress_reverse.json", "mahalanobis_distance"),
+    ("scale-scenario", "stress_scale.json", "multiple"),
+    ("saccr", "counterparty_saccr.json", "ead"),
+    ("exposure-profile", "counterparty_profile.json", "effective_epe"),
+    ("credit-asrf", "credit_asrf.json", "credit_var"),
+    ("credit-copula", "credit_copula.json", "credit_var"),
+    ("frtb-imcc", "frtb_imcc.json", "imcc"),
+    ("frtb-capital", "frtb_ima_capital.json", "aggregate_capital"),
+    ("frtb-pla", "frtb_pla.json", "zone"),
+    ("frtb-backtest", "frtb_backtest.json", "passes"),
+    ("frtb-sbm-fx", "frtb_sbm_fx.json", "capital"),
+]
+
+
+@pytest.mark.parametrize("command,example,key", CASES)
 def test_each_command_prints_its_envelope_and_exits_zero(command, example,
                                                          key, capsys):
     assert cli.main([command, "--input", str(EXAMPLES / example)]) == 0
@@ -34,6 +61,19 @@ def test_each_command_prints_its_envelope_and_exits_zero(command, example,
     assert key in result
     assert result["degraded"] in (True, False)
     assert "input_sha256" in result
+
+
+def test_every_input_command_has_a_case():
+    """A command added to HANDLERS without a shipped example run here would
+    be the one nobody has seen work."""
+    assert set(cli.HANDLERS) == {command for command, _, _ in CASES}
+
+
+def test_the_scenario_library_command_takes_no_input(capsys):
+    assert cli.main(["scenarios"]) == 0
+    library = read(capsys)
+    assert library["windows"]
+    assert all(window["sources"] for window in library["windows"])
 
 
 def test_a_failure_is_a_json_envelope_and_a_nonzero_code(tmp_path, capsys):
@@ -164,3 +204,61 @@ def test_the_server_tools_call_the_same_functions_as_the_cli():
     stress = json.loads((EXAMPLES / "energy_stress.json")
                         .read_text(encoding="utf-8"))
     assert server.risk_stress(stress) == stress_test(stress)
+
+
+# MCP tool name -> CLI command. Both call one function.
+TOOLS = {"risk_tail": "tail", "risk_exposure": "exposure", "risk_stress": "stress",
+         "risk_tail_models": "tail-models", "risk_backtest": "backtest",
+         "risk_derivatives_greeks": "derivatives-greeks", "risk_derivatives_grid": "derivatives-grid",
+         "risk_derivatives_historical": "derivatives-historical", "risk_covariance": "covariance",
+         "risk_var_attribution": "var-attribution", "risk_es_attribution": "es-attribution",
+         "risk_factor_exposure": "factors", "risk_limits": "limits", "risk_what_if": "what-if",
+         "risk_liquidity": "liquidity", "risk_stress_replay": "replay",
+         "risk_reverse_stress": "reverse-stress", "risk_scenario_scale": "scale-scenario",
+         "risk_saccr": "saccr", "risk_exposure_profile": "exposure-profile",
+         "risk_credit_asrf": "credit-asrf", "risk_credit_copula": "credit-copula",
+         "risk_frtb_imcc": "frtb-imcc", "risk_frtb_ima_capital": "frtb-capital",
+         "risk_frtb_pla": "frtb-pla", "risk_frtb_backtest": "frtb-backtest",
+         "risk_frtb_sbm_fx": "frtb-sbm-fx"}
+
+
+def registered_tools():
+    import asyncio
+    from riskdesk.server import server
+    return {t.name: t for t in asyncio.run(server.list_tools())}
+
+
+def test_every_tool_is_registered_and_only_xva_writes():
+    tools = registered_tools()
+    assert set(tools) == set(TOOLS) | {"risk_scenario_library", "risk_desk_status", "risk_xva"}
+    for name, tool in tools.items():
+        hints = tool.annotations
+        assert hints.readOnlyHint is (name != "risk_xva"), name
+        assert hints.destructiveHint is False and hints.openWorldHint is False, name
+        assert hints.idempotentHint is (name != "risk_xva"), name
+        assert tool.description, name
+
+
+@pytest.mark.parametrize("tool,command", sorted(TOOLS.items()))
+def test_each_tool_returns_what_its_command_returns(tool, command):
+    from riskdesk import server
+    example = {c: e for c, e, _ in CASES}[command]
+    request = json.loads((EXAMPLES / example).read_text(encoding="utf-8"))
+    assert getattr(server, tool)(request) == cli.HANDLERS[command](request)
+
+
+def test_the_status_tool_lists_every_tool_and_the_conventions():
+    import asyncio
+    from riskdesk import __version__, server
+    status = asyncio.run(server.risk_desk_status())
+    assert status["status"] == "available" and status["market_data"] is False
+    assert status["riskdesk_version"] == __version__
+    assert status["tools"] == sorted(registered_tools())
+    assert status["data_modes"] == ["synthetic", "user-licensed"]
+    assert status["xva_data_modes"] == ["synthetic", "user-licensed", "upstream-example"]
+    assert any("Loss is positive" in line for line in status["conventions"])
+
+
+def test_the_scenario_library_tool_is_the_command():
+    from riskdesk import server
+    assert server.risk_scenario_library() == cli.scenarios.scenario_library()

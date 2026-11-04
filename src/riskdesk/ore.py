@@ -58,8 +58,11 @@ def prepare_config(project, config, output):
     return target, hashes
 
 
+DATA_MODES = ("synthetic", "user-licensed", "upstream-example")
+
+
 def run_ore(project, config, output, data_mode, timeout=600):
-    if data_mode not in ("synthetic", "user-licensed", "upstream-example"):
+    if data_mode not in DATA_MODES:
         raise ValueError("data_mode must be synthetic, user-licensed or upstream-example")
     target, hashes = prepare_config(project, config, output)
     with (target.parent / "worker.log").open("w") as log:

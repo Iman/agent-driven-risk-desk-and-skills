@@ -11,7 +11,8 @@ pytestmark = pytest.mark.integration
 def test_mcp_lists_typed_tools_and_calculates_tail():
     async def check():
         tools=await server.list_tools()
-        assert {t.name for t in tools}=={'risk_tail','risk_exposure','risk_stress','risk_xva'}
+        assert {'risk_tail','risk_exposure','risk_stress','risk_xva','risk_desk_status'} <= {t.name for t in tools}
+        assert len(tools)==30
         value=await server.call_tool('risk_tail',{'request':dict(as_of='2026-09-12',currency='USD',
             source='test',data_mode='synthetic',pnl=[-100,-50,0,50],confidence=.625,horizon_days=1,portfolio_value=1000)})
         assert '83.333' in str(value)
