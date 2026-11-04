@@ -1,7 +1,7 @@
 {
   "area": "decomposition",
   "title": "Euler allocation, covariance and factor split: independent numerical review",
-  "generated_utc": "2026-11-04T17:07:51.838385+00:00",
+  "generated_utc": "2026-11-04T17:27:35.141267+00:00",
   "checks": [
     {
       "id": "param-var",

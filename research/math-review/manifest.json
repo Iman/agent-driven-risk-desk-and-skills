@@ -1,12 +1,10 @@
 {
-  "generated_utc": "2026-11-04T17:07:51.939464+00:00",
+  "generated_utc": "2026-11-04T17:27:35.212541+00:00",
   "command": "python research/math-review/run_all.py",
-  "reviewed_head": "27491c20acb7fda44108cd6865b5b5c9b1791cd2",
+  "reviewed_head": "5fc0c4c397815de144b5235bd59e9d218f2820be",
   "reviewed_branch": "feat/v0.2",
   "uncommitted_module_changes": [
-    "M src/riskdesk/counterparty.py",
-    " M src/riskdesk/models.py",
-    " M src/riskdesk/ore.py"
+    "M src/riskdesk/derivatives.py"
   ],
   "python": "3.13.14",
   "packages": {
@@ -31,7 +29,7 @@
     "src/riskdesk/analytics.py": "71649a023da6a779d482bb2bd61286c457aec0d92ee5eda15ba3a41fd70001f2",
     "src/riskdesk/tail_models.py": "dc30ba30d5df55e7739416f6c9cf44db72123beb4f0b31c128ff8778e5033430",
     "src/riskdesk/backtest.py": "08eebc277e696ff69eb08c2c78011713a24bba4f2da87434739750fef773d05e",
-    "src/riskdesk/derivatives.py": "a556d3efce6a08e092dcce7d3c755d1338f72e44efa1231b62cd8f33b6fa44f0",
+    "src/riskdesk/derivatives.py": "c2d50bfb0167f98dd15b041981ba1a3625917609a926c3a62c1c73d06cf16d28",
     "src/riskdesk/decomposition.py": "18a136ba9bdeb2a9aa74299bd79eb156791159d1ea18353f9045a190f0260309",
     "src/riskdesk/limits.py": "aafe26988030c1ee866fda529dd97c8c5d4b3e02433456b2efd24939421b75a6",
     "src/riskdesk/liquidity.py": "ff73f44810d5e98f806bd305b1ef42f32d86b5b7b1176d923cfc62fdb144ceab",
@@ -46,15 +44,15 @@
     "src/riskdesk/derivatives.py": "the integrator is removing the Black-76 rho workaround now that Option Desk 4a282d9 fixes black76_greeks; re-run this script after it lands"
   },
   "results_sha256": {
-    "backtest/numerical-results.json": "7d4ab59b3961dae24076eef7e090aa98e6187c09c426e8cdfdb8ffda06949c4d",
-    "tail/numerical-results.json": "5345274c7e25377e739594827096f8c19d0b3d660d677c79fb7eeb4fa0272a28",
-    "counterparty/numerical-results.json": "ac03e558def6fcd201a7caaf798ed27dcf19f7a3c3b88441e0ecd54d47f983a1",
-    "credit/numerical-results.json": "3971e703cb2a0273b81bc9bde167e0767c963f05b9ee9b75ec3e95185e138fec",
-    "decomposition/numerical-results.json": "d5d13abf1b682f17ccce3075209256c33163ea36e8d365052bf3f192aaa3d3c2",
-    "scenarios/numerical-results.json": "ea3447476f7924ffd106eddbc84a8fcbe4c1282f9a838c881d8229be22f9e141",
-    "frtb/numerical-results.json": "889f5ec615df5766aa2425af31dc4dd3af60ad7c60ed7bd38c03a8201b4b60b0",
-    "derivatives/numerical-results.json": "7cccec8ed87507864c8ce8c3026adc57287af2cc971d7c0cc96e5676ad8106a8",
-    "liquidity/numerical-results.json": "f762025e3043eaf4b7eabcaed5423e3cb61a3d65ad2e48692629298216b9c6de"
+    "backtest/numerical-results.json": "0a9da9627364af3c735916503fb0ab954b63b8a12b9f9bb664368a5342b1c02b",
+    "tail/numerical-results.json": "5d8e13676adb67d351f86eb51154dec5a4bf72e7271fe03a5e5056e2fb960b3f",
+    "counterparty/numerical-results.json": "aef885dbe9fac4dafd9d5c1caa9da9e0432456fba5b588841b1ca1a8a5073cd0",
+    "credit/numerical-results.json": "0e188491d058948afc3c9a3aa4f29004cbe9c2f9e68d909b34f043baa89e9710",
+    "decomposition/numerical-results.json": "8d3ad82950587e067b143ffb1e6902d6355844d8195588c8482d764394c155ad",
+    "scenarios/numerical-results.json": "4e5dd512b7a663bb6ef83239d96c7cd18ad4b82db4fe30cbb3f362d6e6371b79",
+    "frtb/numerical-results.json": "46863139c03d5eb76cbd9780efaa333e79af0f9e752dfb9fe77b2033d51cdfc9",
+    "derivatives/numerical-results.json": "885807277e7ad28fe8f5cd5e9a915656f6eea1767f04c4a810f5f255aa00cea8",
+    "liquidity/numerical-results.json": "28ef4c439324c4ce32c8454257158928aa7470c772c9d384cc1a7772560513e6"
   },
   "totals": {
     "checks": 186,

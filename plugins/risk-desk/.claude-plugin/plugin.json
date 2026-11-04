@@ -7,6 +7,7 @@
   },
   "homepage": "https://github.com/Iman/agent-driven-risk-desk-and-skills",
   "repository": "https://github.com/Iman/agent-driven-risk-desk-and-skills",
+  "icon": "./assets/openai-directory-icon.png",
   "license": "PolyForm-Noncommercial-1.0.0",
   "keywords": [
     "risk",

@@ -19,7 +19,7 @@ from optiondesk_engine.pricing.greeks_full import all_greeks, net_greeks
 from riskdesk.analytics import envelope, fsum, tail_risk
 from riskdesk.models import Provenance, StrictModel
 
-MAX_REVALUATIONS = 2_000_000  # about one second of pure Python engine pricing
+MAX_REVALUATIONS = 2_000_000  # about three seconds of pure Python engine pricing (3.06 s, M5 Max, 2026-11-04)
 
 
 class Underlying(StrictModel):
