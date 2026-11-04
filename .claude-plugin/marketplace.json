@@ -4,11 +4,11 @@
     "name": "Iman Samizadeh"
   },
   "description": "Portfolio risk analytics for agent runtimes.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "plugins": [
     {
       "name": "risk-desk",
-      "description": "Portfolio risk an agent can drive: historical VaR and Expected Shortfall from supplied P&L, signed linear exposure, explicit stress scenarios that carry no probability, and counterparty exposure and XVA through a local Open Source Risk Engine project. Research software, not investment advice.",
+      "description": "Portfolio risk an agent can drive, from supplied data only: historical and model VaR and Expected Shortfall with backtests, signed linear exposure, Greeks and full revaluation of European options, VaR and ES attribution, limits and pre-trade what-if, liquidity-adjusted VaR, explicit, historical and reverse stress scenarios that carry no probability, SA-CCR and exposure profiles, portfolio credit VaR, FRTB capital pieces, and XVA through a local Open Source Risk Engine project. Research software, not investment advice.",
       "source": "./plugins/risk-desk",
       "category": "finance"
     },

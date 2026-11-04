@@ -1,7 +1,7 @@
 {
   "name": "risk-desk",
-  "version": "0.1.0",
-  "description": "Portfolio risk an agent can drive: historical VaR and Expected Shortfall from supplied P&L, signed linear exposure, explicit stress scenarios that carry no probability, and counterparty exposure and XVA through a local Open Source Risk Engine project. Research software, not investment advice.",
+  "version": "0.2.0",
+  "description": "Portfolio risk an agent can drive, from supplied data only: historical and model VaR and Expected Shortfall with backtests, signed linear exposure, Greeks and full revaluation of European options, VaR and ES attribution, limits and pre-trade what-if, liquidity-adjusted VaR, explicit, historical and reverse stress scenarios that carry no probability, SA-CCR and exposure profiles, portfolio credit VaR, FRTB capital pieces, and XVA through a local Open Source Risk Engine project. Research software, not investment advice.",
   "author": {
     "name": "Iman Samizadeh"
   },
@@ -28,7 +28,7 @@
   "interface": {
     "displayName": "Risk Desk",
     "shortDescription": "Portfolio risk and XVA",
-    "longDescription": "Calculate risk from explicit local inputs with skfolio and ORE. Preserve loss signs, currencies, horizons, model assumptions and upstream credit.",
+    "longDescription": "Calculate risk from explicit local inputs with skfolio, SciPy, the Option Desk engine and ORE. Preserve loss signs, currencies, horizons, model assumptions and upstream credit.",
     "developerName": "Iman Samizadeh",
     "category": "Finance",
     "capabilities": [
