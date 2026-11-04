@@ -83,9 +83,20 @@ as: row, column, value as found, value as written, and why.
 3. Ask once for every missing value and for `as_of`, `currency`, `source`
    and `data_mode` if the file does not state them.
 4. Apply only the permitted repairs and list them.
-5. Write the request JSON and run the tool or CLI command on it.
+5. Write the request JSON, check it with `scripts/check_artifact.py TOOL
+   REQUEST.json` (every field error at once, with its path), then
+   run the tool or CLI command on it.
 6. If the tool returns a `ValidationError`, quote its message, map it back
    to the row and column, and ask for the corrected value. Do not loosen
    the request to make it pass.
 7. Report the result as its own skill says: `degraded` and its reason first,
    then the figures with currency, horizon and sign convention.
+
+## Going deeper
+
+- `reference.md`: which model each tool reads and where it is defined, how
+  pydantic reads a converted value, and what a passing check does not prove.
+- `workflows/csv-to-request.md`: a positions CSV to a validated request, step by step.
+- `scripts/check_artifact.py TOOL REQUEST.json`: validates a converted file
+  against the tool's own request model and lists every error. Run it with
+  the Python that has riskdesk installed.

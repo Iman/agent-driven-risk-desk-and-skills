@@ -233,3 +233,34 @@ def test_each_tool_returns_what_its_command_returns(tool, command):
 def test_the_scenario_library_tool_is_the_command():
     from riskdesk import server
     assert server.risk_scenario_library() == cli.scenarios.scenario_library()
+
+
+def skill_script(skill):
+    import importlib.util
+    path = EXAMPLES.parent / "plugins/risk-desk/skills" / skill / "scripts/check_artifact.py"
+    spec = importlib.util.spec_from_file_location(skill.replace("-", "_") + "_check", path)
+    module = importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
+    return module
+
+
+def test_the_import_validator_accepts_every_example_and_reports_every_error(tmp_path, capsys):
+    check = skill_script("risk-data-import")
+    models = check.request_models()
+    assert set(models) == set(TOOLS)                   # every tool that takes a request, and no other
+    for tool, command in TOOLS.items():
+        example = json.loads((EXAMPLES / {c: e for c, e, _ in CASES}[command]).read_text(encoding="utf-8"))
+        assert check.errors(models[tool], example) == [], tool
+    book = json.loads((EXAMPLES / "portfolio.json").read_text(encoding="utf-8"))
+    book.update(currency="usd", as_of="04/11/2026", book="x")
+    book["positions"][0]["market_value"] = "1,250,000"
+    path = tmp_path / "request.json"; path.write_text(json.dumps(book))
+    assert check.main("risk_exposure", str(path)) == 1
+    out = capsys.readouterr().out.splitlines()
+    assert out[0] == "FAIL risk_exposure: 4 error(s) against PortfolioRequest"
+    assert sorted(line.split(":")[0].strip() for line in out[1:]) == [
+        "as_of", "book", "currency", "positions.0.market_value"]
+    book = json.loads((EXAMPLES / "portfolio.json").read_text(encoding="utf-8"))
+    book["positions"][1]["id"] = book["positions"][0]["id"]   # a cross-field rule
+    [problem] = check.errors(models["risk_exposure"], book)
+    assert problem.startswith("request: Value error, position ids must be unique (found {")
+    assert check.main("risk_xva", str(path)) == 2
