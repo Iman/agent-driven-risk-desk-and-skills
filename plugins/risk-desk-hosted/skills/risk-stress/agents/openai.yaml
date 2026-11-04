@@ -1,6 +1,6 @@
 interface:
   display_name: "Risk Stress"
-  short_description: "Scenario losses and contributions from explicit shocks"
+  short_description: "Scenario, replay and reverse stress losses for linear books"
 dependencies:
   tools:
     - type: "mcp"

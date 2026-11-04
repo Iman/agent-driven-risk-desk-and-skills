@@ -35,6 +35,6 @@ it with a hosted service. Existing permission in the conversation is
 sufficient. `data_mode` records their declaration; it
 is not a rights certificate and the service does not check it.
 
-Counterparty exposure and XVA are not available here. They need a trusted
+Counterparty XVA is not available here. They need a trusted
 local ORE project directory, which a remote endpoint cannot read. Point
 the user at the local `risk-desk` plugin for that.

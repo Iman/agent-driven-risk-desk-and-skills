@@ -61,3 +61,16 @@ with ZipFile(hosted_target) as archive:
     for required in ('LICENSE', '.codex-plugin/plugin.json', '.mcp.json'):
         assert required in archive.namelist(), required
 print(hosted_target)
+
+# The skills alone, for a submission portal's Skills page: one directory per
+# skill, the same files as the hosted plugin's skills/.
+skills_target = root / 'dist/risk-desk-hosted-skills.zip'
+with ZipFile(skills_target, 'w', ZIP_DEFLATED) as archive:
+    for path in sorted((hosted / 'skills').rglob('*')):
+        if publishable(path):
+            archive.write(path, path.relative_to(hosted / 'skills'))
+with ZipFile(skills_target) as archive:
+    assert archive.testzip() is None
+    assert sorted({name.split('/')[0] for name in archive.namelist()}) == sorted(
+        p.name for p in (hosted / 'skills').iterdir() if p.is_dir())
+print(skills_target)
