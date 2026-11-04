@@ -1,0 +1,1921 @@
+{
+  "generated_utc": "2026-11-04T14:31:10.446839+00:00",
+  "command": "python research/math-review/run_all.py",
+  "reviewed_head": "c9e649e28140bb84b49f9ea96a30090e4963cdc0",
+  "reviewed_branch": "feat/governance",
+  "uncommitted_module_changes": [],
+  "python": "3.13.14",
+  "packages": {
+    "numpy": "2.5.3",
+    "scipy": "1.18.1",
+    "skfolio": "1.1.0",
+    "scikit-learn": "1.9.1",
+    "pydantic": "2.13.5"
+  },
+  "option_desk": {
+    "path": "/Users/developer/workspace/trading-desk/option-desk",
+    "head": "4a282d91bdb9fafbb0e4d80f2e88ab790eac6f4c",
+    "uncommitted_engine_changes": [
+      "M engine/README.md",
+      " M engine/pyproject.toml",
+      "?? engine/src/optiondesk_engine/notices/",
+      "?? engine/src/optiondesk_engine/pricing/quantlib_backend.py",
+      "?? engine/tests/test_quantlib_backend.py"
+    ]
+  },
+  "module_sha256": {
+    "src/riskdesk/analytics.py": "f32b94c92f1e8c1da971bea980611de6a19ab0951920eb316862eb97b35696c3",
+    "src/riskdesk/tail_models.py": "dc30ba30d5df55e7739416f6c9cf44db72123beb4f0b31c128ff8778e5033430",
+    "src/riskdesk/backtest.py": "08eebc277e696ff69eb08c2c78011713a24bba4f2da87434739750fef773d05e",
+    "src/riskdesk/derivatives.py": "b3059fcf15c0c13878d452cd143122a7833480294929b02540c01c65471bcbc1",
+    "src/riskdesk/decomposition.py": "18a136ba9bdeb2a9aa74299bd79eb156791159d1ea18353f9045a190f0260309",
+    "src/riskdesk/limits.py": "ed9a1123d39c8796dcf017e60d603a087bc66863366c604c00eb6052d4cf42b7",
+    "src/riskdesk/liquidity.py": "45878c1362ac8d55e352ab8e00bbbe7197da727d2e086db6651ffda36c42c17a",
+    "src/riskdesk/scenarios.py": "4e39b90c5a767a6ea6da539f30debe1898410d171ca061a0e182f262c78dd2c9",
+    "src/riskdesk/counterparty.py": "b4dccc3142af2d81a0460d4d76092e5ad95246a9a3e21976024b873ccabcecee",
+    "src/riskdesk/credit.py": "a3599a0231075fa3ea4729768feeccda09d1471d616738560b4cdee3cba31170",
+    "src/riskdesk/frtb.py": "0ac2fe942dafbd44191f0f4ae6b1c97021f9eff58ebc5b177ee3722d32fb15c5",
+    "src/riskdesk/ore.py": "23b32c80df8f4e4167ea342f76ccf1587aa3f0c44e206eb824b662ba40feedd1"
+  },
+  "pending_rehash": {
+    "src/riskdesk/analytics.py": "the integrator's overflow fix on feat/v0.2 changes this file; re-run this script after it lands",
+    "src/riskdesk/derivatives.py": "the integrator is removing the Black-76 rho workaround now that Option Desk 4a282d9 fixes black76_greeks; re-run this script after it lands"
+  },
+  "results_sha256": {
+    "backtest/numerical-results.json": "91c2db3de3e7118583695e825dd6133aca2ee78e652203163eaff84ffe7c1476",
+    "tail/numerical-results.json": "968358a581805e2a67d9f608fc3f6847ee630342201f917bba39ed47d30b1146",
+    "counterparty/numerical-results.json": "01cbd271b6a7850f65152ee5b10b5fd7c7694d354380ed21c6806cd39253ea38",
+    "credit/numerical-results.json": "6988b4f7707ae3258e16d67188f231aad074e7bc6931e798fd26a15631367eac",
+    "decomposition/numerical-results.json": "450b7a11da3dac383b6ea2e725c7baa84d463f6a25d7c5ce3e5cf81f1c71f4e8",
+    "scenarios/numerical-results.json": "f6b0f479a2dd3e4320f0fa51ee984bc7a712c09ffaf275399d84a6d97fdd6b5f",
+    "frtb/numerical-results.json": "1ce4d8acebdf98bd50c67ecfea35128e2245495e3b8fe8b5e182568c130f9fda",
+    "derivatives/numerical-results.json": "1103d9f2f9353385a7e838686d559f0ea29cd533b95766491b11ebb5fa4b2e34",
+    "liquidity/numerical-results.json": "d0715c9ae170c3b264e330ea3d5ab96aed680580a136316d36078d9d050888d7"
+  },
+  "totals": {
+    "checks": 186,
+    "failed": []
+  },
+  "checks": [
+    {
+      "area": "backtest",
+      "id": "basel-cdf-0",
+      "what": "P(Bin(250,0.01) <= 0)",
+      "source": "exact binomial sum",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "backtest",
+      "id": "basel-table2-0",
+      "what": "exact CDF vs MAR99 Table 2 at 0, percent",
+      "source": "plugins/risk-desk/skills/risk-backtest/reference.md:58-59 (two decimals)",
+      "compared": "published",
+      "abs_tol": 1e-09,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "area": "backtest",
+      "id": "basel-zone-0",
+      "what": "zone at 0 exceptions of 250",
+      "source": "MAR99.17 Table 2 (plugins/risk-desk/skills/risk-backtest/reference.md:48-49)",
+      "compared": "module",
+      "abs_tol": null,
+      "rel_tol": null,
+      "passed": true
+    },
+    {
+      "area": "backtest",
+      "id": "basel-cdf-1",
+      "what": "P(Bin(250,0.01) <= 1)",
+      "source": "exact binomial sum",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "backtest",
+      "id": "basel-table2-1",
+      "what": "exact CDF vs MAR99 Table 2 at 1, percent",
+      "source": "plugins/risk-desk/skills/risk-backtest/reference.md:58-59 (two decimals)",
+      "compared": "published",
+      "abs_tol": 1e-09,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "area": "backtest",
+      "id": "basel-zone-1",
+      "what": "zone at 1 exceptions of 250",
+      "source": "MAR99.17 Table 2 (plugins/risk-desk/skills/risk-backtest/reference.md:48-49)",
+      "compared": "module",
+      "abs_tol": null,
+      "rel_tol": null,
+      "passed": true
+    },
+    {
+      "area": "backtest",
+      "id": "basel-cdf-2",
+      "what": "P(Bin(250,0.01) <= 2)",
+      "source": "exact binomial sum",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "backtest",
+      "id": "basel-table2-2",
+      "what": "exact CDF vs MAR99 Table 2 at 2, percent",
+      "source": "plugins/risk-desk/skills/risk-backtest/reference.md:58-59 (two decimals)",
+      "compared": "published",
+      "abs_tol": 1e-09,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "area": "backtest",
+      "id": "basel-zone-2",
+      "what": "zone at 2 exceptions of 250",
+      "source": "MAR99.17 Table 2 (plugins/risk-desk/skills/risk-backtest/reference.md:48-49)",
+      "compared": "module",
+      "abs_tol": null,
+      "rel_tol": null,
+      "passed": true
+    },
+    {
+      "area": "backtest",
+      "id": "basel-cdf-3",
+      "what": "P(Bin(250,0.01) <= 3)",
+      "source": "exact binomial sum",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "backtest",
+      "id": "basel-table2-3",
+      "what": "exact CDF vs MAR99 Table 2 at 3, percent",
+      "source": "plugins/risk-desk/skills/risk-backtest/reference.md:58-59 (two decimals)",
+      "compared": "published",
+      "abs_tol": 1e-09,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "area": "backtest",
+      "id": "basel-zone-3",
+      "what": "zone at 3 exceptions of 250",
+      "source": "MAR99.17 Table 2 (plugins/risk-desk/skills/risk-backtest/reference.md:48-49)",
+      "compared": "module",
+      "abs_tol": null,
+      "rel_tol": null,
+      "passed": true
+    },
+    {
+      "area": "backtest",
+      "id": "basel-cdf-4",
+      "what": "P(Bin(250,0.01) <= 4)",
+      "source": "exact binomial sum",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "backtest",
+      "id": "basel-table2-4",
+      "what": "exact CDF vs MAR99 Table 2 at 4, percent",
+      "source": "plugins/risk-desk/skills/risk-backtest/reference.md:58-59 (two decimals)",
+      "compared": "published",
+      "abs_tol": 1e-09,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "area": "backtest",
+      "id": "basel-zone-4",
+      "what": "zone at 4 exceptions of 250",
+      "source": "MAR99.17 Table 2 (plugins/risk-desk/skills/risk-backtest/reference.md:48-49)",
+      "compared": "module",
+      "abs_tol": null,
+      "rel_tol": null,
+      "passed": true
+    },
+    {
+      "area": "backtest",
+      "id": "basel-cdf-5",
+      "what": "P(Bin(250,0.01) <= 5)",
+      "source": "exact binomial sum",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "backtest",
+      "id": "basel-table2-5",
+      "what": "exact CDF vs MAR99 Table 2 at 5, percent",
+      "source": "plugins/risk-desk/skills/risk-backtest/reference.md:58-59 (two decimals)",
+      "compared": "published",
+      "abs_tol": 1e-09,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "area": "backtest",
+      "id": "basel-zone-5",
+      "what": "zone at 5 exceptions of 250",
+      "source": "MAR99.17 Table 2 (plugins/risk-desk/skills/risk-backtest/reference.md:48-49)",
+      "compared": "module",
+      "abs_tol": null,
+      "rel_tol": null,
+      "passed": true
+    },
+    {
+      "area": "backtest",
+      "id": "basel-cdf-6",
+      "what": "P(Bin(250,0.01) <= 6)",
+      "source": "exact binomial sum",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "backtest",
+      "id": "basel-table2-6",
+      "what": "exact CDF vs MAR99 Table 2 at 6, percent",
+      "source": "plugins/risk-desk/skills/risk-backtest/reference.md:58-59 (two decimals)",
+      "compared": "published",
+      "abs_tol": 1e-09,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "area": "backtest",
+      "id": "basel-zone-6",
+      "what": "zone at 6 exceptions of 250",
+      "source": "MAR99.17 Table 2 (plugins/risk-desk/skills/risk-backtest/reference.md:48-49)",
+      "compared": "module",
+      "abs_tol": null,
+      "rel_tol": null,
+      "passed": true
+    },
+    {
+      "area": "backtest",
+      "id": "basel-cdf-7",
+      "what": "P(Bin(250,0.01) <= 7)",
+      "source": "exact binomial sum",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "backtest",
+      "id": "basel-table2-7",
+      "what": "exact CDF vs MAR99 Table 2 at 7, percent",
+      "source": "plugins/risk-desk/skills/risk-backtest/reference.md:58-59 (two decimals)",
+      "compared": "published",
+      "abs_tol": 1e-09,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "area": "backtest",
+      "id": "basel-zone-7",
+      "what": "zone at 7 exceptions of 250",
+      "source": "MAR99.17 Table 2 (plugins/risk-desk/skills/risk-backtest/reference.md:48-49)",
+      "compared": "module",
+      "abs_tol": null,
+      "rel_tol": null,
+      "passed": true
+    },
+    {
+      "area": "backtest",
+      "id": "basel-cdf-8",
+      "what": "P(Bin(250,0.01) <= 8)",
+      "source": "exact binomial sum",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "backtest",
+      "id": "basel-table2-8",
+      "what": "exact CDF vs MAR99 Table 2 at 8, percent",
+      "source": "plugins/risk-desk/skills/risk-backtest/reference.md:58-59 (two decimals)",
+      "compared": "published",
+      "abs_tol": 1e-09,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "area": "backtest",
+      "id": "basel-zone-8",
+      "what": "zone at 8 exceptions of 250",
+      "source": "MAR99.17 Table 2 (plugins/risk-desk/skills/risk-backtest/reference.md:48-49)",
+      "compared": "module",
+      "abs_tol": null,
+      "rel_tol": null,
+      "passed": true
+    },
+    {
+      "area": "backtest",
+      "id": "basel-cdf-9",
+      "what": "P(Bin(250,0.01) <= 9)",
+      "source": "exact binomial sum",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "backtest",
+      "id": "basel-table2-9",
+      "what": "exact CDF vs MAR99 Table 2 at 9, percent",
+      "source": "plugins/risk-desk/skills/risk-backtest/reference.md:58-59 (two decimals)",
+      "compared": "published",
+      "abs_tol": 1e-09,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "area": "backtest",
+      "id": "basel-zone-9",
+      "what": "zone at 9 exceptions of 250",
+      "source": "MAR99.17 Table 2 (plugins/risk-desk/skills/risk-backtest/reference.md:48-49)",
+      "compared": "module",
+      "abs_tol": null,
+      "rel_tol": null,
+      "passed": true
+    },
+    {
+      "area": "backtest",
+      "id": "basel-cdf-10",
+      "what": "P(Bin(250,0.01) <= 10)",
+      "source": "exact binomial sum",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "backtest",
+      "id": "basel-table2-10",
+      "what": "exact CDF vs MAR99 Table 2 at 10, percent",
+      "source": "plugins/risk-desk/skills/risk-backtest/reference.md:58-59 (two decimals)",
+      "compared": "published",
+      "abs_tol": 1e-09,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "area": "backtest",
+      "id": "basel-zone-10",
+      "what": "zone at 10 exceptions of 250",
+      "source": "MAR99.17 Table 2 (plugins/risk-desk/skills/risk-backtest/reference.md:48-49)",
+      "compared": "module",
+      "abs_tol": null,
+      "rel_tol": null,
+      "passed": true
+    },
+    {
+      "area": "backtest",
+      "id": "basel-bounds-250",
+      "what": "amber and red starts for T=250",
+      "source": "MAR99.17 rule: first count with CDF >= 95% and >= 99.99% (plugins/risk-desk/skills/risk-backtest/reference.md:49-52)",
+      "compared": "module",
+      "abs_tol": null,
+      "rel_tol": null,
+      "passed": true
+    },
+    {
+      "area": "backtest",
+      "id": "basel-bounds-500",
+      "what": "amber and red starts for T=500",
+      "source": "MAR99.17 rule: first count with CDF >= 95% and >= 99.99% (plugins/risk-desk/skills/risk-backtest/reference.md:49-52)",
+      "compared": "module",
+      "abs_tol": null,
+      "rel_tol": null,
+      "passed": true
+    },
+    {
+      "area": "backtest",
+      "id": "basel-bounds-1000",
+      "what": "amber and red starts for T=1000",
+      "source": "MAR99.17 rule: first count with CDF >= 95% and >= 99.99% (plugins/risk-desk/skills/risk-backtest/reference.md:49-52)",
+      "compared": "module",
+      "abs_tol": null,
+      "rel_tol": null,
+      "passed": true
+    },
+    {
+      "area": "backtest",
+      "id": "kupiec-lr",
+      "what": "Kupiec LR, 6 of 250 at p=0.01",
+      "source": "Kupiec (1995) as stated in REF:17",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "backtest",
+      "id": "kupiec-p",
+      "what": "Kupiec p-value, chi-square(1) tail by erfc",
+      "source": "REF:17",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-09,
+      "passed": true
+    },
+    {
+      "area": "backtest",
+      "id": "christoffersen-ind",
+      "what": "LR_ind by hand transition counts",
+      "source": "Christoffersen (1998) as stated in REF:28-35",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "backtest",
+      "id": "christoffersen-cc",
+      "what": "LR_cc by hand transition counts",
+      "source": "Christoffersen (1998) as stated in REF:28-35",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "backtest",
+      "id": "christoffersen-cc-p",
+      "what": "LR_cc p-value, chi-square(2) tail exp(-x/2)",
+      "source": "Christoffersen (1998) as stated in REF:28-35",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-09,
+      "passed": true
+    },
+    {
+      "area": "backtest",
+      "id": "z2",
+      "what": "Acerbi-Szekely Z2 by hand loop",
+      "source": "REF:67",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "backtest",
+      "id": "z2-p-normal-null",
+      "what": "Z2 p-value, independent 20,000-draw simulation (4 combined SE)",
+      "source": "REF:72-82 null construction",
+      "compared": "module",
+      "abs_tol": 0.006190668949012355,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "area": "tail",
+      "id": "hs-var-n20-q0.95",
+      "what": "historical VaR, n=20, q=0.95",
+      "source": "order statistic and fractional tail mass, analytics.py:32-48",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "tail",
+      "id": "hs-es-n20-q0.95",
+      "what": "historical ES, n=20, q=0.95",
+      "source": "order statistic and fractional tail mass, analytics.py:32-48",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "tail",
+      "id": "hs-var-n37-q0.9",
+      "what": "historical VaR, n=37, q=0.9",
+      "source": "order statistic and fractional tail mass, analytics.py:32-48",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "tail",
+      "id": "hs-es-n37-q0.9",
+      "what": "historical ES, n=37, q=0.9",
+      "source": "order statistic and fractional tail mass, analytics.py:32-48",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "tail",
+      "id": "hs-var-n1000-q0.99",
+      "what": "historical VaR, n=1000, q=0.99",
+      "source": "order statistic and fractional tail mass, analytics.py:32-48",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "tail",
+      "id": "hs-es-n1000-q0.99",
+      "what": "historical ES, n=1000, q=0.99",
+      "source": "order statistic and fractional tail mass, analytics.py:32-48",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "tail",
+      "id": "hs-var-n250-q0.975",
+      "what": "historical VaR, n=250, q=0.975",
+      "source": "order statistic and fractional tail mass, analytics.py:32-48",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "tail",
+      "id": "hs-es-n250-q0.975",
+      "what": "historical ES, n=250, q=0.975",
+      "source": "order statistic and fractional tail mass, analytics.py:32-48",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "tail",
+      "id": "normal-var",
+      "what": "normal VaR from stdlib mean, divisor-n sd and inverse CDF",
+      "source": "plugins/risk-desk/skills/risk-tail/reference.md:22-25",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-09,
+      "passed": true
+    },
+    {
+      "area": "tail",
+      "id": "normal-es-quadrature",
+      "what": "normal ES = integral of the fitted quantile over (q,1) / (1-q)",
+      "source": "plugins/risk-desk/skills/risk-tail/reference.md:9-10, 25",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-07,
+      "passed": true
+    },
+    {
+      "area": "tail",
+      "id": "student-t-es-integral",
+      "what": "Student-t ES by integrating y g(y) over the tail, module fit",
+      "source": "plugins/risk-desk/skills/risk-tail/reference.md:35-40",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-07,
+      "passed": true
+    },
+    {
+      "area": "tail",
+      "id": "evt-var-inverts-eq9",
+      "what": "EVT VaR put back into eq. (9) gives 1-q",
+      "source": "plugins/risk-desk/skills/risk-tail/reference.md:53-56",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-09,
+      "passed": true
+    },
+    {
+      "area": "tail",
+      "id": "evt-es-integral",
+      "what": "EVT ES = VaR + integral of the GPD tail survival / (1-q)",
+      "source": "plugins/risk-desk/skills/risk-tail/reference.md:58-62",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-07,
+      "passed": true
+    },
+    {
+      "area": "tail",
+      "id": "evt-threshold",
+      "what": "threshold is the (k+1)th largest loss, k = floor(0.10 n)",
+      "source": "plugins/risk-desk/skills/risk-tail/reference.md:48-50",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 0,
+      "passed": true
+    },
+    {
+      "area": "tail",
+      "id": "garch-sigma-next",
+      "what": "one-step GARCH volatility by hand recursion from the posterior mean",
+      "source": "plugins/risk-desk/skills/risk-tail/reference.md:75-83",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "tail",
+      "id": "garch-nonconvergence-flagged",
+      "what": "degraded flag and reason track GARCH convergence (observed converged=False, max R-hat 1.015)",
+      "source": "plugins/risk-desk/skills/risk-tail/reference.md:78-79",
+      "compared": "module",
+      "abs_tol": null,
+      "rel_tol": null,
+      "passed": true
+    },
+    {
+      "area": "counterparty",
+      "id": "example-1-published",
+      "what": "independent EAD vs published (USD thousands, whole-thousand rounding)",
+      "source": "CRE99.40 as transcribed at plugins/risk-desk/skills/risk-counterparty/reference.md:84-88; image not re-read",
+      "compared": "published",
+      "abs_tol": 0.5,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "area": "counterparty",
+      "id": "example-1-module",
+      "what": "module EAD vs independent EAD",
+      "source": "CRE52 recomputation in this script",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "counterparty",
+      "id": "example-2-published",
+      "what": "independent EAD vs published (USD thousands, whole-thousand rounding)",
+      "source": "CRE99.58 as transcribed at plugins/risk-desk/skills/risk-counterparty/reference.md:84-88; image not re-read",
+      "compared": "published",
+      "abs_tol": 0.5,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "area": "counterparty",
+      "id": "example-2-module",
+      "what": "module EAD vs independent EAD",
+      "source": "CRE52 recomputation in this script",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "counterparty",
+      "id": "example-3-published",
+      "what": "independent EAD vs published (USD thousands, whole-thousand rounding)",
+      "source": "CRE99.76 as transcribed at plugins/risk-desk/skills/risk-counterparty/reference.md:84-88; image not re-read",
+      "compared": "published",
+      "abs_tol": 0.5,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "area": "counterparty",
+      "id": "example-3-module",
+      "what": "module EAD vs independent EAD",
+      "source": "CRE52 recomputation in this script",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "counterparty",
+      "id": "example-4-published",
+      "what": "independent EAD vs published (USD thousands, whole-thousand rounding)",
+      "source": "BCBS 279 Annex 4a as transcribed at plugins/risk-desk/skills/risk-counterparty/reference.md:84-88; image not re-read",
+      "compared": "published",
+      "abs_tol": 0.5,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "area": "counterparty",
+      "id": "example-4-module",
+      "what": "module EAD vs independent EAD",
+      "source": "CRE52 recomputation in this script",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "counterparty",
+      "id": "example-5-published",
+      "what": "independent EAD vs published (USD thousands, whole-thousand rounding)",
+      "source": "CRE99.97 as transcribed at plugins/risk-desk/skills/risk-counterparty/reference.md:84-88; image not re-read",
+      "compared": "published",
+      "abs_tol": 0.5,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "area": "counterparty",
+      "id": "example-5-module",
+      "what": "module EAD vs independent EAD",
+      "source": "CRE52 recomputation in this script",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "counterparty",
+      "id": "fx-no-published-example",
+      "what": "module EAD vs independent EAD; constants as transcribed, no published example",
+      "source": "CRE52.59, CRE52.66, CRE52.72 as at plugins/risk-desk/skills/risk-counterparty/reference.md:50-51, 59-75",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "counterparty",
+      "id": "equity-no-published-example",
+      "what": "module EAD vs independent EAD; constants as transcribed, no published example",
+      "source": "CRE52.59, CRE52.66, CRE52.72 as at plugins/risk-desk/skills/risk-counterparty/reference.md:50-51, 59-75",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "counterparty",
+      "id": "negative-rate-shift",
+      "what": "IR option with negative P and K shifted by lambda: module vs independent",
+      "source": "CRE52.40 FAQ2 as read at plugins/risk-desk/skills/risk-counterparty/reference.md:43",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "counterparty",
+      "id": "margined-cap-binding",
+      "what": "margined EAD capped at the unmargined EAD (cap binds)",
+      "source": "CRE52.2 reading at plugins/risk-desk/skills/risk-counterparty/reference.md:97-98",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "counterparty",
+      "id": "margined-cap-flag",
+      "what": "module reports the cap as applied",
+      "source": "plugins/risk-desk/skills/risk-counterparty/reference.md:97-98",
+      "compared": "module",
+      "abs_tol": null,
+      "rel_tol": null,
+      "passed": true
+    },
+    {
+      "area": "credit",
+      "id": "table-readings-agree",
+      "what": "bis.org reading in this review equals the test transcription",
+      "source": "https://www.bis.org/committees/bcbs/basel-framework/standard/cre/99/inforce/2023-01-01/published/2020-03-27, Table 1, corporate column, turnover EUR 50 million, M 2.5",
+      "compared": "test copy",
+      "abs_tol": null,
+      "rel_tol": null,
+      "passed": true
+    },
+    {
+      "area": "credit",
+      "id": "rw-pd0.0005",
+      "what": "risk weight %, PD 0.0005, LGD 40%",
+      "source": "https://www.bis.org/committees/bcbs/basel-framework/standard/cre/99/inforce/2023-01-01/published/2020-03-27, Table 1, corporate column, turnover EUR 50 million, M 2.5; table rounds to 0.01",
+      "compared": "published",
+      "abs_tol": 0.005,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "area": "credit",
+      "id": "ul-pd0.0005",
+      "what": "module unexpected loss per unit EAD, PD 0.0005",
+      "source": "CRE31.5 term written here",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-10,
+      "passed": true
+    },
+    {
+      "area": "credit",
+      "id": "rw-pd0.001",
+      "what": "risk weight %, PD 0.001, LGD 40%",
+      "source": "https://www.bis.org/committees/bcbs/basel-framework/standard/cre/99/inforce/2023-01-01/published/2020-03-27, Table 1, corporate column, turnover EUR 50 million, M 2.5; table rounds to 0.01",
+      "compared": "published",
+      "abs_tol": 0.005,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "area": "credit",
+      "id": "ul-pd0.001",
+      "what": "module unexpected loss per unit EAD, PD 0.001",
+      "source": "CRE31.5 term written here",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-10,
+      "passed": true
+    },
+    {
+      "area": "credit",
+      "id": "rw-pd0.0025",
+      "what": "risk weight %, PD 0.0025, LGD 40%",
+      "source": "https://www.bis.org/committees/bcbs/basel-framework/standard/cre/99/inforce/2023-01-01/published/2020-03-27, Table 1, corporate column, turnover EUR 50 million, M 2.5; table rounds to 0.01",
+      "compared": "published",
+      "abs_tol": 0.005,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "area": "credit",
+      "id": "ul-pd0.0025",
+      "what": "module unexpected loss per unit EAD, PD 0.0025",
+      "source": "CRE31.5 term written here",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-10,
+      "passed": true
+    },
+    {
+      "area": "credit",
+      "id": "rw-pd0.004",
+      "what": "risk weight %, PD 0.004, LGD 40%",
+      "source": "https://www.bis.org/committees/bcbs/basel-framework/standard/cre/99/inforce/2023-01-01/published/2020-03-27, Table 1, corporate column, turnover EUR 50 million, M 2.5; table rounds to 0.01",
+      "compared": "published",
+      "abs_tol": 0.005,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "area": "credit",
+      "id": "ul-pd0.004",
+      "what": "module unexpected loss per unit EAD, PD 0.004",
+      "source": "CRE31.5 term written here",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-10,
+      "passed": true
+    },
+    {
+      "area": "credit",
+      "id": "rw-pd0.005",
+      "what": "risk weight %, PD 0.005, LGD 40%",
+      "source": "https://www.bis.org/committees/bcbs/basel-framework/standard/cre/99/inforce/2023-01-01/published/2020-03-27, Table 1, corporate column, turnover EUR 50 million, M 2.5; table rounds to 0.01",
+      "compared": "published",
+      "abs_tol": 0.005,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "area": "credit",
+      "id": "ul-pd0.005",
+      "what": "module unexpected loss per unit EAD, PD 0.005",
+      "source": "CRE31.5 term written here",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-10,
+      "passed": true
+    },
+    {
+      "area": "credit",
+      "id": "rw-pd0.0075",
+      "what": "risk weight %, PD 0.0075, LGD 40%",
+      "source": "https://www.bis.org/committees/bcbs/basel-framework/standard/cre/99/inforce/2023-01-01/published/2020-03-27, Table 1, corporate column, turnover EUR 50 million, M 2.5; table rounds to 0.01",
+      "compared": "published",
+      "abs_tol": 0.005,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "area": "credit",
+      "id": "ul-pd0.0075",
+      "what": "module unexpected loss per unit EAD, PD 0.0075",
+      "source": "CRE31.5 term written here",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-10,
+      "passed": true
+    },
+    {
+      "area": "credit",
+      "id": "rw-pd0.01",
+      "what": "risk weight %, PD 0.01, LGD 40%",
+      "source": "https://www.bis.org/committees/bcbs/basel-framework/standard/cre/99/inforce/2023-01-01/published/2020-03-27, Table 1, corporate column, turnover EUR 50 million, M 2.5; table rounds to 0.01",
+      "compared": "published",
+      "abs_tol": 0.005,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "area": "credit",
+      "id": "ul-pd0.01",
+      "what": "module unexpected loss per unit EAD, PD 0.01",
+      "source": "CRE31.5 term written here",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-10,
+      "passed": true
+    },
+    {
+      "area": "credit",
+      "id": "rw-pd0.013",
+      "what": "risk weight %, PD 0.013, LGD 40%",
+      "source": "https://www.bis.org/committees/bcbs/basel-framework/standard/cre/99/inforce/2023-01-01/published/2020-03-27, Table 1, corporate column, turnover EUR 50 million, M 2.5; table rounds to 0.01",
+      "compared": "published",
+      "abs_tol": 0.005,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "area": "credit",
+      "id": "ul-pd0.013",
+      "what": "module unexpected loss per unit EAD, PD 0.013",
+      "source": "CRE31.5 term written here",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-10,
+      "passed": true
+    },
+    {
+      "area": "credit",
+      "id": "rw-pd0.015",
+      "what": "risk weight %, PD 0.015, LGD 40%",
+      "source": "https://www.bis.org/committees/bcbs/basel-framework/standard/cre/99/inforce/2023-01-01/published/2020-03-27, Table 1, corporate column, turnover EUR 50 million, M 2.5; table rounds to 0.01",
+      "compared": "published",
+      "abs_tol": 0.005,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "area": "credit",
+      "id": "ul-pd0.015",
+      "what": "module unexpected loss per unit EAD, PD 0.015",
+      "source": "CRE31.5 term written here",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-10,
+      "passed": true
+    },
+    {
+      "area": "credit",
+      "id": "rw-pd0.02",
+      "what": "risk weight %, PD 0.02, LGD 40%",
+      "source": "https://www.bis.org/committees/bcbs/basel-framework/standard/cre/99/inforce/2023-01-01/published/2020-03-27, Table 1, corporate column, turnover EUR 50 million, M 2.5; table rounds to 0.01",
+      "compared": "published",
+      "abs_tol": 0.005,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "area": "credit",
+      "id": "ul-pd0.02",
+      "what": "module unexpected loss per unit EAD, PD 0.02",
+      "source": "CRE31.5 term written here",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-10,
+      "passed": true
+    },
+    {
+      "area": "credit",
+      "id": "rw-pd0.025",
+      "what": "risk weight %, PD 0.025, LGD 40%",
+      "source": "https://www.bis.org/committees/bcbs/basel-framework/standard/cre/99/inforce/2023-01-01/published/2020-03-27, Table 1, corporate column, turnover EUR 50 million, M 2.5; table rounds to 0.01",
+      "compared": "published",
+      "abs_tol": 0.005,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "area": "credit",
+      "id": "ul-pd0.025",
+      "what": "module unexpected loss per unit EAD, PD 0.025",
+      "source": "CRE31.5 term written here",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-10,
+      "passed": true
+    },
+    {
+      "area": "credit",
+      "id": "rw-pd0.03",
+      "what": "risk weight %, PD 0.03, LGD 40%",
+      "source": "https://www.bis.org/committees/bcbs/basel-framework/standard/cre/99/inforce/2023-01-01/published/2020-03-27, Table 1, corporate column, turnover EUR 50 million, M 2.5; table rounds to 0.01",
+      "compared": "published",
+      "abs_tol": 0.005,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "area": "credit",
+      "id": "ul-pd0.03",
+      "what": "module unexpected loss per unit EAD, PD 0.03",
+      "source": "CRE31.5 term written here",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-10,
+      "passed": true
+    },
+    {
+      "area": "credit",
+      "id": "rw-pd0.04",
+      "what": "risk weight %, PD 0.04, LGD 40%",
+      "source": "https://www.bis.org/committees/bcbs/basel-framework/standard/cre/99/inforce/2023-01-01/published/2020-03-27, Table 1, corporate column, turnover EUR 50 million, M 2.5; table rounds to 0.01",
+      "compared": "published",
+      "abs_tol": 0.005,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "area": "credit",
+      "id": "ul-pd0.04",
+      "what": "module unexpected loss per unit EAD, PD 0.04",
+      "source": "CRE31.5 term written here",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-10,
+      "passed": true
+    },
+    {
+      "area": "credit",
+      "id": "rw-pd0.05",
+      "what": "risk weight %, PD 0.05, LGD 40%",
+      "source": "https://www.bis.org/committees/bcbs/basel-framework/standard/cre/99/inforce/2023-01-01/published/2020-03-27, Table 1, corporate column, turnover EUR 50 million, M 2.5; table rounds to 0.01",
+      "compared": "published",
+      "abs_tol": 0.005,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "area": "credit",
+      "id": "ul-pd0.05",
+      "what": "module unexpected loss per unit EAD, PD 0.05",
+      "source": "CRE31.5 term written here",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-10,
+      "passed": true
+    },
+    {
+      "area": "credit",
+      "id": "rw-pd0.06",
+      "what": "risk weight %, PD 0.06, LGD 40%",
+      "source": "https://www.bis.org/committees/bcbs/basel-framework/standard/cre/99/inforce/2023-01-01/published/2020-03-27, Table 1, corporate column, turnover EUR 50 million, M 2.5; table rounds to 0.01",
+      "compared": "published",
+      "abs_tol": 0.005,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "area": "credit",
+      "id": "ul-pd0.06",
+      "what": "module unexpected loss per unit EAD, PD 0.06",
+      "source": "CRE31.5 term written here",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-10,
+      "passed": true
+    },
+    {
+      "area": "credit",
+      "id": "rw-pd0.1",
+      "what": "risk weight %, PD 0.1, LGD 40%",
+      "source": "https://www.bis.org/committees/bcbs/basel-framework/standard/cre/99/inforce/2023-01-01/published/2020-03-27, Table 1, corporate column, turnover EUR 50 million, M 2.5; table rounds to 0.01",
+      "compared": "published",
+      "abs_tol": 0.005,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "area": "credit",
+      "id": "ul-pd0.1",
+      "what": "module unexpected loss per unit EAD, PD 0.1",
+      "source": "CRE31.5 term written here",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-10,
+      "passed": true
+    },
+    {
+      "area": "credit",
+      "id": "rw-pd0.15",
+      "what": "risk weight %, PD 0.15, LGD 40%",
+      "source": "https://www.bis.org/committees/bcbs/basel-framework/standard/cre/99/inforce/2023-01-01/published/2020-03-27, Table 1, corporate column, turnover EUR 50 million, M 2.5; table rounds to 0.01",
+      "compared": "published",
+      "abs_tol": 0.005,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "area": "credit",
+      "id": "ul-pd0.15",
+      "what": "module unexpected loss per unit EAD, PD 0.15",
+      "source": "CRE31.5 term written here",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-10,
+      "passed": true
+    },
+    {
+      "area": "credit",
+      "id": "rw-pd0.2",
+      "what": "risk weight %, PD 0.2, LGD 40%",
+      "source": "https://www.bis.org/committees/bcbs/basel-framework/standard/cre/99/inforce/2023-01-01/published/2020-03-27, Table 1, corporate column, turnover EUR 50 million, M 2.5; table rounds to 0.01",
+      "compared": "published",
+      "abs_tol": 0.005,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "area": "credit",
+      "id": "ul-pd0.2",
+      "what": "module unexpected loss per unit EAD, PD 0.2",
+      "source": "CRE31.5 term written here",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-10,
+      "passed": true
+    },
+    {
+      "area": "decomposition",
+      "id": "param-var",
+      "what": "VaR = z sqrt(e' Sigma e) by loops",
+      "source": "plugins/risk-desk/skills/risk-attribution/reference.md:70-72",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "decomposition",
+      "id": "param-es-quadrature",
+      "what": "normal ES = integral of the quantile over (c,1) / (1-c)",
+      "source": "plugins/risk-desk/skills/risk-attribution/reference.md:72-74",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-07,
+      "passed": true
+    },
+    {
+      "area": "decomposition",
+      "id": "param-euler-sum-var",
+      "what": "component VaRs sum to VaR",
+      "source": "plugins/risk-desk/skills/risk-attribution/reference.md:79-81, Tasche (2008) Eq. (2.6)",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "decomposition",
+      "id": "param-euler-sum-es",
+      "what": "component ESs sum to ES",
+      "source": "plugins/risk-desk/skills/risk-attribution/reference.md:79-81",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "decomposition",
+      "id": "param-component-p1",
+      "what": "component VaR of p1 = x dVaR/dx (central difference)",
+      "source": "plugins/risk-desk/skills/risk-attribution/reference.md:75-80",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-07,
+      "passed": true
+    },
+    {
+      "area": "decomposition",
+      "id": "param-incremental-p1",
+      "what": "incremental VaR of p1 by full recomputation",
+      "source": "plugins/risk-desk/skills/risk-attribution/reference.md:83-87",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-10,
+      "passed": true
+    },
+    {
+      "area": "decomposition",
+      "id": "param-component-p2",
+      "what": "component VaR of p2 = x dVaR/dx (central difference)",
+      "source": "plugins/risk-desk/skills/risk-attribution/reference.md:75-80",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-07,
+      "passed": true
+    },
+    {
+      "area": "decomposition",
+      "id": "param-incremental-p2",
+      "what": "incremental VaR of p2 by full recomputation",
+      "source": "plugins/risk-desk/skills/risk-attribution/reference.md:83-87",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-10,
+      "passed": true
+    },
+    {
+      "area": "decomposition",
+      "id": "param-component-p3",
+      "what": "component VaR of p3 = x dVaR/dx (central difference)",
+      "source": "plugins/risk-desk/skills/risk-attribution/reference.md:75-80",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-07,
+      "passed": true
+    },
+    {
+      "area": "decomposition",
+      "id": "param-incremental-p3",
+      "what": "incremental VaR of p3 by full recomputation",
+      "source": "plugins/risk-desk/skills/risk-attribution/reference.md:83-87",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-10,
+      "passed": true
+    },
+    {
+      "area": "decomposition",
+      "id": "param-component-p4",
+      "what": "component VaR of p4 = x dVaR/dx (central difference)",
+      "source": "plugins/risk-desk/skills/risk-attribution/reference.md:75-80",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-07,
+      "passed": true
+    },
+    {
+      "area": "decomposition",
+      "id": "param-incremental-p4",
+      "what": "incremental VaR of p4 by full recomputation",
+      "source": "plugins/risk-desk/skills/risk-attribution/reference.md:83-87",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-10,
+      "passed": true
+    },
+    {
+      "area": "decomposition",
+      "id": "hist-es-c0.95",
+      "what": "historical ES by sorted losses, T=203, c=0.95",
+      "source": "plugins/risk-desk/skills/risk-attribution/reference.md:93-100",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "decomposition",
+      "id": "hist-component-p1-c0.95",
+      "what": "tail-weighted loss of p1, c=0.95",
+      "source": "plugins/risk-desk/skills/risk-attribution/reference.md:101-106, Tasche (2008) Eq. (3.11a)",
+      "compared": "module",
+      "abs_tol": 1e-12,
+      "rel_tol": 1e-10,
+      "passed": true
+    },
+    {
+      "area": "decomposition",
+      "id": "hist-component-p2-c0.95",
+      "what": "tail-weighted loss of p2, c=0.95",
+      "source": "plugins/risk-desk/skills/risk-attribution/reference.md:101-106, Tasche (2008) Eq. (3.11a)",
+      "compared": "module",
+      "abs_tol": 1e-12,
+      "rel_tol": 1e-10,
+      "passed": true
+    },
+    {
+      "area": "decomposition",
+      "id": "hist-component-p3-c0.95",
+      "what": "tail-weighted loss of p3, c=0.95",
+      "source": "plugins/risk-desk/skills/risk-attribution/reference.md:101-106, Tasche (2008) Eq. (3.11a)",
+      "compared": "module",
+      "abs_tol": 1e-12,
+      "rel_tol": 1e-10,
+      "passed": true
+    },
+    {
+      "area": "decomposition",
+      "id": "hist-component-p4-c0.95",
+      "what": "tail-weighted loss of p4, c=0.95",
+      "source": "plugins/risk-desk/skills/risk-attribution/reference.md:101-106, Tasche (2008) Eq. (3.11a)",
+      "compared": "module",
+      "abs_tol": 1e-12,
+      "rel_tol": 1e-10,
+      "passed": true
+    },
+    {
+      "area": "decomposition",
+      "id": "hist-es-c0.99",
+      "what": "historical ES by sorted losses, T=203, c=0.99",
+      "source": "plugins/risk-desk/skills/risk-attribution/reference.md:93-100",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "decomposition",
+      "id": "hist-component-p1-c0.99",
+      "what": "tail-weighted loss of p1, c=0.99",
+      "source": "plugins/risk-desk/skills/risk-attribution/reference.md:101-106, Tasche (2008) Eq. (3.11a)",
+      "compared": "module",
+      "abs_tol": 1e-12,
+      "rel_tol": 1e-10,
+      "passed": true
+    },
+    {
+      "area": "decomposition",
+      "id": "hist-component-p2-c0.99",
+      "what": "tail-weighted loss of p2, c=0.99",
+      "source": "plugins/risk-desk/skills/risk-attribution/reference.md:101-106, Tasche (2008) Eq. (3.11a)",
+      "compared": "module",
+      "abs_tol": 1e-12,
+      "rel_tol": 1e-10,
+      "passed": true
+    },
+    {
+      "area": "decomposition",
+      "id": "hist-component-p3-c0.99",
+      "what": "tail-weighted loss of p3, c=0.99",
+      "source": "plugins/risk-desk/skills/risk-attribution/reference.md:101-106, Tasche (2008) Eq. (3.11a)",
+      "compared": "module",
+      "abs_tol": 1e-12,
+      "rel_tol": 1e-10,
+      "passed": true
+    },
+    {
+      "area": "decomposition",
+      "id": "hist-component-p4-c0.99",
+      "what": "tail-weighted loss of p4, c=0.99",
+      "source": "plugins/risk-desk/skills/risk-attribution/reference.md:101-106, Tasche (2008) Eq. (3.11a)",
+      "compared": "module",
+      "abs_tol": 1e-12,
+      "rel_tol": 1e-10,
+      "passed": true
+    },
+    {
+      "area": "decomposition",
+      "id": "hist-es-c0.975",
+      "what": "historical ES by sorted losses, T=203, c=0.975",
+      "source": "plugins/risk-desk/skills/risk-attribution/reference.md:93-100",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "decomposition",
+      "id": "hist-component-p1-c0.975",
+      "what": "tail-weighted loss of p1, c=0.975",
+      "source": "plugins/risk-desk/skills/risk-attribution/reference.md:101-106, Tasche (2008) Eq. (3.11a)",
+      "compared": "module",
+      "abs_tol": 1e-12,
+      "rel_tol": 1e-10,
+      "passed": true
+    },
+    {
+      "area": "decomposition",
+      "id": "hist-component-p2-c0.975",
+      "what": "tail-weighted loss of p2, c=0.975",
+      "source": "plugins/risk-desk/skills/risk-attribution/reference.md:101-106, Tasche (2008) Eq. (3.11a)",
+      "compared": "module",
+      "abs_tol": 1e-12,
+      "rel_tol": 1e-10,
+      "passed": true
+    },
+    {
+      "area": "decomposition",
+      "id": "hist-component-p3-c0.975",
+      "what": "tail-weighted loss of p3, c=0.975",
+      "source": "plugins/risk-desk/skills/risk-attribution/reference.md:101-106, Tasche (2008) Eq. (3.11a)",
+      "compared": "module",
+      "abs_tol": 1e-12,
+      "rel_tol": 1e-10,
+      "passed": true
+    },
+    {
+      "area": "decomposition",
+      "id": "hist-component-p4-c0.975",
+      "what": "tail-weighted loss of p4, c=0.975",
+      "source": "plugins/risk-desk/skills/risk-attribution/reference.md:101-106, Tasche (2008) Eq. (3.11a)",
+      "compared": "module",
+      "abs_tol": 1e-12,
+      "rel_tol": 1e-10,
+      "passed": true
+    },
+    {
+      "area": "decomposition",
+      "id": "cov-sample",
+      "what": "sample covariance, worst element, divisor T-1",
+      "source": "plugins/risk-desk/skills/risk-attribution/reference.md:36",
+      "compared": "module",
+      "abs_tol": 1e-15,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "area": "decomposition",
+      "id": "cov-ewma-recursion",
+      "what": "EWMA covariance against a normalised recursion, worst element",
+      "source": "plugins/risk-desk/skills/risk-attribution/reference.md:37-48",
+      "compared": "module",
+      "abs_tol": 1e-15,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "area": "decomposition",
+      "id": "factor-betas-normal-equations",
+      "what": "OLS betas against the normal equations, worst difference",
+      "source": "plugins/risk-desk/skills/risk-attribution/reference.md:114-115",
+      "compared": "module",
+      "abs_tol": 1e-12,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "area": "decomposition",
+      "id": "factor-split-adds",
+      "what": "systematic + idiosyncratic = total variance in sample",
+      "source": "plugins/risk-desk/skills/risk-attribution/reference.md:120-123",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-10,
+      "passed": true
+    },
+    {
+      "area": "scenarios",
+      "id": "unbounded-distance",
+      "what": "Mahalanobis distance vs search along the equal-loss line",
+      "source": "plugins/risk-desk/skills/risk-stress/reference.md:121-156",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-08,
+      "passed": true
+    },
+    {
+      "area": "scenarios",
+      "id": "unbounded-shock-A",
+      "what": "most plausible shock to A",
+      "source": "plugins/risk-desk/skills/risk-stress/reference.md:121-156",
+      "compared": "module",
+      "abs_tol": 1e-06,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "area": "scenarios",
+      "id": "unbounded-shock-B",
+      "what": "most plausible shock to B",
+      "source": "plugins/risk-desk/skills/risk-stress/reference.md:121-156",
+      "compared": "module",
+      "abs_tol": 1e-06,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "area": "scenarios",
+      "id": "unbounded-revalued-loss",
+      "what": "the shocks revalue to the target loss",
+      "source": "plugins/risk-desk/skills/risk-stress/reference.md:137-138",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-09,
+      "passed": true
+    },
+    {
+      "area": "scenarios",
+      "id": "unbounded-normal-probability",
+      "what": "P(loss >= L) = Phi(-L / sqrt(w' Sigma w))",
+      "source": "plugins/risk-desk/skills/risk-stress/reference.md:158-164",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-09,
+      "passed": true
+    },
+    {
+      "area": "scenarios",
+      "id": "floor-binds-distance",
+      "what": "Mahalanobis distance vs search along the equal-loss line",
+      "source": "plugins/risk-desk/skills/risk-stress/reference.md:121-156",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-08,
+      "passed": true
+    },
+    {
+      "area": "scenarios",
+      "id": "floor-binds-shock-A",
+      "what": "most plausible shock to A",
+      "source": "plugins/risk-desk/skills/risk-stress/reference.md:121-156",
+      "compared": "module",
+      "abs_tol": 1e-06,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "area": "scenarios",
+      "id": "floor-binds-shock-B",
+      "what": "most plausible shock to B",
+      "source": "plugins/risk-desk/skills/risk-stress/reference.md:121-156",
+      "compared": "module",
+      "abs_tol": 1e-06,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "area": "scenarios",
+      "id": "floor-binds-revalued-loss",
+      "what": "the shocks revalue to the target loss",
+      "source": "plugins/risk-desk/skills/risk-stress/reference.md:137-138",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-09,
+      "passed": true
+    },
+    {
+      "area": "scenarios",
+      "id": "scale-multiple",
+      "what": "k = target loss / scenario loss",
+      "source": "plugins/risk-desk/skills/risk-stress/reference.md:168-172",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "scenarios",
+      "id": "scale-loss",
+      "what": "scaled scenario revalues to the target loss",
+      "source": "plugins/risk-desk/skills/risk-stress/reference.md:168-172",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "frtb",
+      "id": "cascade-single-lh-10",
+      "what": "one-horizon book at LH 10 = ES_T sqrt(LH/10)",
+      "source": "MAR33.4 closed form, plugins/risk-desk/skills/risk-frtb/reference.md:25-27",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-14,
+      "passed": true
+    },
+    {
+      "area": "frtb",
+      "id": "cascade-single-lh-20",
+      "what": "one-horizon book at LH 20 = ES_T sqrt(LH/10)",
+      "source": "MAR33.4 closed form, plugins/risk-desk/skills/risk-frtb/reference.md:25-27",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-14,
+      "passed": true
+    },
+    {
+      "area": "frtb",
+      "id": "cascade-single-lh-40",
+      "what": "one-horizon book at LH 40 = ES_T sqrt(LH/10)",
+      "source": "MAR33.4 closed form, plugins/risk-desk/skills/risk-frtb/reference.md:25-27",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-14,
+      "passed": true
+    },
+    {
+      "area": "frtb",
+      "id": "cascade-single-lh-60",
+      "what": "one-horizon book at LH 60 = ES_T sqrt(LH/10)",
+      "source": "MAR33.4 closed form, plugins/risk-desk/skills/risk-frtb/reference.md:25-27",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-14,
+      "passed": true
+    },
+    {
+      "area": "frtb",
+      "id": "cascade-single-lh-120",
+      "what": "one-horizon book at LH 120 = ES_T sqrt(LH/10)",
+      "source": "MAR33.4 closed form, plugins/risk-desk/skills/risk-frtb/reference.md:25-27",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-14,
+      "passed": true
+    },
+    {
+      "area": "frtb",
+      "id": "cascade-mixed",
+      "what": "mixed cascade with weights 1, 1, 2, 2, 6 on the squares",
+      "source": "plugins/risk-desk/skills/risk-frtb/reference.md:20-26",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-14,
+      "passed": true
+    },
+    {
+      "area": "frtb",
+      "id": "imcc",
+      "what": "IMCC = 0.5 IMCC(C) + 0.5 sum IMCC(C_i), class ratios floored",
+      "source": "MAR33.15, plugins/risk-desk/skills/risk-frtb/reference.md:37-47",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-14,
+      "passed": true
+    },
+    {
+      "area": "frtb",
+      "id": "pla-spearman-close",
+      "what": "Spearman by own average ranks and Pearson",
+      "source": "plugins/risk-desk/skills/risk-frtb/reference.md:106-108",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "frtb",
+      "id": "pla-ks-close",
+      "what": "KS in counts of 0.004 by brute-force empirical CDFs",
+      "source": "plugins/risk-desk/skills/risk-frtb/reference.md:109-113",
+      "compared": "module",
+      "abs_tol": null,
+      "rel_tol": null,
+      "passed": true
+    },
+    {
+      "area": "frtb",
+      "id": "pla-zone-close",
+      "what": "zone from MAR32.42 Table 2 thresholds",
+      "source": "plugins/risk-desk/skills/risk-frtb/reference.md:114-123",
+      "compared": "module",
+      "abs_tol": null,
+      "rel_tol": null,
+      "passed": true
+    },
+    {
+      "area": "frtb",
+      "id": "pla-spearman-loose",
+      "what": "Spearman by own average ranks and Pearson",
+      "source": "plugins/risk-desk/skills/risk-frtb/reference.md:106-108",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "frtb",
+      "id": "pla-ks-loose",
+      "what": "KS in counts of 0.004 by brute-force empirical CDFs",
+      "source": "plugins/risk-desk/skills/risk-frtb/reference.md:109-113",
+      "compared": "module",
+      "abs_tol": null,
+      "rel_tol": null,
+      "passed": true
+    },
+    {
+      "area": "frtb",
+      "id": "pla-zone-loose",
+      "what": "zone from MAR32.42 Table 2 thresholds",
+      "source": "plugins/risk-desk/skills/risk-frtb/reference.md:114-123",
+      "compared": "module",
+      "abs_tol": null,
+      "rel_tol": null,
+      "passed": true
+    },
+    {
+      "area": "frtb",
+      "id": "desk-limit-99-12",
+      "what": "12 exceptions at 99: desk passes?",
+      "source": "MAR32.19 read as 'more than 12' and 'more than 30', plugins/risk-desk/skills/risk-frtb/reference.md:91-99",
+      "compared": "module",
+      "abs_tol": null,
+      "rel_tol": null,
+      "passed": true
+    },
+    {
+      "area": "frtb",
+      "id": "desk-limit-99-13",
+      "what": "13 exceptions at 99: desk passes?",
+      "source": "MAR32.19 read as 'more than 12' and 'more than 30', plugins/risk-desk/skills/risk-frtb/reference.md:91-99",
+      "compared": "module",
+      "abs_tol": null,
+      "rel_tol": null,
+      "passed": true
+    },
+    {
+      "area": "frtb",
+      "id": "desk-limit-975-30",
+      "what": "30 exceptions at 975: desk passes?",
+      "source": "MAR32.19 read as 'more than 12' and 'more than 30', plugins/risk-desk/skills/risk-frtb/reference.md:91-99",
+      "compared": "module",
+      "abs_tol": null,
+      "rel_tol": null,
+      "passed": true
+    },
+    {
+      "area": "frtb",
+      "id": "desk-limit-975-31",
+      "what": "31 exceptions at 975: desk passes?",
+      "source": "MAR32.19 read as 'more than 12' and 'more than 30', plugins/risk-desk/skills/risk-frtb/reference.md:91-99",
+      "compared": "module",
+      "abs_tol": null,
+      "rel_tol": null,
+      "passed": true
+    },
+    {
+      "area": "frtb",
+      "id": "sbm-fx-capital-reduce-False",
+      "what": "FX delta+vega capital, max over three scenarios",
+      "source": "MAR21.4-21.7, MAR21.86-21.95 at plugins/risk-desk/skills/risk-frtb/reference.md:125-167",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "frtb",
+      "id": "sbm-fx-capital-reduce-True",
+      "what": "FX delta+vega capital, max over three scenarios",
+      "source": "MAR21.4-21.7, MAR21.86-21.95 at plugins/risk-desk/skills/risk-frtb/reference.md:125-167",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "derivatives",
+      "id": "rho-future-call",
+      "what": "future call rho per rate point, central difference",
+      "source": "plugins/risk-desk/skills/risk-derivatives/reference.md:31-37 (Black-76, future held fixed)",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-07,
+      "passed": true
+    },
+    {
+      "area": "derivatives",
+      "id": "value-future-call",
+      "what": "future call model value, own closed form",
+      "source": "plugins/risk-desk/skills/risk-derivatives/reference.md:31-37 (Black-76, future held fixed)",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "derivatives",
+      "id": "rho-spot-call",
+      "what": "spot call rho per rate point, central difference",
+      "source": "plugins/risk-desk/skills/risk-derivatives/reference.md:9-13",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-07,
+      "passed": true
+    },
+    {
+      "area": "derivatives",
+      "id": "value-spot-call",
+      "what": "spot call model value, own closed form",
+      "source": "plugins/risk-desk/skills/risk-derivatives/reference.md:9-13",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "derivatives",
+      "id": "rho-future-put",
+      "what": "future put rho per rate point, central difference",
+      "source": "plugins/risk-desk/skills/risk-derivatives/reference.md:31-37 (Black-76, future held fixed)",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-07,
+      "passed": true
+    },
+    {
+      "area": "derivatives",
+      "id": "value-future-put",
+      "what": "future put model value, own closed form",
+      "source": "plugins/risk-desk/skills/risk-derivatives/reference.md:31-37 (Black-76, future held fixed)",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "derivatives",
+      "id": "rho-spot-put",
+      "what": "spot put rho per rate point, central difference",
+      "source": "plugins/risk-desk/skills/risk-derivatives/reference.md:9-13",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-07,
+      "passed": true
+    },
+    {
+      "area": "derivatives",
+      "id": "value-spot-put",
+      "what": "spot put model value, own closed form",
+      "source": "plugins/risk-desk/skills/risk-derivatives/reference.md:9-13",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "liquidity",
+      "id": "days-A",
+      "what": "days to liquidate A = V / (q ADV)",
+      "source": "plugins/risk-desk/skills/risk-liquidity/reference.md:16",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "liquidity",
+      "id": "col-A",
+      "what": "cost of liquidity A = V (S + a sigma) / 2",
+      "source": "Bangia et al. eq. (4), plugins/risk-desk/skills/risk-liquidity/reference.md:37-45",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "liquidity",
+      "id": "days-B",
+      "what": "days to liquidate B = V / (q ADV)",
+      "source": "plugins/risk-desk/skills/risk-liquidity/reference.md:16",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "liquidity",
+      "id": "col-B",
+      "what": "cost of liquidity B = V (S + a sigma) / 2",
+      "source": "Bangia et al. eq. (4), plugins/risk-desk/skills/risk-liquidity/reference.md:37-45",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "area": "liquidity",
+      "id": "schedule",
+      "what": "end-of-day held value, day by day",
+      "source": "plugins/risk-desk/skills/risk-liquidity/reference.md:17-19",
+      "compared": "module",
+      "abs_tol": null,
+      "rel_tol": null,
+      "passed": true
+    },
+    {
+      "area": "liquidity",
+      "id": "lvar-additive",
+      "what": "L-VaR = historical VaR + total cost (form from a secondary source)",
+      "source": "plugins/risk-desk/skills/risk-liquidity/reference.md:57-69",
+      "compared": "module",
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    }
+  ]
+}

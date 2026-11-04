@@ -1,0 +1,141 @@
+{
+  "area": "scenarios",
+  "title": "Reverse stress and scenario scaling: independent numerical review",
+  "generated_utc": "2026-11-04T14:31:10.430497+00:00",
+  "checks": [
+    {
+      "id": "unbounded-distance",
+      "what": "Mahalanobis distance vs search along the equal-loss line",
+      "source": "plugins/risk-desk/skills/risk-stress/reference.md:121-156",
+      "compared": "module",
+      "reference": 0.6963575181639444,
+      "value": 0.6963575181639444,
+      "difference": 0.0,
+      "abs_tol": 0.0,
+      "rel_tol": 1e-08,
+      "passed": true
+    },
+    {
+      "id": "unbounded-shock-A",
+      "what": "most plausible shock to A",
+      "source": "plugins/risk-desk/skills/risk-stress/reference.md:121-156",
+      "compared": "module",
+      "reference": -0.11637931042319405,
+      "value": -0.11637931034482758,
+      "difference": 7.836646609415965e-11,
+      "abs_tol": 1e-06,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "id": "unbounded-shock-B",
+      "what": "most plausible shock to B",
+      "source": "plugins/risk-desk/skills/risk-stress/reference.md:121-156",
+      "compared": "module",
+      "reference": 0.08405172394201486,
+      "value": 0.08405172413793104,
+      "difference": 1.9591617217429302e-10,
+      "abs_tol": 1e-06,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "id": "unbounded-revalued-loss",
+      "what": "the shocks revalue to the target loss",
+      "source": "plugins/risk-desk/skills/risk-stress/reference.md:137-138",
+      "compared": "module",
+      "reference": 150.0,
+      "value": 150.0,
+      "difference": 0.0,
+      "abs_tol": 0.0,
+      "rel_tol": 1e-09,
+      "passed": true
+    },
+    {
+      "id": "unbounded-normal-probability",
+      "what": "P(loss >= L) = Phi(-L / sqrt(w' Sigma w))",
+      "source": "plugins/risk-desk/skills/risk-stress/reference.md:158-164",
+      "compared": "module",
+      "reference": 0.24310248022607228,
+      "value": 0.24310248022607223,
+      "difference": -5.551115123125783e-17,
+      "abs_tol": 0.0,
+      "rel_tol": 1e-09,
+      "passed": true
+    },
+    {
+      "id": "floor-binds-distance",
+      "what": "Mahalanobis distance vs search along the equal-loss line",
+      "source": "plugins/risk-desk/skills/risk-stress/reference.md:121-156",
+      "compared": "module",
+      "reference": 2.32379000772445,
+      "value": 2.3237900077244493,
+      "difference": -8.881784197001252e-16,
+      "abs_tol": 0.0,
+      "rel_tol": 1e-08,
+      "passed": true
+    },
+    {
+      "id": "floor-binds-shock-A",
+      "what": "most plausible shock to A",
+      "source": "plugins/risk-desk/skills/risk-stress/reference.md:121-156",
+      "compared": "module",
+      "reference": -0.29999999999999993,
+      "value": -0.3,
+      "difference": -5.551115123125783e-17,
+      "abs_tol": 1e-06,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "id": "floor-binds-shock-B",
+      "what": "most plausible shock to B",
+      "source": "plugins/risk-desk/skills/risk-stress/reference.md:121-156",
+      "compared": "module",
+      "reference": -0.6000000000000001,
+      "value": -0.5999999999999998,
+      "difference": 3.3306690738754696e-16,
+      "abs_tol": 1e-06,
+      "rel_tol": 0.0,
+      "passed": true
+    },
+    {
+      "id": "floor-binds-revalued-loss",
+      "what": "the shocks revalue to the target loss",
+      "source": "plugins/risk-desk/skills/risk-stress/reference.md:137-138",
+      "compared": "module",
+      "reference": 600.0,
+      "value": 599.9999999999999,
+      "difference": -1.1368683772161603e-13,
+      "abs_tol": 0.0,
+      "rel_tol": 1e-09,
+      "passed": true
+    },
+    {
+      "id": "scale-multiple",
+      "what": "k = target loss / scenario loss",
+      "source": "plugins/risk-desk/skills/risk-stress/reference.md:168-172",
+      "compared": "module",
+      "reference": 3.103448275862069,
+      "value": 3.103448275862069,
+      "difference": 0.0,
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "id": "scale-loss",
+      "what": "scaled scenario revalues to the target loss",
+      "source": "plugins/risk-desk/skills/risk-stress/reference.md:168-172",
+      "compared": "module",
+      "reference": 180.0,
+      "value": 180.0,
+      "difference": 0.0,
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    }
+  ],
+  "passed": 11,
+  "failed": []
+}

@@ -1,0 +1,105 @@
+{
+  "area": "derivatives",
+  "title": "Option book Greeks: independent numerical review",
+  "generated_utc": "2026-11-04T14:31:10.444656+00:00",
+  "checks": [
+    {
+      "id": "rho-future-call",
+      "what": "future call rho per rate point, central difference",
+      "source": "plugins/risk-desk/skills/risk-derivatives/reference.md:31-37 (Black-76, future held fixed)",
+      "compared": "module",
+      "reference": -2.7679236726640966,
+      "value": -2.7679236733275627,
+      "difference": -6.634661708915246e-10,
+      "abs_tol": 0.0,
+      "rel_tol": 1e-07,
+      "passed": true
+    },
+    {
+      "id": "value-future-call",
+      "what": "future call model value, own closed form",
+      "source": "plugins/risk-desk/skills/risk-derivatives/reference.md:31-37 (Black-76, future held fixed)",
+      "compared": "module",
+      "reference": 369.0564897770083,
+      "value": 369.0564897770083,
+      "difference": 0.0,
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "id": "rho-spot-call",
+      "what": "spot call rho per rate point, central difference",
+      "source": "plugins/risk-desk/skills/risk-derivatives/reference.md:9-13",
+      "compared": "module",
+      "reference": 11.555071373337,
+      "value": 11.555071372241807,
+      "difference": -1.095193269406991e-09,
+      "abs_tol": 0.0,
+      "rel_tol": 1e-07,
+      "passed": true
+    },
+    {
+      "id": "value-spot-call",
+      "what": "spot call model value, own closed form",
+      "source": "plugins/risk-desk/skills/risk-derivatives/reference.md:9-13",
+      "compared": "module",
+      "reference": 411.43808939879466,
+      "value": 411.43808939879466,
+      "difference": 0.0,
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "id": "rho-future-put",
+      "what": "future put rho per rate point, central difference",
+      "source": "plugins/risk-desk/skills/risk-derivatives/reference.md:31-37 (Black-76, future held fixed)",
+      "compared": "module",
+      "reference": -1.684329952311714,
+      "value": -1.6843299533916372,
+      "difference": -1.0799232619262966e-09,
+      "abs_tol": 0.0,
+      "rel_tol": 1e-07,
+      "passed": true
+    },
+    {
+      "id": "value-future-put",
+      "what": "future put model value, own closed form",
+      "source": "plugins/risk-desk/skills/risk-derivatives/reference.md:31-37 (Black-76, future held fixed)",
+      "compared": "module",
+      "reference": 224.57732711888497,
+      "value": 224.57732711888497,
+      "difference": 0.0,
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    },
+    {
+      "id": "rho-spot-put",
+      "what": "spot put rho per rate point, central difference",
+      "source": "plugins/risk-desk/skills/risk-derivatives/reference.md:9-13",
+      "compared": "module",
+      "reference": -9.033209306963386,
+      "value": -9.033209306540757,
+      "difference": 4.226290428732682e-10,
+      "abs_tol": 0.0,
+      "rel_tol": 1e-07,
+      "passed": true
+    },
+    {
+      "id": "value-spot-put",
+      "what": "spot put model value, own closed form",
+      "source": "plugins/risk-desk/skills/risk-derivatives/reference.md:9-13",
+      "compared": "module",
+      "reference": 201.2063610939495,
+      "value": 201.2063610939495,
+      "difference": 0.0,
+      "abs_tol": 0.0,
+      "rel_tol": 1e-12,
+      "passed": true
+    }
+  ],
+  "passed": 8,
+  "failed": []
+}
