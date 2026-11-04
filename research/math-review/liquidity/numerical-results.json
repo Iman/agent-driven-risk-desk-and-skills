@@ -1,7 +1,7 @@
 {
   "area": "liquidity",
   "title": "Liquidation horizon, spread cost and L-VaR: independent numerical review",
-  "generated_utc": "2026-11-04T14:31:10.446637+00:00",
+  "generated_utc": "2026-11-04T14:40:42.439817+00:00",
   "checks": [
     {
       "id": "days-A",

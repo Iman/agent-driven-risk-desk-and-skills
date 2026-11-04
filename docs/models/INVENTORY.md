@@ -1,10 +1,10 @@
 # Model inventory
 
 Risk Desk v0.2, reviewed at commit c9e649e of feat/v0.2 (worktree feat/governance) on 4 November 2026.
-Line references are to that commit. src/riskdesk/analytics.py and src/riskdesk/derivatives.py are being changed
-on feat/v0.2 (an overflow fix, and removal of the Black-76 rho workaround), so their line references and
-their hashes in [research/math-review/manifest.json](../../research/math-review/manifest.json) must be
-re-recorded once those changes land.
+Line references are to that commit, except that src/riskdesk/analytics.py (an overflow fix) and
+src/riskdesk/derivatives.py (removal of the local Black-76 rho correction) changed afterwards on feat/v0.2;
+their hashes in [research/math-review/manifest.json](../../research/math-review/manifest.json) were
+re-recorded after those changes and the numerical review rerun with 0 failures.
 
 Status vocabulary:
 
@@ -142,8 +142,7 @@ below names a row of that area's `report.md`.
   research/math-review/derivatives rho-* and value-* (own BSM and Black-76 prices, central differences in r).
 - Sources: Black and Scholes (1973), Merton (1973), Black (1976) (risk-derivatives/reference.md:77-83);
   Option Desk pricing functions.
-- Status: verified. Open text defect: derivatives.py:6-8 and 186 and risk-derivatives/reference.md:31-37 say
-  the engine's Black-76 rho is wrong; Option Desk 4a282d9 corrected it (I20). The numbers are unaffected.
+- Status: verified. Black-76 rho comes from the engine since Option Desk 4a282d9 (I20).
 
 ### M07 Spot and vol scenario grid
 

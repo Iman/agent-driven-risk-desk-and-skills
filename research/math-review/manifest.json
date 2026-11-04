@@ -1,8 +1,8 @@
 {
-  "generated_utc": "2026-11-04T14:31:10.446839+00:00",
+  "generated_utc": "2026-11-04T14:40:42.440004+00:00",
   "command": "python research/math-review/run_all.py",
-  "reviewed_head": "c9e649e28140bb84b49f9ea96a30090e4963cdc0",
-  "reviewed_branch": "feat/governance",
+  "reviewed_head": "707c1a564ec40b9876a1084e2a64046fbd3f1c84",
+  "reviewed_branch": "feat/v0.2",
   "uncommitted_module_changes": [],
   "python": "3.13.14",
   "packages": {
@@ -24,33 +24,33 @@
     ]
   },
   "module_sha256": {
-    "src/riskdesk/analytics.py": "f32b94c92f1e8c1da971bea980611de6a19ab0951920eb316862eb97b35696c3",
+    "src/riskdesk/analytics.py": "71649a023da6a779d482bb2bd61286c457aec0d92ee5eda15ba3a41fd70001f2",
     "src/riskdesk/tail_models.py": "dc30ba30d5df55e7739416f6c9cf44db72123beb4f0b31c128ff8778e5033430",
     "src/riskdesk/backtest.py": "08eebc277e696ff69eb08c2c78011713a24bba4f2da87434739750fef773d05e",
-    "src/riskdesk/derivatives.py": "b3059fcf15c0c13878d452cd143122a7833480294929b02540c01c65471bcbc1",
+    "src/riskdesk/derivatives.py": "a556d3efce6a08e092dcce7d3c755d1338f72e44efa1231b62cd8f33b6fa44f0",
     "src/riskdesk/decomposition.py": "18a136ba9bdeb2a9aa74299bd79eb156791159d1ea18353f9045a190f0260309",
-    "src/riskdesk/limits.py": "ed9a1123d39c8796dcf017e60d603a087bc66863366c604c00eb6052d4cf42b7",
-    "src/riskdesk/liquidity.py": "45878c1362ac8d55e352ab8e00bbbe7197da727d2e086db6651ffda36c42c17a",
-    "src/riskdesk/scenarios.py": "4e39b90c5a767a6ea6da539f30debe1898410d171ca061a0e182f262c78dd2c9",
-    "src/riskdesk/counterparty.py": "b4dccc3142af2d81a0460d4d76092e5ad95246a9a3e21976024b873ccabcecee",
-    "src/riskdesk/credit.py": "a3599a0231075fa3ea4729768feeccda09d1471d616738560b4cdee3cba31170",
-    "src/riskdesk/frtb.py": "0ac2fe942dafbd44191f0f4ae6b1c97021f9eff58ebc5b177ee3722d32fb15c5",
-    "src/riskdesk/ore.py": "23b32c80df8f4e4167ea342f76ccf1587aa3f0c44e206eb824b662ba40feedd1"
+    "src/riskdesk/limits.py": "aafe26988030c1ee866fda529dd97c8c5d4b3e02433456b2efd24939421b75a6",
+    "src/riskdesk/liquidity.py": "ff73f44810d5e98f806bd305b1ef42f32d86b5b7b1176d923cfc62fdb144ceab",
+    "src/riskdesk/scenarios.py": "96cb4a3f8c1615f7899c7539dd7e7e737acf8551c648f9f2c7d00ae0fcb927b4",
+    "src/riskdesk/counterparty.py": "a0818ccfac53875e27c7138491ecca13e07b02c1726f24a181122a72952a50aa",
+    "src/riskdesk/credit.py": "b8222a3184b4817b6be0060db185fe688ef068bf2daa672b16e7dee9065595ff",
+    "src/riskdesk/frtb.py": "eebd663565c6d5795b562e973cb4d455ca88db8c07412bb16cd44dc580608c00",
+    "src/riskdesk/ore.py": "0f010edd91cb3e5863a842786a29dc7208c7e1c976bba5792832dc226fe7576b"
   },
   "pending_rehash": {
     "src/riskdesk/analytics.py": "the integrator's overflow fix on feat/v0.2 changes this file; re-run this script after it lands",
     "src/riskdesk/derivatives.py": "the integrator is removing the Black-76 rho workaround now that Option Desk 4a282d9 fixes black76_greeks; re-run this script after it lands"
   },
   "results_sha256": {
-    "backtest/numerical-results.json": "91c2db3de3e7118583695e825dd6133aca2ee78e652203163eaff84ffe7c1476",
-    "tail/numerical-results.json": "968358a581805e2a67d9f608fc3f6847ee630342201f917bba39ed47d30b1146",
-    "counterparty/numerical-results.json": "01cbd271b6a7850f65152ee5b10b5fd7c7694d354380ed21c6806cd39253ea38",
-    "credit/numerical-results.json": "6988b4f7707ae3258e16d67188f231aad074e7bc6931e798fd26a15631367eac",
-    "decomposition/numerical-results.json": "450b7a11da3dac383b6ea2e725c7baa84d463f6a25d7c5ce3e5cf81f1c71f4e8",
-    "scenarios/numerical-results.json": "f6b0f479a2dd3e4320f0fa51ee984bc7a712c09ffaf275399d84a6d97fdd6b5f",
-    "frtb/numerical-results.json": "1ce4d8acebdf98bd50c67ecfea35128e2245495e3b8fe8b5e182568c130f9fda",
-    "derivatives/numerical-results.json": "1103d9f2f9353385a7e838686d559f0ea29cd533b95766491b11ebb5fa4b2e34",
-    "liquidity/numerical-results.json": "d0715c9ae170c3b264e330ea3d5ab96aed680580a136316d36078d9d050888d7"
+    "backtest/numerical-results.json": "ba8bc3db2987a8447104a27639b578ee3c80d3e018333d42a145949bc9a60f16",
+    "tail/numerical-results.json": "73d8a22dad55918e3fdf8dc6ef860b3847b7175a5d92394b15871deae885751f",
+    "counterparty/numerical-results.json": "acf3fad27d38b43156e2f5cb634ccff15d159c7576c9e5b46ff73848ee006243",
+    "credit/numerical-results.json": "6cbb7372c089f1b0e32725e605b471a36d8e7b389420532c091a9a00f9c22d62",
+    "decomposition/numerical-results.json": "f3eda41ee1b41a60b74b2149169d3bf55114c0952e5a7c3f340ecb6d3d7095f2",
+    "scenarios/numerical-results.json": "d69685ca86787574fab77ac651fa1ad7617b88e50cd558ffad4edbbe544e9832",
+    "frtb/numerical-results.json": "a9eab2a2144d488616d7cae09c3127cb9a90c8fef220473f83ed3bf374973564",
+    "derivatives/numerical-results.json": "493ef25f525797d59011221806b72e12aa782c60a5f09bea9ed8384e8f6033b2",
+    "liquidity/numerical-results.json": "bd7f713a35e634ffaac284f7b48c98514ac5ca060ecf2cf9f7683a1d69acac78"
   },
   "totals": {
     "checks": 186,

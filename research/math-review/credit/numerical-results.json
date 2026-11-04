@@ -1,7 +1,7 @@
 {
   "area": "credit",
   "title": "ASRF credit VaR: independent check against CRE99 Table 1",
-  "generated_utc": "2026-11-04T14:31:10.319279+00:00",
+  "generated_utc": "2026-11-04T14:40:42.305681+00:00",
   "checks": [
     {
       "id": "table-readings-agree",

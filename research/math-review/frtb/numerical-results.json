@@ -1,7 +1,7 @@
 {
   "area": "frtb",
   "title": "FRTB IMA, PLA, backtesting and FX SBM: independent numerical review",
-  "generated_utc": "2026-11-04T14:31:10.442142+00:00",
+  "generated_utc": "2026-11-04T14:40:42.435190+00:00",
   "checks": [
     {
       "id": "cascade-single-lh-10",

@@ -1,7 +1,7 @@
 {
   "area": "backtest",
   "title": "VaR and ES backtests: independent numerical review",
-  "generated_utc": "2026-11-04T14:31:05.121712+00:00",
+  "generated_utc": "2026-11-04T14:40:36.667644+00:00",
   "checks": [
     {
       "id": "basel-cdf-0",

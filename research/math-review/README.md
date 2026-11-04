@@ -69,6 +69,7 @@ non-convergence is printed in its description.
 
 manifest.json records the git head, the sha256 of every reviewed module, the Option Desk head and any
 uncommitted engine changes, the package versions and the sha256 of every results file.
-src/riskdesk/analytics.py (an overflow fix) and src/riskdesk/derivatives.py (removal of the Black-76 rho
-workaround after Option Desk 4a282d9) are being changed on feat/v0.2. Once those changes land, rerun the
-commands above and commit the outputs; until then tests/test_governance.py fails on purpose.
+src/riskdesk/analytics.py (an overflow fix) and src/riskdesk/derivatives.py (removal of the local Black-76
+rho correction after Option Desk 4a282d9) changed after the first review; the hashes were re-recorded and
+the review rerun with 0 failures. Any later change to a reviewed module makes tests/test_governance.py fail
+until the commands above are rerun and the outputs committed.
