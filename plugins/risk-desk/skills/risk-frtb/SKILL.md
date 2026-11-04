@@ -9,17 +9,15 @@ Five functions, each taking a JSON request and returning a result envelope
 with `degraded`, `currency`, `as_of`, `source`, `data_mode`, `input_sha256`
 and `assumptions`. Read the envelope; do not redo the arithmetic yourself.
 
-| Task | Function | Proposed tool | Rules |
+| Task | Function | MCP tool, CLI command | Rules |
 |---|---|---|---|
-| Liquidity-adjusted ES, stress scaling, IMCC | `frtb_imcc` | `risk_frtb_imcc` | MAR33.4, MAR33.6, MAR33.15 |
-| Aggregate IMA capital, surcharge, RWA | `frtb_ima_capital` | `risk_frtb_ima_capital` | MAR33.41 to MAR33.46, MAR32.9 |
-| P&L attribution test zone | `frtb_pla` | `risk_frtb_pla` | MAR32.34 to MAR32.42 |
-| VaR backtesting counts, desk verdict or bank zone | `frtb_backtest` | `risk_frtb_backtest` | MAR32.5, MAR32.9, MAR32.18, MAR32.19 |
-| SBM FX delta and vega capital | `frtb_sbm_fx` | `risk_frtb_sbm_fx` | MAR21.4, MAR21.6, MAR21.7, MAR21.86 to MAR21.95 |
+| Liquidity-adjusted ES, stress scaling, IMCC | `frtb_imcc` | `risk_frtb_imcc`, `riskdesk frtb-imcc --input PATH` | MAR33.4, MAR33.6, MAR33.15 |
+| Aggregate IMA capital, surcharge, RWA | `frtb_ima_capital` | `risk_frtb_ima_capital`, `riskdesk frtb-capital --input PATH` | MAR33.41 to MAR33.46, MAR32.9 |
+| P&L attribution test zone | `frtb_pla` | `risk_frtb_pla`, `riskdesk frtb-pla --input PATH` | MAR32.34 to MAR32.42 |
+| VaR backtesting counts, desk verdict or bank zone | `frtb_backtest` | `risk_frtb_backtest`, `riskdesk frtb-backtest --input PATH` | MAR32.5, MAR32.9, MAR32.18, MAR32.19 |
+| SBM FX delta and vega capital | `frtb_sbm_fx` | `risk_frtb_sbm_fx`, `riskdesk frtb-sbm-fx --input PATH` | MAR21.4, MAR21.6, MAR21.7, MAR21.86 to MAR21.95 |
 
-The MCP and CLI names are proposals until the integrator wires them. If no
-tool is available, call the functions in `riskdesk.frtb` from Python. If
-neither is available, say so; never produce a capital figure by hand.
+If no tool is available, say so; never produce a capital figure by hand.
 
 ## Contract
 

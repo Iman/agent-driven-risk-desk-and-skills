@@ -5,8 +5,7 @@ description: Backtest a supplied VaR forecast series, and optionally an Expected
 
 # Risk Backtest
 
-Tool `risk_backtest`, CLI `riskdesk backtest --input PATH` (proposed names; until the
-integration is wired call `riskdesk.backtest.var_backtest(payload)`).
+Tool `risk_backtest`, CLI `riskdesk backtest --input PATH`.
 
 ## Contract (BacktestRequest)
 

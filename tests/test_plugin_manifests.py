@@ -90,9 +90,11 @@ def test_the_codex_skills_pointer_resolves_to_the_skills_on_disk():
     directory = (plugin / pointer.removeprefix("./")).resolve()
     assert directory.is_dir()
     assert directory == (plugin / "skills").resolve()
-    assert skill_directories(plugin) == ["risk-portfolio", "risk-setup",
-                                         "risk-stress", "risk-tail",
-                                         "risk-xva"]
+    assert skill_directories(plugin) == [
+        "risk-attribution", "risk-backtest", "risk-counterparty", "risk-credit",
+        "risk-data-import", "risk-derivatives", "risk-frtb", "risk-limits",
+        "risk-liquidity", "risk-portfolio", "risk-setup", "risk-stress",
+        "risk-tail", "risk-xva"]
 
 
 def test_every_skill_directory_declares_its_own_name():
@@ -332,9 +334,11 @@ def test_the_manifest_icons_a_runtime_will_fetch_exist():
 # manifest in the sibling project names them and neither does this one:
 # the runtime reads plugins/<name>/commands and plugins/<name>/agents by
 # convention. A key was not invented for them here.
-COMMANDS = ["risk-dashboard", "risk-exposure", "risk-report", "risk-stress",
-            "risk-tail", "risk-xva"]
-AGENTS = ["risk-data-auditor", "risk-reviewer"]
+COMMANDS = ["risk-backtest", "risk-daily", "risk-dashboard", "risk-exposure",
+            "risk-limits", "risk-report", "risk-stress", "risk-tail",
+            "risk-whatif", "risk-xva"]
+AGENTS = ["risk-data-auditor", "risk-model-validator", "risk-reviewer",
+          "stress-scenario-designer"]
 
 
 def front_matter(path):

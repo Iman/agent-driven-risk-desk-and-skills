@@ -5,7 +5,7 @@ description: Greeks, spot and vol scenario grids, and historical full-revaluatio
 
 # Risk Derivatives
 
-Three functions share one book contract. The integrator names the MCP tools; the proposed names are `risk_derivatives_greeks`, `risk_derivatives_grid` and `risk_derivatives_historical`.
+Three functions share one book contract. MCP tools `risk_derivatives_greeks`, `risk_derivatives_grid` and `risk_derivatives_historical`; CLI `riskdesk derivatives-greeks`, `riskdesk derivatives-grid` and `riskdesk derivatives-historical`, each with `--input PATH`.
 
 | question | function | extra input |
 |---|---|---|

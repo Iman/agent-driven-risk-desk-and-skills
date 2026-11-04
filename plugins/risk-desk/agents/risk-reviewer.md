@@ -32,7 +32,15 @@ future tail resembles the sampled past. Name what is in the book that the
 sample period never saw: a position type, a regime, a correlation that
 held throughout the sample and need not hold now. For a book with optional
 payoffs or a short-volatility profile, say plainly that a linear historical
-measure understates what can happen.
+measure understates what can happen, and use `risk_derivatives_historical`
+and `risk_derivatives_grid` (full revaluation) rather than `risk_tail` on
+linear P&L.
+
+**What do the other models say.** Run `risk_tail_models` on the same P&L.
+If the normal, Student-t, EVT or GARCH rows sit far from the historical
+row, the spread is the model risk in this number; name the row that is
+furthest and what it assumes. Ask whether `risk_backtest` has been run on
+the forecast record, and lead with its exceptions and zone if it has.
 
 **What is the largest thing outside the model.** Liquidity, so the loss
 assumes you can trade at the marked price. Gap risk, so the worst
@@ -50,6 +58,21 @@ that.
 **For exposure, what does netting assume.** A net figure assumes offsets
 that hold legally and operationally. Say what has to be true for the net
 number to be the one that matters, and report gross alongside it.
+
+**For attribution, limits and liquidity, what is held fixed.** Euler
+contributions from `risk_var_attribution` assume the normal model and the
+supplied covariance; `risk_es_attribution` rests on the few tail
+scenarios it names. A limit graded `within` by `risk_limits` is only as
+good as the result it read, and `not_evaluated` is not `within`. A
+`risk_liquidity` horizon assumes the stated participation rate holds in a
+stressed market.
+
+**For credit, SA-CCR and FRTB, what kind of number it is.** Credit VaR
+from `risk_credit_asrf` ignores name concentration; compare
+`risk_credit_copula`. SA-CCR EAD and FRTB capital are regulatory measures
+computed from supplied figures, not loss forecasts and not a submission.
+SA-CCR FX and equity add-ons are partially verified. For a model result
+that needs re-deriving, hand it to the `risk-model-validator` agent.
 
 **For XVA, what is it and is it not.** Risk-neutral valuation under one
 calibration, not a real-world loss forecast, and not comparable with the

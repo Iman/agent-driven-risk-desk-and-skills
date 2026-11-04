@@ -12,9 +12,6 @@ Two tools share the TailRequest contract in [input contracts](../../references/c
 | `risk_tail` | `riskdesk tail --input PATH` | historical VaR and ES via skfolio |
 | `risk_tail_models` | `riskdesk tail-models --input PATH` | the historical result plus six model estimates of the same quantities |
 
-`risk_tail_models` and its CLI command are proposed names; they exist once the
-integration is wired. Until then call `riskdesk.tail_models.tail_models(payload)`.
-
 Require the currency, as-of date, source, data mode, portfolio value, confidence and horizon. Each P&L observation must already cover that horizon. Do not convert daily results to another horizon by silently scaling them. For `risk_tail_models` the P&L must be in time order, oldest first: the GARCH columns depend on order, the others do not.
 
 ## Report first

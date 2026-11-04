@@ -18,10 +18,8 @@ result, cite it, and do not re-derive numbers yourself.
 | reverse stress to a target loss | `risk_reverse_stress` | `riskdesk reverse-stress --input PATH` |
 | scale a scenario to a target loss | `risk_scenario_scale` | `riskdesk scale-scenario --input PATH` |
 
-`risk_stress` and its CLI exist today. The other four names are the names
-proposed for wiring; if a tool is not listed by the server, say it is not
-available rather than computing the figure yourself. The functions are in
-`riskdesk.scenarios`.
+If a tool is not listed by the server, say it is not available rather than
+computing the figure yourself.
 
 ## Contracts
 

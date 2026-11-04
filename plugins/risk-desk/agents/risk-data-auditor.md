@@ -12,9 +12,12 @@ command returns; every result carries its own provenance.
 
 **Degradation.** Any result with `degraded` true, and its
 `degraded_reason`. This is the first thing you report, never a footnote.
-Today one condition sets it: fewer than 20 observations of tail
-probability mass. It is a reporting threshold, not a verdict on the
-number.
+Each tool sets it for its own conditions and says which in the reason:
+fewer than 20 observations of tail probability mass, an unconverged GARCH
+fit, an infinite Student-t or EVT Expected Shortfall, a limit result
+graded against inputs dated differently, and others. It is a reporting flag, not a verdict on the
+number. `risk_desk_status` lists the tools and the reporting conventions
+they share.
 
 **The horizon claim.** `horizon_days` states what each P&L observation is
 supposed to span. Nothing in the software can check that, and nothing
@@ -46,6 +49,19 @@ about their rights; it is not a rights certificate and nothing checks it.
 an explicit zero where nothing moves. The model refuses a scenario that
 omits one, so a set that ran is complete by construction; what is worth
 checking is whether the zeros were meant.
+
+**Order and shape of a series.** For `risk_tail_models` and
+`risk_backtest` the P&L must be in time order, oldest first, and a VaR
+series must be aligned with the P&L it is tested against, one forecast
+made before each outcome. Nothing checks either. For `risk_stress_replay`
+both window dates must be in the caller's price series.
+
+**Option and credit inputs.** An option needs a strike, an expiry or year
+fraction, an implied vol in decimal form (0.25, not 25) and a rate; a
+premium is not a linear market value. An obligor needs exposure, PD and
+LGD as fractions. A value missing from the caller's file is reported
+missing, never filled; the risk-data-import skill lists the repairs that
+may be made and the ones that may not.
 
 **Internal consistency.** Gross should exceed or equal the absolute net
 for any book. Stressed NAV should equal NAV plus scenario P&L. A share of
