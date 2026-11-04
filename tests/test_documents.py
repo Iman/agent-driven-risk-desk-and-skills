@@ -6,9 +6,11 @@ link to a file that does not exist, a document promising a capability the
 code does not have, and four files disagreeing about the licence.
 
 The options vocabulary check exists because these documents were adapted
-from a sibling project whose scope is listed options. A sentence about
-Greeks or an expiry surviving the adaptation would describe a capability
-this repository refuses to have, which is worse than a typo.
+from a sibling project whose scope is listed-options trading. Since v0.2
+Risk Desk values European options in a book and reports their Greeks, so
+those words are in scope; the strategy and market-structure words of the
+sibling project are not, and a sentence promising them would describe a
+capability this repository does not have, which is worse than a typo.
 """
 import re
 from pathlib import Path
@@ -19,11 +21,11 @@ ROOT = Path(__file__).resolve().parent.parent
 LICENCE_ID = "PolyForm-Noncommercial-1.0.0"
 LICENCE_NAME = "PolyForm Noncommercial License 1.0.0"
 
-# Words from the sibling project's scope. None of these is in this
-# project's contract, and the models refuse the instruments they name.
-OPTIONS_VOCABULARY = ("greek", "iron condor", "straddle", "strangle",
+# Words from the sibling project's scope that are not in this project's
+# contract. Greeks and option expiry are (risk_derivatives_*, since v0.2).
+OPTIONS_VOCABULARY = ("iron condor", "straddle", "strangle",
                       "open interest", "volatility surface", "moneyness",
-                      "option chain", "expiry", "max pain")
+                      "option chain", "max pain")
 
 # A line containing one of these is denying a capability, not claiming it.
 DENIALS = ("no ", "not ", "cannot", "refus", "outside this", "do not",
@@ -96,8 +98,8 @@ def test_no_document_claims_this_software_fetches_market_data():
 def cli_commands():
     source = (ROOT / "src" / "riskdesk" / "cli.py").read_text(
         encoding="utf-8")
-    named = set(re.findall(r'commands\.add_parser\("([a-z]+)"', source))
-    handlers = set(re.findall(r'"([a-z]+)": \w+', source.split(
+    named = set(re.findall(r'commands\.add_parser\("([a-z-]+)"', source))
+    handlers = set(re.findall(r'"([a-z-]+)": [\w.]+', source.split(
         "HANDLERS = {")[1].split("}")[0]))
     return named | handlers
 
@@ -117,7 +119,7 @@ def test_every_riskdesk_command_a_document_names_exists():
         body = text(path)
         code = "\n".join(re.findall(r"```[a-z]*\n(.*?)```", body, re.S))
         code += "\n" + "\n".join(re.findall(r"`([^`\n]+)`", body))
-        for name in re.findall(r"\briskdesk ([a-z]+)", code):
+        for name in re.findall(r"\briskdesk ([a-z][a-z-]*)", code):
             if name in real:
                 continue
             invented.append("{}: riskdesk {}".format(path.name, name))
@@ -158,10 +160,11 @@ def test_the_licence_documents_agree_about_the_upstream_counts():
 
 
 def test_every_dependency_licence_named_was_checked_against_its_notice():
-    """LICENSES.md names four. Each one has to match the notice file that
+    """LICENSES.md names five. Each one has to match the notice file that
     actually ships, not a package index."""
     expected = {"skfolio": "BSD 3-Clause", "mcp": "MIT License",
-                "pydantic": "The MIT License"}
+                "pydantic": "The MIT License",
+                "optiondesk-engine": "PolyForm Noncommercial License 1.0.0"}
     for package, opening in expected.items():
         directory = ROOT / "notices" / package
         assert directory.is_dir(), package
@@ -228,18 +231,10 @@ def defined_options():
     return flags
 
 
-def subcommands():
-    source = (ROOT / "src" / "riskdesk" / "cli.py").read_text(encoding="utf-8")
-    named = set(re.findall(r'add_parser\("([a-z]+)"', source))
-    named |= set(re.findall(r'"([a-z]+)": \w+', source.split(
-        "HANDLERS = {")[1].split("}")[0]))
-    return named
-
-
 def test_every_option_a_command_file_names_exists():
     """An invented flag in a command file is worse than one in prose: an
     agent will run it."""
-    flags, commands = defined_options(), subcommands()
+    flags, commands = defined_options(), cli_commands()
     assert {"--input", "--output", "--tail", "--exposure", "--xva",
             "--host", "--port", "--project", "--config",
             "--data-mode"} <= flags, sorted(flags)
@@ -248,7 +243,7 @@ def test_every_option_a_command_file_names_exists():
         body = path.read_text(encoding="utf-8")
         code = "\n".join(re.findall(r"```[a-z]*\n(.*?)```", body, re.S))
         code += "\n" + "\n".join(re.findall(r"`([^`]+)`", body, re.S))
-        for name in re.findall(r"\briskdesk ([a-z]+)", code):
+        for name in re.findall(r"\briskdesk ([a-z][a-z-]*)", code):
             if name not in commands:
                 invented.append("{}: riskdesk {}".format(path.name, name))
         for flag in re.findall(r"(--[a-z][a-z-]+)", code):
