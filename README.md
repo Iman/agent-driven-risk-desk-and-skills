@@ -2,17 +2,19 @@
 
 Risk Desk measures the loss side of a book and shows its working. It
 calculates historical and model VaR and Expected Shortfall from supplied
-P&L and backtests a forecast record, gross and net exposure for signed
-linear positions, Greeks and full revaluation for books with European
-options, VaR and ES attribution, limits and a pre-trade what-if,
-liquidity-adjusted VaR, explicit, historical and reverse stress scenarios
-that carry no probability, SA-CCR exposure, portfolio credit VaR, FRTB
-capital pieces from a bank's own figures, and counterparty exposure and
-XVA through a local Open Source Risk Engine project. The CLI and 30 local
-MCP tools call the same runtime functions, so an agent and a person get the
-same numbers with the same provenance, units, assumptions and degraded
-flag attached. A local dashboard reads the core results in a browser, and
-14 plugin skills cover these tasks and setup.
+P&L, and backtests a forecast record. It calculates gross and net
+exposure for signed linear positions, and Greeks and full revaluation for
+books with European options. It also gives VaR and ES attribution, limits,
+a pre-trade what-if and liquidity-adjusted VaR. Its explicit, historical
+and reverse stress scenarios carry no probability. It calculates SA-CCR
+exposure, portfolio credit VaR, FRTB capital pieces from a bank's own
+figures, and counterparty exposure and XVA through a local Open Source
+Risk Engine project.
+
+The CLI and 30 local MCP tools call the same runtime functions. So an
+agent and a person get the same numbers, with the same provenance, units,
+assumptions and degraded flag attached. A local dashboard reads the core
+results in a browser, and 14 plugin skills cover these tasks and setup.
 
 [![Tests](https://img.shields.io/badge/tests-810%20collected-blue)](docs/IMPLEMENTATION.md)
 [![Unit coverage](https://img.shields.io/badge/unit%20coverage-93.85%25-blue)](#development)
@@ -25,14 +27,14 @@ flag attached. A local dashboard reads the core results in a browser, and
 
 One page, written by `riskdesk report`, from the synthetic energy book in
 `examples/`. Synthetic example inputs, not market data and not a record of
-any position. The page states its sign convention, prints its degraded
-flag whether or not it is set, and embeds its own styling and charts, so it
+any position. The page states its sign convention and prints its degraded
+flag whether or not it is set. It embeds its own styling and charts, so it
 opens with no network.
 
 Both surfaces follow the reader's system setting: these captures are the
 dark default, and there is a light mode built from the same tokens. Every
 colour comes from one token layer, so neither mode is hard coded in a
-rule, and no rule outside that layer writes a colour at all.
+rule. No rule outside that layer writes a colour.
 
 ### The dashboard
 
@@ -42,22 +44,21 @@ The same numbers over a loopback socket, five views: overview, exposure,
 stress, tail risk and counterparty XVA. Synthetic example inputs, not
 market data. It binds a loopback address and refuses anything else, makes
 no outbound request, and reads no path from the request. Every view prints
-the sign convention and the degraded flag whether or not the flag is set,
-and a view whose input was absent says so in words that do not imply a
-zero.
+the sign convention and the degraded flag whether or not the flag is set.
+A view whose input was absent says so in words that do not imply a zero.
 
 ![The dashboard exposure view: a signed net exposure ladder with shorts drawn left of a zero line and longs right of it, above an ordered share-of-gross concentration chart. Drawn from synthetic example inputs, not market data](docs/images/dashboard-exposure.png)
 
 The exposure view, which is where the sign convention earns its keep. The
 ladder puts the 6 legs of the synthetic energy book on the side of the
-zero line their sign says they are on, so a short reads as a short without
-anyone reading the minus sign, and the concentration chart is ordered and
-says what the shares are shares of.
+zero line their sign says they are on. So a short reads as a short without
+anyone reading the minus sign. The concentration chart is ordered and says
+what the shares are shares of.
 
 ## Get started
 
 Requirements: Git, and a Python the project supports. `pyproject.toml`
-declares 3.11 or later; the pinned dependency set and the ORE wheel were
+declares 3.11 or later. The pinned dependency set and the ORE wheel were
 tested on CPython 3.13, macOS ARM64.
 
 ```sh
@@ -78,7 +79,7 @@ extra, attempts the optional ORE extra and says plainly whether that
 worked, then runs the tests. The package needs the Option Desk engine,
 which pip installs from PyPI. [INSTALL.md](INSTALL.md) shows how to
 check its hash. `demo.sh` runs the core commands over the
-example books and prints what each result means; the 29 example input
+example books and prints what each result means. The 29 example input
 files cover every command. Neither script
 prints colour, neither reaches the network beyond pip, and both exit
 non-zero on any failure.
@@ -95,30 +96,32 @@ docker run --rm risk-desk                        # what this image can do
 ```
 
 `--user` is not decoration. The image runs as a fixed non-root uid on
-purpose, and on Linux a bind mount keeps the ownership it has on the host,
-so without it the container cannot write into your directory. Docker
+purpose. On Linux a bind mount keeps the ownership it has on the host, so
+without `--user` the container cannot write into your directory. Docker
 Desktop on macOS hides that by remapping ownership, which is how this
-reached CI green on a laptop and red on a Linux runner. Run without it and
+reached CI green on a laptop and red on a Linux runner. Without `--user`,
 the entrypoint refuses with exit 65 and prints the line above.
 
-The image ships the core scope. The ORE extra is platform dependent and
-this was measured, not assumed: on `python:3.13-slim` at linux/amd64 pip
-resolves open-source-risk-engine 1.8.16.0, and at linux/arm64 pip reports
-no distribution of any version. So the build attempts it, records what
-happened, and `docker run risk-desk` prints that status; `xva` is refused
-up front with the reason rather than failing inside a worker. Build with
-`--build-arg WITH_XVA=require` to turn a missing extra into a failed build.
+The image ships the core scope. The ORE extra is platform dependent, and
+this was measured, not assumed. On `python:3.13-slim` pip resolves
+open-source-risk-engine 1.8.16.0 at linux/amd64, and reports no
+distribution of any version at linux/arm64. So the build attempts it,
+records what happened, and `docker run risk-desk` prints that status.
+`xva` is refused up front with the reason rather than failing inside a
+worker. To turn a missing extra into a failed build, build with
+`--build-arg WITH_XVA=require`.
 
 A command that writes a file into a container with no volume mounted is
-refused with exit 64, because the summary it would print is identical to a
-real run and the file would be gone on exit. A mount the container cannot
-write is refused with exit 65 before anything runs, an artifacts path that
-does not exist with exit 66, and `xva` with no ORE backend with exit 69.
+refused with exit 64. Without the refusal it prints a summary identical to
+a real run, and the file is gone on exit. Before anything runs, a mount
+the container cannot write is refused with exit 65. An artifacts path that
+does not exist is refused with exit 66, and `xva` with no ORE backend with
+exit 69.
 
 The plugin is [plugins/risk-desk](plugins/risk-desk). It starts
-`riskdesk-mcp` through PATH, so either activate the environment in the
-client's launch environment or configure the client with the absolute path
-to the installed executable. Installing the plugin does not install the
+`riskdesk-mcp` through PATH. So activate the environment in the client's
+launch environment, or configure the client with the absolute path to the
+installed executable. Installing the plugin does not install the
 runtime. The server speaks stdio and makes no market-data or broker
 requests.
 
@@ -126,11 +129,11 @@ requests.
 
 ### Install the plugin
 
-The runtime is a normal Python install; the plugin only tells your agent
-where to find it. Install the runtime first with `./install.sh`, then make
-`riskdesk-mcp` reachable, either by activating `.venv` in the environment
-that launches the agent or by pointing the client at
-`.venv/bin/riskdesk-mcp` by absolute path.
+The runtime is a normal Python install. The plugin only tells your agent
+where to find it. Install the runtime first with `./install.sh`. Then make
+`riskdesk-mcp` reachable: activate `.venv` in the environment that
+launches the agent, or point the client at `.venv/bin/riskdesk-mcp` by
+absolute path.
 
 | Runtime | Install the plugin | Manifest it reads |
 | --- | --- | --- |
@@ -139,9 +142,9 @@ that launches the agent or by pointing the client at
 | Any MCP client | Add `.mcp.json`'s single stdio server, or run `riskdesk-mcp` yourself | [.mcp.json](plugins/risk-desk/.mcp.json) |
 | Hosted | The endpoint is live at `https://riskdesk.avidquant.com/mcp` and advertises 3 risk tools plus a status tool. It serves synthetic demo data only, and it cannot run `risk_xva`. | [risk-desk-hosted](plugins/risk-desk-hosted/README.md) |
 
-Both manifests describe the same plugin, both point at the same 14 skill
-directories, and a validation test fails the build if either stops
-matching what is on disk. Installing the plugin does not install the
+Both manifests describe the same plugin and point at the same 14 skill
+directories. A validation test fails the build if either stops matching
+what is on disk. Installing the plugin does not install the
 runtime.
 
 ### Prompts
@@ -181,33 +184,37 @@ rather than declared in the manifest.
 | `/risk-whatif` | Before beside after, and nothing is placed |
 | `/risk-daily` | Every degraded result and breach before any figure, and which inputs were synthetic |
 
-The agents are `risk-data-auditor`, which checks whether the inputs
-support any conclusion at all, `risk-reviewer`, which attacks whether
-the number is trustworthy rather than whether the arithmetic is right,
-`risk-model-validator`, which re-derives a model result, backtests it and
-compares challenger models, and `stress-scenario-designer`, which builds
-historical, hypothetical and reverse scenarios from the caller's data and
-the dated library. The reviewer and the validator are required to say
-plainly when they find no reason to doubt a result, because an adversary
-that always finds something is noise.
+The agents:
+
+- `risk-data-auditor` checks whether the inputs support any conclusion
+  at all.
+- `risk-reviewer` attacks whether the number is trustworthy rather than
+  whether the arithmetic is right.
+- `risk-model-validator` re-derives a model result, backtests it and
+  compares challenger models.
+- `stress-scenario-designer` builds historical, hypothetical and reverse
+  scenarios from the caller's data and the dated library.
+
+The reviewer and the validator must say plainly when they find no reason
+to doubt a result. An adversary that always finds something is noise.
 
 ### Read it in a browser
 
 `riskdesk dashboard` serves the synthetic energy book by default, from
 `examples/`, and takes the same `--input`, `--tail`, `--exposure` and
-`--xva` flags as `riskdesk report`. It computes nothing of its own: the
+`--xva` flags as `riskdesk report`. It computes nothing of its own. The
 views come from the functions the CLI and the MCP tools call, through the
-same shaping path as the saved report page, so the two cannot disagree
+same shaping path as the saved report page. So the two cannot disagree
 about a number.
 
 It serves one machine. There is no authentication, so it binds a loopback
-address and refuses any other host rather than letting a typo in a flag put
-a risk book on a network. Each failure has its own exit code and a sentence
-on stderr: 64 for a host that is not loopback, 66 for a missing input, 67
-for an input that fails its contract, 73 for a port already in use.
+address and refuses any other host. A typo in a flag cannot put a risk
+book on a network. Each failure has its own exit code and a sentence on
+stderr: 64 for a host that is not loopback, 66 for a missing input, 67 for
+an input that fails its contract, 73 for a port already in use.
 
 The XVA view never runs ORE. The adapter needs a trusted local project
-directory, a fresh output directory and a separate process, so the view
+directory, a fresh output directory and a separate process. So the view
 reprints a result the adapter already wrote, or explains what is missing.
 
 ### Use it from LangChain or LangGraph
@@ -222,8 +229,8 @@ python -m pip install "langgraph==1.2.19"   # only for the graph
 ```
 
 - `desk_tools()` turns the tools `riskdesk-mcp` registers into LangChain
-  tools. Names, descriptions and input schemas are read from the server,
-  and every call goes through the server's own validation, so there is no
+  tools. Names, descriptions and input schemas are read from the server.
+  Every call goes through the server's own validation, so there is no
   second tool list to keep in step.
 - `ask(question, model=...)` runs a three-node LangGraph routine. The
   model picks read-only tools, the tools run, and the model answers under
@@ -235,37 +242,37 @@ python -m pip install "langgraph==1.2.19"   # only for the graph
 The tested versions are `langchain-core==1.7.2` and `langgraph==1.2.19`,
 with every wheel installed for them on CPython 3.13 and macOS ARM64, and
 its sha256, in [agent/wheel-hashes.json](agent/wheel-hashes.json). They
-install on top of the Risk Desk wheels without changing any of them. The tests use a scripted chat model and need no network and no API
-key.
+install on top of the Risk Desk wheels without changing any of them. The
+tests use a scripted chat model and need no network and no API key.
 
 ## What it computes
 
 The input contracts are in
 [plugins/risk-desk/references/contracts.md](plugins/risk-desk/references/contracts.md).
 The Pydantic models in `src/riskdesk/models.py` and in each calculation
-module are the executable version; unknown fields and nonfinite numbers
+module are the executable version. Unknown fields and nonfinite numbers
 are rejected.
 
 - **Tail risk** consumes monetary P&L observations that already span the
   stated horizon. It uses skfolio's empirical quantile and fractional-tail
-  Expected Shortfall. Positive VaR and ES mean loss; negative values are
+  Expected Shortfall. Positive VaR and ES mean loss. Negative values are
   preserved as gains and are not floored at zero. No square-root-of-time
   scaling is applied and no observation is dropped.
 - **Exposure** requires signed linear-position market values already
   translated into one base currency. Gross counts absolute values before
-  offsetting; net does not. Leverage divides by the supplied NAV. The
+  offsetting, and net does not. Leverage divides by the supplied NAV. The
   report draws it as [the two charts above](#the-dashboard).
-  Exposure, stress and the linear tools take linear positions only; for a
-  book with options use `risk_derivatives_greeks`, `risk_derivatives_grid`
+  Exposure, stress and the linear tools take linear positions only. For a
+  book with options, use `risk_derivatives_greeks`, `risk_derivatives_grid`
   and `risk_derivatives_historical`.
 - **Tail models and backtests.** `risk_tail_models` puts normal,
   Student-t, EVT, GARCH filtered historical, GARCH-EVT and GARCH-t Monte
-  Carlo estimates beside the historical one; `risk_backtest` tests a VaR
+  Carlo estimates beside the historical one. `risk_backtest` tests a VaR
   and ES forecast record (Kupiec, Christoffersen, Basel zone,
   Acerbi-Szekely Z2).
 - **Derivatives** values European calls and puts on spot
   (Black-Scholes-Merton) or futures (Black-76) underlyings through the
-  Option Desk engine, and reports cash Greeks, spot and vol grids and
+  Option Desk engine. It reports cash Greeks, spot and vol grids and
   historical full-revaluation P&L.
 - **Attribution, limits and liquidity**: covariance estimators, Euler VaR
   and ES contributions, factor exposure, limit grading, a pre-trade
@@ -274,10 +281,10 @@ are rejected.
   caller's prices, a dated scenario library with sources and no prices,
   reverse stress under a supplied covariance, and scenario scaling.
 - **Counterparty, credit and FRTB**: SA-CCR exposure at default for one
-  netting set (FX and equity add-ons partially verified), exposure-profile
-  summaries, ASRF and Gaussian copula credit VaR, and FRTB IMA, PLA,
-  backtesting and FX SBM capital pieces computed from figures the bank
-  supplies.
+  netting set (FX and equity add-ons partially verified), and
+  exposure-profile summaries. ASRF and Gaussian copula credit VaR. FRTB
+  IMA, PLA, backtesting and FX SBM capital pieces, computed from figures
+  the bank supplies.
 - **Stress** requires an explicit return shock for every asset in every
   scenario. It reports P&L, loss, stressed NAV and per-position
   contributions. It attaches no probability to a scenario.
@@ -287,7 +294,7 @@ are rejected.
   is not a result. See [docs/ORE.md](docs/ORE.md) for the pinned
   reproduction, what it does and does not establish, and the rules for
   running your own project. Version 1.8.16.0 was tested on CPython 3.13,
-  macOS ARM64; install `.` without the extra for everything else.
+  macOS ARM64. For everything else, install `.` without the extra.
 
 Every core result carries provenance, a SHA-256 of its input, its currency,
 its assumptions and a degraded flag. A small tail sample raises a warning.
@@ -321,35 +328,41 @@ and credit migration need a configured valuation model, not this one.
 .venv/bin/python -m build
 ```
 
-Tests are separated by marker: `-m unit` runs in process with no subprocess
-and no socket, `-m integration` runs the real scripts and the real stdio
-transport, and `-m validation` checks the repository and its documents. The
-coverage gate is measured from the unit suite alone, because integration
-tests light up lines they assert nothing about, and it refuses a report
-that is missing a production file.
+Tests are separated by marker:
+
+- `-m unit` runs in process, with no subprocess and no socket.
+- `-m integration` runs the real scripts and the real stdio transport.
+- `-m validation` checks the repository and its documents.
+
+The coverage gate is measured from the unit suite alone, because
+integration tests light up lines they assert nothing about. It refuses a
+report that is missing a production file.
 
 `scripts/mutate.py` breaks the analytics on purpose, 33 ways, and requires
 the tests to notice: sign flips, the quantile boundary, gross counted as
 net, the leverage divisor, the degraded flag and every validation rule. Its
-last recorded run detected 31 by the test file named for each, found no
-survivors, and recorded 2 mutants as equivalent with the measurement that
+last recorded run detected 31 by the test file named for each and found no
+survivors. It recorded 2 mutants as equivalent, with the measurement that
 justifies calling them that. There is no mutation badge here, because two
-cases are not killed and a badge would round that away.
+cases are not killed and a badge rounds that away.
 
-`scripts/evidence.py` is the part worth a minute. The figures that travel
-between documents, the ones quoted here and in `docs/ORE.md`,
-`docs/IMPLEMENTATION.md` and `CHANGELOG.md`, are recorded in
-`docs/evidence.json` with where each came from, and `check` fails when a
-document and the record disagree. A validation test runs that check, so
-the suite goes red when the prose drifts from the repository. Figures the
-recorder counted here are marked `measured`; the ORE regression values,
-which came from a run against an upstream checkout that is not part of this
-repository, are marked `pinned` with the date they were observed.
+`scripts/evidence.py` ties each quoted figure to its source. The figures
+that travel between documents are recorded in `docs/evidence.json`, with
+where each came from. These are the ones quoted here and in
+`docs/ORE.md`, `docs/IMPLEMENTATION.md` and `CHANGELOG.md`. `check` fails
+when a document and the record disagree. A validation test runs that
+check, so the suite goes red when the prose drifts from the repository.
+
+Figures the recorder counted here are marked `measured`. The ORE
+regression values came from a run against an upstream checkout that is
+not part of this repository. They are marked `pinned`, with the date they
+were observed.
 
 `scripts/screenshot_report.py` regenerates the images above from a page it
-writes in the same run, either whole or clipped to one section's own
-bounding box read from the live DOM. It needs Playwright, which is not a project
-dependency, so the image is committed and regenerating it is deliberate.
+writes in the same run. It takes the page whole, or clipped to one
+section's bounding box read from the live DOM. It needs Playwright, which
+is not a project dependency, so the image is committed and regenerating it
+is deliberate.
 
 ## Documentation
 

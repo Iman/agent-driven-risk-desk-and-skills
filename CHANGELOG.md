@@ -32,32 +32,32 @@ called by the CLI and the MCP server alike. Fourteen plugin skills.
 - A local `risk_desk_status` tool: version, registered tools, accepted
   data modes and reporting conventions.
 - Commands `/risk-backtest`, `/risk-limits`, `/risk-whatif` and
-  `/risk-daily`; agents `risk-model-validator` and
-  `stress-scenario-designer`; skill `risk-data-import`.
+  `/risk-daily`, agents `risk-model-validator` and
+  `stress-scenario-designer`, and skill `risk-data-import`.
 - Skills `risk-portfolio`, `risk-xva`, `risk-setup` and
-  `risk-data-import` each gain a reference, a workflow and a script:
-  exposure and XVA result checkers, an install doctor that calls
-  `risk_desk_status` over stdio, and a validator that checks a
-  converted request against the tool's own pydantic model.
+  `risk-data-import` each gain a reference, a workflow and a script. The
+  scripts are exposure and XVA result checkers, an install doctor that
+  calls `risk_desk_status` over stdio, and a request validator. The
+  validator checks a converted request against the tool's own pydantic
+  model.
 - `scripts/evidence.py check` re-counts the cheap figures instead of
   trusting the record.
 - `riskdesk-agent` 0.2.0 under `agent/`: LangChain tools read from the
-  MCP server's registry, tool results as documents, and a LangGraph
-  answer routine that withholds any answer with a number in no tool
-  result.
+  MCP server's registry, and tool results as documents. Its LangGraph
+  answer routine withholds any answer with a number in no tool result.
 
 ### Changed on 2026-11-04
 
 - A sum that overflows is refused with `ValueError` in every module,
   where six functions raised `OverflowError`.
-- Black-76 rho comes from the engine; Risk Desk's own copy of the
+- Black-76 rho comes from the engine. Risk Desk's own copy of the
   correction is removed.
 - numpy, scipy, scikit-learn and optiondesk-engine are declared. The
   engine is identified by the sha256 of the wheel built from option-desk
-  commit `4a282d9`, because an earlier wheel with the same version lacks
-  the rho fix. It is on PyPI, and on 4 November 2026 the wheel there had
+  commit `4a282d9`. An earlier wheel with the same version lacks the rho
+  fix. It is on PyPI, and on 4 November 2026 the wheel there had
   the recorded sha256.
-- 810 tests collected; unit line coverage of src/riskdesk is 93.85
+- 810 tests collected. Unit line coverage of src/riskdesk is 93.85
   percent.
 
 ## 0.1.0, unreleased

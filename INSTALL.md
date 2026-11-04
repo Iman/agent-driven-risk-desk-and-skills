@@ -1,12 +1,12 @@
 # Install Risk Desk
 
-Seven routes. They are not alternatives to each other in the way a list
-suggests: the first installs the software, and most of the rest only tell
-an agent where to find it.
+Seven routes. They are not alternatives in the way a list suggests. The
+first installs the software, and most of the rest only tell an agent
+where to find it.
 
 **Installing a plugin does not install the runtime.** That is the one
-mistake worth avoiding, and it is the reason routes 3, 4 and 6 all start
-by pointing at route 1.
+mistake worth avoiding. It is the reason routes 3, 4 and 6 all start by
+pointing at route 1.
 
 | Route | What it gives you | Needs Python |
 | --- | --- | --- |
@@ -22,7 +22,7 @@ by pointing at route 1.
 
 Git, and a Python the project supports. `pyproject.toml` declares 3.11 or
 later. The pinned dependency set and the ORE wheel were tested on CPython
-3.13 on macOS ARM64, and CI runs the suite on 3.11, 3.12 and 3.13.
+3.13 on macOS ARM64. CI runs the suite on 3.11, 3.12 and 3.13.
 
 ### The Option Desk engine
 
@@ -53,9 +53,9 @@ cd agent-driven-risk-desk-and-skills
 ./demo.sh
 ```
 
-`install.sh` creates `.venv`, installs the package with its development
-extra, attempts the optional ORE extra and says plainly whether that
-worked, then runs the test suite. It writes nothing outside the checkout,
+`install.sh` creates `.venv` and installs the package with its
+development extra. It attempts the optional ORE extra, says plainly
+whether that worked, then runs the test suite. It writes nothing outside the checkout,
 puts nothing on your `PATH`, and registers nothing with any agent runtime.
 
 `demo.sh` runs every command over the example books and prints what each
@@ -163,8 +163,8 @@ Any MCP client can start the server directly. The plugin's own
 }
 ```
 
-Replace `riskdesk-mcp` with the absolute path inside `.venv/bin` if the
-client does not inherit your environment. The server speaks stdio, binds
+If the client does not inherit your environment, replace `riskdesk-mcp`
+with the absolute path inside `.venv/bin`. The server speaks stdio, binds
 no socket, and makes no market-data or broker request.
 
 ## 7. Container
@@ -178,18 +178,20 @@ docker run --rm --user "$(id -u):$(id -g)" \
     -v "$PWD/artifacts:/artifacts" risk-desk demo
 ```
 
-`--user` is not decoration. The image runs as a fixed non-root uid, and on
-Linux a bind mount keeps the ownership it has on the host, so without it
-the container cannot write your directory. Run it without and the
+`--user` is not decoration. The image runs as a fixed non-root uid. On
+Linux a bind mount keeps the ownership it has on the host, so without
+`--user` the container cannot write your directory. Without `--user`, the
 entrypoint refuses with exit 65 and prints the line above.
 
-The image states its own scope. Exit codes: 64 a writing command with no
-mount, 65 a mount it cannot write, 66 an artifacts path that does not
-exist, 69 `xva` with no ORE backend in this image.
+The image states its own scope. Exit codes:
 
-The skills are read by the agent on your host, not by the image, so the
-container is a route to the CLI and the demo rather than to an agent
-setup.
+- 64: a writing command with no mount.
+- 65: a mount it cannot write.
+- 66: an artifacts path that does not exist.
+- 69: `xva` with no ORE backend in this image.
+
+The agent on your host reads the skills, not the image. So the container
+is a route to the CLI and the demo, not to an agent setup.
 
 ## Removing it
 
@@ -206,14 +208,13 @@ this project's to delete.
 `./install.sh` prints the interpreter it chose, the environment it built
 and whether the ORE extra installed. Start there.
 
-The most common outcome is an agent that lists no tools, and the cause is
-almost always that the plugin was installed without the runtime, or that
-`riskdesk-mcp` is not on the `PATH` the agent launches with. Check it
-directly:
+The most common outcome is an agent that lists no tools. The cause is
+almost always a plugin installed without the runtime, or a `PATH` without
+`riskdesk-mcp` when the agent launches. Check it directly:
 
 ```sh
 .venv/bin/riskdesk-mcp < /dev/null
 ```
 
-That should start and exit without a traceback. If the command is not
-found, route 1 has not been run in that environment.
+A good install starts and exits without a traceback. If the command is
+not found, route 1 has not been run in that environment.
