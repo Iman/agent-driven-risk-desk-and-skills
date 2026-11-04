@@ -68,12 +68,12 @@ Without it, one contribution with no assignment would block one.
 
 ## Third-party components
 
-The tested dependency tree contains 47 upstream distributions. Every one
-had a locatable notice, and 79 notice files are retained unchanged in
+The tested dependency tree contains 48 upstream distributions. Every one
+had a locatable notice, and 80 notice files are retained unchanged in
 `notices/`, with hashes in `wheel-hashes.json` and the resolved tree in
 `dependency-inventory.json`.
 
-The four components the project depends on most directly, each checked
+The five components the project depends on most directly, each checked
 against the notice file on disk rather than against a package index:
 
 | Component | Licence, as stated in its own notice |
@@ -82,6 +82,7 @@ against the notice file on disk rather than against a package index:
 | MCP Python SDK | MIT |
 | Pydantic | MIT |
 | Open Source Risk Engine | Quaternion Risk Management and Acadia copyright, full bundled notice retained |
+| Option Desk engine | PolyForm Noncommercial License 1.0.0, the same licence as Risk Desk |
 
 The remaining distributions are not listed here with a licence name,
 deliberately. Restating a licence this document has not verified against
@@ -90,7 +91,7 @@ repository refuses to make. `dependency-inventory.json` records what each
 distribution declared, `notices/` holds what each one shipped, and where
 those two disagree the notice is authoritative.
 
-Note what the inventory does not settle: 16 of the 48 entries declare no
+Note what the inventory does not settle: 17 of the 49 entries declare no
 licence expression in their metadata at all and carry only a licence file.
 That is why the notice on disk, and not the metadata, is the thing this
 project treats as the answer.

@@ -24,6 +24,32 @@ Git, and a Python the project supports. `pyproject.toml` declares 3.11 or
 later. The pinned dependency set and the ORE wheel were tested on CPython
 3.13 on macOS ARM64, and CI runs the suite on 3.11, 3.12 and 3.13.
 
+### The Option Desk engine
+
+Risk Desk prices options and fits GARCH-t through `optiondesk-engine`
+0.3.0, the engine of the sibling Option Desk project. It is not on a
+package index, so `pip install .` stops with `No matching distribution
+found for optiondesk-engine==0.3.0` until pip is pointed at the wheel.
+The wheel Risk Desk was tested with is built from option-desk commit
+`4a282d9`, and its identity is the sha256 in `wheel-hashes.json`, not the
+version string: an earlier build also numbered 0.3.0 lacks the Black-76
+rho fix. Build it from a checkout that contains that commit, never from a
+working tree with uncommitted changes:
+
+```sh
+mkdir -p /tmp/od-src engine-wheel
+git -C PATH_TO_OPTION_DESK archive 4a282d9 engine | tar -x -C /tmp/od-src
+python3 -m pip install build
+python3 -m build --wheel --outdir engine-wheel /tmp/od-src/engine
+shasum -a 256 engine-wheel/optiondesk_engine-0.3.0-py3-none-any.whl
+PIP_FIND_LINKS="$PWD/engine-wheel" ./install.sh
+```
+
+The hash printed must equal the one recorded for `optiondesk-engine` in
+`wheel-hashes.json`; two builds of that commit with hatchling 1.33.0 produced the same bytes on
+2026-11-04. On that date the commit was not yet on the public Option Desk
+repository, so this route needs the maintainer's checkout.
+
 ## 1. Full local installer
 
 ```sh

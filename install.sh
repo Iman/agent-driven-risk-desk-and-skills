@@ -90,7 +90,8 @@ VPY="$VENV/bin/python"
 
 say "== Installing riskdesk with its development extra"
 "$VPY" -m pip install --upgrade --quiet pip || die "could not upgrade pip"
-"$VPY" -m pip install --quiet "$ROOT[dev]" || die "could not install riskdesk[dev]"
+"$VPY" -m pip install --quiet "$ROOT[dev]" \
+  || die "could not install riskdesk[dev]; optiondesk-engine is not on a package index, see INSTALL.md (set PIP_FIND_LINKS to the directory holding its wheel)"
 
 XVA_STATUS="skipped by --no-xva"
 if [ "$WITH_XVA" -eq 1 ]; then
