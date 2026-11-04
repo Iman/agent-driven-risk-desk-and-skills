@@ -34,6 +34,11 @@ called by the CLI and the MCP server alike. Fourteen plugin skills.
 - Commands `/risk-backtest`, `/risk-limits`, `/risk-whatif` and
   `/risk-daily`; agents `risk-model-validator` and
   `stress-scenario-designer`; skill `risk-data-import`.
+- Skills `risk-portfolio`, `risk-xva`, `risk-setup` and
+  `risk-data-import` each gain a reference, a workflow and a script:
+  exposure and XVA result checkers, an install doctor that calls
+  `risk_desk_status` over stdio, and a validator that checks a
+  converted request against the tool's own pydantic model.
 - `scripts/evidence.py check` re-counts the cheap figures instead of
   trusting the record.
 - `riskdesk-agent` 0.2.0 under `agent/`: LangChain tools read from the
@@ -51,7 +56,7 @@ called by the CLI and the MCP server alike. Fourteen plugin skills.
   engine is identified by the sha256 of the wheel built from option-desk
   commit `4a282d9`, because an earlier wheel with the same version lacks
   the rho fix. It is on no package index; INSTALL.md gives the route.
-- 804 tests collected; unit line coverage of src/riskdesk is 93.68
+- 809 tests collected; unit line coverage of src/riskdesk is 93.84
   percent.
 
 ## 0.1.0, unreleased
