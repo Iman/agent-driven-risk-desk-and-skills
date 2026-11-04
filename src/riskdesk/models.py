@@ -8,6 +8,10 @@ class StrictModel(BaseModel):
     model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
 
 
+# ORE also runs on its own shipped example data, which no Risk Desk calculation uses.
+OreDataMode = Literal["synthetic", "user-licensed", "upstream-example"]
+
+
 class Provenance(StrictModel):
     as_of: date
     currency: str = Field(pattern=r"^[A-Z]{3}$")

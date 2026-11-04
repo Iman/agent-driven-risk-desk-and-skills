@@ -34,9 +34,8 @@
    the `artifact` path and `backend_version`.
 8. For peak PFE, EPE and Effective EPE of a netting set, take the rows of
    `reports.exposure_nettingset_<ID>` unchanged into `risk_exposure_profile`
-   and follow `../risk-counterparty/workflows/exposure-profile.md`. That
-   contract takes only `synthetic` or `user-licensed`; for an
-   `upstream-example` run, ask the user which applies.
+   and follow `../risk-counterparty/workflows/exposure-profile.md`, passing
+   the run's `data_mode` through unchanged.
 
 ## Before reporting
 

@@ -102,10 +102,9 @@ its `outputPath`.
 
 `risk_exposure_profile` (`src/riskdesk/counterparty.py:292-361`) takes the
 rows of one `exposure_nettingset_...` report as ORE wrote them, plus
-`as_of`, `currency`, `source` and `data_mode`. Its contract accepts only
-`synthetic` or `user-licensed` (`src/riskdesk/models.py:15`), so a run declared
-`upstream-example` cannot pass its `data_mode` through unchanged; ask the
-user which declaration applies rather than choosing one. The step by step
+`as_of`, `currency`, `source` and `data_mode`. Its `data_mode` takes the same
+three values as `risk_xva` (`OreDataMode` in `src/riskdesk/models.py`), so the
+run's declaration passes through unchanged. The step by step
 is `../risk-counterparty/workflows/exposure-profile.md`.
 
 ## Not established by a clean run

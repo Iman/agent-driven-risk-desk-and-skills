@@ -19,8 +19,8 @@ pytestmark = pytest.mark.unit
 
 
 def meta(**extra):
-    return dict(as_of="2026-11-04", currency="USD", source="synthetic test",
-                data_mode="synthetic", **extra)
+    return {**dict(as_of="2026-11-04", currency="USD", source="synthetic test",
+                   data_mode="synthetic"), **extra}
 
 
 def ir(id, notional, value, maturity, position, ccy, start, end, **extra):
@@ -296,6 +296,14 @@ def test_profile_summary_by_hand():
     assert (result["peak_pfe"], result["peak_pfe_time"]) == (70, 0.5)
     assert result["averaging_horizon_years"] == 1.0 and result["dates_in_first_year"] == 3
     assert result["netting_set"] == "CPTY_A" and result["degraded"] is False
+
+
+def test_profile_summary_accepts_every_data_mode_risk_xva_accepts():
+    # risk_xva runs ORE's own examples as upstream-example; its profile must summarise too.
+    from riskdesk.ore import DATA_MODES
+    for mode in DATA_MODES:
+        result = exposure_profile_summary(profile([0, 1.0], [10, 20], data_mode=mode))
+        assert result["data_mode"] == mode
 
 
 def test_profile_summary_converges_to_the_closed_form_integrals():

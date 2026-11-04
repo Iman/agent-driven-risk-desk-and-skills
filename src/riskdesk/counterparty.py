@@ -14,7 +14,7 @@ from pydantic import Field, model_validator
 from scipy.stats import norm
 
 from riskdesk.analytics import envelope, fsum
-from riskdesk.models import Provenance, StrictModel
+from riskdesk.models import OreDataMode, Provenance, StrictModel
 
 ALPHA = 1.4                  # CRE52.1
 MULTIPLIER_FLOOR = 0.05      # CRE52.23
@@ -305,6 +305,7 @@ class ExposureRow(StrictModel):
 
 
 class ExposureProfileRequest(Provenance):
+    data_mode: OreDataMode  # the profile comes from a risk_xva run, so it takes the same modes
     rows: list[ExposureRow] = Field(min_length=2, max_length=100_000)
 
     @model_validator(mode="after")

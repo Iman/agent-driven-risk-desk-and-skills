@@ -1,6 +1,6 @@
 # Risk Desk input contracts
 
-All amounts are in the stated base currency. `as_of` is an ISO date. `source` must identify the input origin. `data_mode` is `synthetic` or `user-licensed`; it is the caller's declaration, not a rights certificate. Unknown fields and nonfinite numbers are rejected.
+All amounts are in the stated base currency. `as_of` is an ISO date. `source` must identify the input origin. `data_mode` is `synthetic` or `user-licensed` (the ORE tools, `risk_xva` and `risk_exposure_profile`, also take `upstream-example` for ORE's own example inputs); it is the caller's declaration, not a rights certificate. Unknown fields and nonfinite numbers are rejected.
 
 ## TailRequest
 

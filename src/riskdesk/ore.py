@@ -4,7 +4,10 @@ import json
 from pathlib import Path
 import subprocess
 import sys
+from typing import get_args
 import xml.etree.ElementTree as ET
+
+from riskdesk.models import OreDataMode
 
 
 def prepare_config(project, config, output):
@@ -58,7 +61,7 @@ def prepare_config(project, config, output):
     return target, hashes
 
 
-DATA_MODES = ("synthetic", "user-licensed", "upstream-example")
+DATA_MODES = get_args(OreDataMode)
 
 
 def run_ore(project, config, output, data_mode, timeout=600):
