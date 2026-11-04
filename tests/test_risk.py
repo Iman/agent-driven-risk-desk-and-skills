@@ -165,3 +165,25 @@ def test_a_sum_that_overflows_is_a_value_error(module, function, example, mutate
     call = getattr(importlib.import_module("riskdesk." + module), function)
     with pytest.raises(ValueError, match="numerical limits"):
         call(_overflowing(example, mutate))
+
+
+def test_the_exposure_checker_passes_real_results_and_catches_tampering(tmp_path, capsys):
+    import importlib.util
+    import json
+    from pathlib import Path
+    path = Path(__file__).resolve().parent.parent / "plugins/risk-desk/skills/risk-portfolio/scripts/check_artifact.py"
+    spec = importlib.util.spec_from_file_location("risk_portfolio_check", path)
+    checker = importlib.util.module_from_spec(spec); spec.loader.exec_module(checker)
+    offset = portfolio(); offset["positions"].append(
+        {"id": "short_a", "asset": "A", "market_value": -600, "instrument_type": "linear"})
+    hedged = portfolio_exposure(offset)       # a long and a short in A both add to gross
+    assert (hedged["gross_exposure"], hedged["net_exposure"], hedged["net_by_asset"]["A"]) == (1400, -200, 0)
+    assert checker.check(hedged) == [] and checker.check(portfolio_exposure(portfolio())) == []
+    artifact = tmp_path / "exposure.json"
+    artifact.write_text(json.dumps(hedged))
+    assert checker.main(str(artifact)) == 0 and capsys.readouterr().out.startswith("OK USD gross 1400")
+    hedged["gross_leverage"] = 1.0
+    artifact.write_text(json.dumps(hedged))
+    assert checker.main(str(artifact)) == 1 and "gross_leverage is not gross / nav" in capsys.readouterr().out
+    assert "gross is below the absolute value of net" in checker.check(
+        dict(portfolio_exposure(portfolio()), gross_exposure=300))
