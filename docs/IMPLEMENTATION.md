@@ -68,22 +68,24 @@ Observed on 2026-11-04, for the v0.2 integration on branch `feat/v0.2`:
   September, which carries the same version number 0.3.0.
 - That wheel, built twice from a clean `git archive` of the commit with
   hatchling 1.33.0, gave the same sha256 both times; it is recorded in
-  `wheel-hashes.json`. `pip install --dry-run` of this checkout fails with
-  `No matching distribution found for optiondesk-engine==0.3.0` without
-  it and resolves to that hash with `PIP_FIND_LINKS` pointing at it.
+  `wheel-hashes.json`. Before the PyPI upload, `pip install --dry-run` of
+  this checkout failed with `No matching distribution found for
+  optiondesk-engine==0.3.0` without it, and resolved to that hash with
+  `PIP_FIND_LINKS` pointing at it.
+- Later on 4 November 2026 `optiondesk-engine` 0.3.0 was on PyPI.
+  `pip download --no-deps optiondesk-engine==0.3.0` fetched a wheel with
+  the sha256 recorded in `wheel-hashes.json`. `pip install --dry-run
+  '.[dev]'` against PyPI alone resolved `optiondesk-engine-0.3.0`, and an
+  install from PyPI wrote no `direct_url.json`.
 - The tested dependency tree now has 48 upstream distributions with 80
   notice files; the Option Desk engine's licence notice is the one added.
 
 UNKNOWN for v0.2, and not claimed:
 
-- `optiondesk-engine` is on no package index, and commit `4a282d9` was not
-  on the public option-desk repository on 2026-11-04. Until it is
-  published, `pip install .` fails for anyone without the maintainer's
-  checkout (measured with `--dry-run`). `./install.sh`, the CI workflow and
-  the container build all run `pip install .` the same way and were not
-  run here.
-- The container tests were not run (`-m docker` needs a daemon and the
-  image build cannot resolve the engine).
+- `./install.sh`, the CI workflow and the container build all run
+  `pip install .` and were not run against PyPI here. Only the
+  `--dry-run` resolve above was.
+- The container tests were not run (`-m docker` needs a daemon).
 - SA-CCR FX and equity add-ons are partially verified: constants checked
   against CRE52.72, with no published worked example to reproduce.
 - The hosted endpoint was not changed and still advertises its four tools.

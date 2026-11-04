@@ -40,9 +40,8 @@ rather than failing (96-105); run `pytest -q --color=no` unless
 (112-118). It writes only inside the checkout and registers nothing
 (`install.sh:13-15`).
 
-When `.[dev]` fails it stops with a pointer to INSTALL.md and
-`PIP_FIND_LINKS` (`install.sh:93-94`), because `optiondesk-engine` is not
-on a package index (`INSTALL.md`, "The Option Desk engine").
+When `.[dev]` fails it stops with a pointer to the pip output and
+INSTALL.md (`install.sh:93-94`).
 
 ## The Option Desk engine wheel
 
@@ -55,19 +54,20 @@ engine"). The recorded entry (`wheel-hashes.json:134-140`):
 - source: option-desk commit `4a282d91bdb9fafbb0e4d80f2e88ab790eac6f4c`,
   `engine/` built from a clean git archive
 
-The build commands are in INSTALL.md and are not repeated here. On
-2026-11-04 that route, run from an option-desk checkout containing the
-commit, produced a wheel with exactly the recorded sha256.
+The wheel is on PyPI. On 4 November 2026 `pip download --no-deps
+optiondesk-engine==0.3.0` fetched a file with exactly the recorded
+sha256. INSTALL.md gives the check.
 
 What an installed environment can prove: pip's `direct_url.json` (PEP
 610) in the distribution's metadata, which the doctor reads. Observed with
 pip 26.1.2 on 2026-11-04: installing the wheel by its path records
 `archive_info.hashes.sha256`, which the doctor compares with
-`wheel-hashes.json` and fails on a mismatch; installing it through
-`--find-links` (the `PIP_FIND_LINKS` route) writes no `direct_url.json`,
-so that install's identity cannot be checked afterwards; an editable
-install records its source directory and no hash. So check the wheel
-file's sha256 before installing it, or install it by path.
+`wheel-hashes.json` and fails on a mismatch. Installing it through
+`--find-links` writes no `direct_url.json`, so that install's identity
+cannot be checked afterwards. An install from PyPI writes none either
+(observed on 4 November 2026). An editable install records its source
+directory and no hash. So check the wheel file's sha256 before you
+install it, or install it by path.
 
 ## The ORE extra
 

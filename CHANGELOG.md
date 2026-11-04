@@ -55,7 +55,8 @@ called by the CLI and the MCP server alike. Fourteen plugin skills.
 - numpy, scipy, scikit-learn and optiondesk-engine are declared. The
   engine is identified by the sha256 of the wheel built from option-desk
   commit `4a282d9`, because an earlier wheel with the same version lacks
-  the rho fix. It is on no package index; INSTALL.md gives the route.
+  the rho fix. It is on PyPI, and on 4 November 2026 the wheel there had
+  the recorded sha256.
 - 809 tests collected; unit line coverage of src/riskdesk is 93.84
   percent.
 

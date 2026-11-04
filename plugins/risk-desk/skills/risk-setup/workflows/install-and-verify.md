@@ -16,12 +16,13 @@ Commands run from the root of the user's Risk Desk checkout.
 
    Add `--no-xva` if the user does not want the ORE extra, `--no-tests` to
    skip the suite.
-3. If pip stops with `No matching distribution found for
-   optiondesk-engine==0.3.0`, follow "The Option Desk engine" in
-   INSTALL.md: build the wheel from option-desk commit `4a282d9`, compare
-   its sha256 with the `optiondesk-engine` entry of `wheel-hashes.json`,
-   and only on a match run `PIP_FIND_LINKS="$PWD/engine-wheel" ./install.sh`.
-   A different hash is a different build; stop and say so.
+3. pip installs `optiondesk-engine` 0.3.0 from PyPI. If pip stops with
+   `No matching distribution found for optiondesk-engine==0.3.0`, pip
+   cannot reach PyPI or an index that carries it: report that and stop.
+   To check the engine's identity, follow "The Option Desk engine" in
+   INSTALL.md and compare the sha256 with the `optiondesk-engine` entry
+   of `wheel-hashes.json`. If the hashes differ, the wheel is a different
+   build: stop and say so.
 4. If the installer reports the ORE extra as not installed, read
    `.venv/xva-install.log`. Report it as a platform limitation; everything
    except the ORE run still works.

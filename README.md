@@ -76,8 +76,8 @@ Then, for the web view:
 `install.sh` creates `.venv`, installs the package with its development
 extra, attempts the optional ORE extra and says plainly whether that
 worked, then runs the tests. The package needs the Option Desk engine,
-which is not on a package index yet; [INSTALL.md](INSTALL.md) gives the
-build-and-verify route. `demo.sh` runs the core commands over the
+which pip installs from PyPI. [INSTALL.md](INSTALL.md) shows how to
+check its hash. `demo.sh` runs the core commands over the
 example books and prints what each result means; the 29 example input
 files cover every command. Neither script
 prints colour, neither reaches the network beyond pip, and both exit

@@ -27,28 +27,22 @@ later. The pinned dependency set and the ORE wheel were tested on CPython
 ### The Option Desk engine
 
 Risk Desk prices options and fits GARCH-t through `optiondesk-engine`
-0.3.0, the engine of the sibling Option Desk project. It is not on a
-package index, so `pip install .` stops with `No matching distribution
-found for optiondesk-engine==0.3.0` until pip is pointed at the wheel.
-The wheel Risk Desk was tested with is built from option-desk commit
-`4a282d9`, and its identity is the sha256 in `wheel-hashes.json`, not the
-version string: an earlier build also numbered 0.3.0 lacks the Black-76
-rho fix. Build it from a checkout that contains that commit, never from a
-working tree with uncommitted changes:
+0.3.0, the engine of the sibling Option Desk project. It is on PyPI, so
+`pip install .` and `install.sh` resolve it with no extra step. Its
+identity is the sha256 in `wheel-hashes.json`, not the version string:
+an earlier build also numbered 0.3.0 lacks the Black-76 rho fix. On
+4 November 2026 the wheel on PyPI had the recorded sha256.
+
+pip records no hash when it installs from an index, so check the wheel
+before you install it:
 
 ```sh
-mkdir -p /tmp/od-src engine-wheel
-git -C PATH_TO_OPTION_DESK archive 4a282d9 engine | tar -x -C /tmp/od-src
-python3 -m pip install build
-python3 -m build --wheel --outdir engine-wheel /tmp/od-src/engine
+python3 -m pip download --no-deps -d engine-wheel optiondesk-engine==0.3.0
 shasum -a 256 engine-wheel/optiondesk_engine-0.3.0-py3-none-any.whl
-PIP_FIND_LINKS="$PWD/engine-wheel" ./install.sh
 ```
 
 The hash printed must equal the one recorded for `optiondesk-engine` in
-`wheel-hashes.json`; two builds of that commit with hatchling 1.33.0 produced the same bytes on
-2026-11-04. On that date the commit was not yet on the public Option Desk
-repository, so this route needs the maintainer's checkout.
+`wheel-hashes.json`.
 
 ## 1. Full local installer
 
@@ -85,8 +79,8 @@ failure.
 
 `riskdesk xva` needs `open-source-risk-engine`, whose wheel exists for a
 limited set of Python and platform combinations. The installer attempts it
-and reports the outcome rather than failing. Without it you have
-historical tail risk, exposure and stress, which is most of the project.
+and reports the outcome rather than failing. Without it, every command
+and tool works except `riskdesk xva` and `risk_xva`.
 
 Measured, so you know what to expect: the wheel resolves on macOS ARM64
 under CPython 3.13, and on `python:3.13-slim` at linux/amd64. It does not
