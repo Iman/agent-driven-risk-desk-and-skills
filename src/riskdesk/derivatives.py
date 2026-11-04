@@ -3,9 +3,8 @@
 Every price and every Greek comes from optiondesk_engine: Black-Scholes-Merton
 (bs_price, all_greeks) for a spot underlying, Black-76 (black76_price,
 black76_greeks) for a futures underlying, and net_greeks for aggregation.
-One correction is made here and stated: black76_greeks returns all_greeks'
-partial in r with the carry rate held fixed, which is not Black-76 rho. With
-the future held fixed, dV/dr = -t * V, so that is reported instead.
+Black-76 rho is the engine's own: dV/dr = -t * V with the future held fixed
+(optiondesk-engine commit 4a282d9 and later).
 """
 import math
 from datetime import date
@@ -151,9 +150,7 @@ def _greeks(request, p):
                     vega=0.0, theta=0.0, rho=0.0, vanna=0.0, vomma=0.0, charm=0.0, veta=0.0)
     t, S = _years(p, request.as_of), request.underlyings[p.underlying].price
     if _future(request, p):
-        g = black76_greeks(S, p.strike, t, p.implied_vol, p.kind, p.rate)
-        g["rho"] = -t * g["price"]  # Black-76 rho with the future held fixed; see module docstring
-        return g
+        return black76_greeks(S, p.strike, t, p.implied_vol, p.kind, p.rate)
     return all_greeks(S, p.strike, t, p.implied_vol, p.kind, p.rate, p.carry_yield)
 
 
@@ -183,7 +180,7 @@ GREEK_UNITS = {
 CONVENTIONS = [
     "Prices and Greeks from optiondesk_engine: Black-Scholes-Merton for spot underlyings, Black-76 for futures.",
     "Time is ACT/365 years; an expiry date is converted as (expiry - as_of) days / 365.",
-    "Black-76 rho is -t x V with the future fixed; the engine's black76_greeks rho holds the carry rate fixed and is not used.",
+    "Black-76 rho is -t x V with the future held fixed, as returned by the engine's black76_greeks.",
     "European exercise, one flat implied volatility per option, rates and carry continuously compounded.",
     "All prices and amounts are in the stated currency; no FX translation is performed.",
 ]

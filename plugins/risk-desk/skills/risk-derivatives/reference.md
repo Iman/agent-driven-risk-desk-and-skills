@@ -28,13 +28,13 @@ From `optiondesk_engine/pricing/greeks_full.py` (module docstring) and `black_sc
 - rho is per 1.00 of rate. Risk Desk divides by 100 to report per rate point.
 - An implied vol above 10.0 or a t above 100 years is refused as a unit error.
 
-## One correction to the engine
+## Black-76 rho
 
-`black76_greeks` calls `all_greeks(F, K, t, sigma, kind, r, r)`. Its rho is the partial derivative in r with q held fixed. With q = r substituted, that is not the Black-76 rho, where F is fixed and r moves only the discount. Measured on 2026-11-04 at F=100, K=95, t=0.75, sigma=0.3, r=0.05: engine call rho 36.161, central finite difference of `black76_price` in r -9.226, and -tV -9.226. Theta matched the finite difference to the eleventh digit. Risk Desk therefore reports Black-76 rho as
+With the future held fixed, the rate moves only the discount, so
 
     rho = dV/dr with F fixed = -t V
 
-`tests/test_derivatives.py` fails two tests if this line is removed (the finite-difference test and the parity test). The engine's own test of `black76_greeks` (`engine/tests/test_forwards.py`, `test_the_greeks_say_what_they_are_derivatives_of`) checks only the key names, not the rho value.
+The engine's `black76_greeks` returns this from optiondesk-engine commit `4a282d9` (2026-11-04). Before that commit it returned `all_greeks`' partial in r with the carry held fixed, which is a different number: at F=100, K=95, t=0.75, sigma=0.3, r=0.05 the call rho was 36.161 against -tV -9.226. Risk Desk used to correct this locally; the one copy is now the engine's. The engine wheel Risk Desk installs is built from that commit and identified by its sha256 in `wheel-hashes.json`, because the version string 0.3.0 was also carried by an earlier build without the fix. `tests/test_derivatives.py` fails two tests (the finite-difference test and the parity test) when run against that earlier build.
 
 ## Aggregation
 

@@ -51,10 +51,10 @@ Positive P&L is profit, and `full_loss` is minus `full_pnl`. The tail block keep
 - An option whose life ends inside the horizon is valued at its undiscounted payoff on the shocked price. It is not rolled.
 - Model values are not quotes or fills. European exercise and one flat vol per option are assumed.
 - Historical VaR is not a forecast and not risk-neutral valuation. Do not scale a one-day result to ten days.
-- Black-76 rho here is -t x V. The Option Desk engine's own `black76_greeks` rho is a different number. See reference.md.
+- Black-76 rho is -t x V with the future held fixed, from the engine's `black76_greeks` (optiondesk-engine commit 4a282d9 or later). See reference.md.
 
 ## Going deeper
 
-- `reference.md`: every formula, the engine conventions inherited, the one correction made, and the sources.
+- `reference.md`: every formula, the engine conventions inherited, Black-76 rho, and the sources.
 - `workflows/greeks-to-tail.md`: the order to run the three functions in and what to check.
 - `scripts/check_artifact.py`: a one-line verdict on a saved result.

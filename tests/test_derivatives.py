@@ -85,8 +85,8 @@ def test_book_greeks_match_finite_differences_of_the_revalued_book():
 
 def test_put_call_parity_book_matches_closed_form_for_spot_and_future():
     """Long call, short put, same strike: value, delta and rho in closed form,
-    gamma and vega zero. Black-76 rho here is -t(F-K)e^{-rt}; the engine's
-    black76_greeks rho would give K t e^{-rt} and fail this test."""
+    gamma and vega zero. Black-76 rho here is -t(F-K)e^{-rt}; an engine
+    build before optiondesk-engine 4a282d9 gave K t e^{-rt} and fails this test."""
     S, F, K, t, r, q, n, m = 100.0, 80.0, 90.0, 0.6, 0.05, 0.02, 7, 50.0
     book = dict(BASE, underlyings={"S": dict(price=S, price_type="spot"), "F": dict(price=F, price_type="future")},
                 positions=[option("sc", "S", "call", K, n, t, 0.3, r, q, m), option("sp", "S", "put", K, -n, t, 0.3, r, q, m),
