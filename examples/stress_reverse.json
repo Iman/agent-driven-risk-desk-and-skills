@@ -1,0 +1,54 @@
+{
+  "as_of": "2026-09-12",
+  "currency": "USD",
+  "data_mode": "synthetic",
+  "nav": 1000000,
+  "source": "synthetic: hand-written ten-day return covariance, not estimated from data",
+  "positions": [
+    {
+      "id": "equity-long",
+      "asset": "EQUITY",
+      "market_value": 700000,
+      "instrument_type": "linear"
+    },
+    {
+      "id": "bond-long",
+      "asset": "BOND",
+      "market_value": 500000,
+      "instrument_type": "linear"
+    },
+    {
+      "id": "credit-short",
+      "asset": "CREDIT",
+      "market_value": -200000,
+      "instrument_type": "linear"
+    }
+  ],
+  "target_loss": 150000,
+  "horizon_days": 10,
+  "assets": [
+    "EQUITY",
+    "BOND",
+    "CREDIT"
+  ],
+  "covariance": [
+    [
+      0.0025,
+      0.0005,
+      0.001
+    ],
+    [
+      0.0005,
+      0.0004,
+      0.0002
+    ],
+    [
+      0.001,
+      0.0002,
+      0.0016
+    ]
+  ],
+  "floors": {
+    "BOND": -0.2
+  }
+}
