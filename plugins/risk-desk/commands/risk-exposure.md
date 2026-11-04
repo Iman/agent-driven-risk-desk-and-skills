@@ -4,8 +4,8 @@ argument-hint: [INPUT_PATH]
 arguments: [input]
 ---
 
-Aggregate the book in $input, or `examples/energy_book.json` when no path
-is given.
+Aggregate the book in $input. When no path is given, use
+`examples/energy_book.json`.
 
 1. `riskdesk exposure --input examples/energy_book.json`. When a path was
    given, use `--input $input`.
@@ -16,7 +16,7 @@ is given.
    offsetting. That is why a share of gross is never negative, and why
    gross exceeds net for any book holding both sides.
 4. Give both leverage figures as multiples of the supplied NAV, and say
-   supplied. The NAV came from the input; nothing here verified it.
+   supplied. The NAV came from the input. Nothing here verified it.
 5. Name the largest share of gross and its percentage, from
    `gross_shares`. Concentration is the thing a reader cannot get by
    glancing at the total.

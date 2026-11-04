@@ -27,8 +27,8 @@ the only one that can run `risk_xva`.
 
 One remote MCP server, `https://riskdesk.avidquant.com/mcp`, carrying the
 twelve skills in `skills/`. It is built from `openai-skills/` at the
-repository root; edit the sources there and rebuild with
-`python scripts/package_plugin.py` rather than editing the copies here.
+repository root. Edit the sources there and rebuild with
+`python scripts/package_plugin.py`, rather than editing the copies here.
 
 Every local tool except `risk_xva`, under the same name, all read-only:
 
@@ -81,13 +81,13 @@ service. Use these public URLs when submitting the plugin.
 The Codex manifest at `.codex-plugin/plugin.json` includes nine positive
 test cases, three negative cases and release notes under
 `extensions.com.openai`. Rebuild the upload with
-`python scripts/package_plugin.py`; the hosted ZIP is
+`python scripts/package_plugin.py`. The hosted ZIP is
 `dist/risk-desk-hosted-plugin.zip` at the repository root.
 
 Uploaded cases are managed by the package. To change them, edit the
-manifest and upload the rebuilt ZIP. Run the prompts through the connected
-plugin before submitting; expected behavior is not a record of a completed
-conversation test.
+manifest and upload the rebuilt ZIP. Before submitting, run the prompts
+through the connected plugin. Expected behaviour is not a record of a
+completed conversation test.
 
 The recording URL is omitted until a real walkthrough is available. Enter
 its reviewer-accessible URL in the portal, or add `demo_recording_url`
@@ -98,8 +98,8 @@ are omitted so this upload preserves the portal's existing settings.
 
 `risk_xva` is deliberately absent. Counterparty XVA reads a
 trusted local ORE project directory, and a remote endpoint cannot read
-files on your machine. That work stays in the local plugin, and pretending
-otherwise would put a tool in the list that could never run.
+files on your machine. That work stays in the local plugin. Listing it
+here puts a tool in the list that can never run.
 
 No market data is fetched, no order is placed, and nothing is stored on
 your behalf that you did not send. `data_mode` records your declaration

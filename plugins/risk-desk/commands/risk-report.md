@@ -4,14 +4,14 @@ argument-hint: [OUTPUT_PATH]
 arguments: [output]
 ---
 
-Write the report page to $output, or `artifacts/report.html` when no path
-is given.
+Write the report page to $output. When no path is given, use
+`artifacts/report.html`.
 
 1. `riskdesk report --input examples/energy_stress.json --tail
    examples/energy_tail.json --exposure examples/energy_book.json --output
    artifacts/report.html`. When a path was given, use `--output $output`.
-   Replace the three inputs with the caller's own files when they have
-   them; `--tail` and `--exposure` are optional and `--input` is not.
+   When the caller has their own files, replace the three inputs with
+   them. `--tail` and `--exposure` are optional, and `--input` is not.
 2. Report what the command printed: the byte count, whether the tail and
    exposure panels were included, and the degraded flag.
 3. An omitted input produces a section saying the input was absent. That

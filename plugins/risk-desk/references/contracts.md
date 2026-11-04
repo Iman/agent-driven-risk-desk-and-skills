@@ -1,12 +1,12 @@
 # Risk Desk input contracts
 
-All amounts are in the stated base currency. `as_of` is an ISO date. `source` must identify the input origin. `data_mode` is `synthetic` or `user-licensed` (the ORE tools, `risk_xva` and `risk_exposure_profile`, also take `upstream-example` for ORE's own example inputs); it is the caller's declaration, not a rights certificate. Unknown fields and nonfinite numbers are rejected.
+All amounts are in the stated base currency. `as_of` is an ISO date. `source` must identify the input origin. `data_mode` is `synthetic` or `user-licensed` (the ORE tools, `risk_xva` and `risk_exposure_profile`, also take `upstream-example` for ORE's own example inputs). It is the caller's declaration, not a rights certificate. Unknown fields and nonfinite numbers are rejected.
 
 ## TailRequest
 
 Required fields: `as_of`, `currency` (three uppercase letters), `source`, `data_mode`, `pnl` (at least two monetary profit/loss samples), `confidence` (strictly between zero and one), `horizon_days` (positive integer), `portfolio_value` (positive).
 Each sample spans the entire stated horizon. Positive P&L is profit. No dates are inferred for samples, no scaling is performed, and missing observations are not dropped.
-`risk_tail_models` takes the same contract; for it the P&L must be in time order, oldest first, because the GARCH models depend on order.
+`risk_tail_models` takes the same contract. For it, the P&L must be in time order, oldest first, because the GARCH models depend on order.
 
 ## PortfolioRequest
 
@@ -31,7 +31,12 @@ Each model below carries the provenance fields `as_of`, `currency`, `source` and
 | `es_null_dof` | number, 1 < v <= 1000, optional | degrees of freedom for `student-t` |
 | `seed` | integer >= 0, default 0 | seed of the Z2 simulation |
 
-Rules: `var`, `pnl` and `expected_shortfall` have one length; `expected_shortfall` and `es_null` come together; `es_null_dof` is given for, and only for, `student-t`; each ES is positive and above its VaR.
+Rules:
+
+- `var`, `pnl` and `expected_shortfall` have one length.
+- `expected_shortfall` and `es_null` come together.
+- `es_null_dof` is given for, and only for, `student-t`.
+- Each ES is positive and above its VaR.
 
 ## DerivativesBookRequest (risk_derivatives_greeks)
 
@@ -55,7 +60,12 @@ Kept separate from PortfolioRequest on purpose: an option position is a quantity
 | `positions.*.rate` | number | continuously compounded rate |
 | `positions.*.carry_yield` | number | continuous carry or dividend yield; required on spot (0 if none), refused on a future |
 
-Rules: a linear position carries no option terms; an option needs `kind`, `strike`, `implied_vol` and `rate`; every `underlying` is known; an option must expire after `as_of`.
+Rules:
+
+- A linear position carries no option terms.
+- An option needs `kind`, `strike`, `implied_vol` and `rate`.
+- Every `underlying` is known.
+- An option must expire after `as_of`.
 
 ## ScenarioGridRequest (risk_derivatives_grid)
 
@@ -110,7 +120,7 @@ PortfolioRequest plus the `assets`, `returns` and `horizon_days` of CovarianceRe
 | `limits.*.warning` | number, optional | warning level, on the safe side of `limit` |
 | `results` | mapping of `exposure`, `tail`, `stress` to a result envelope | Risk Desk results to grade, unchanged; finite numbers only |
 
-A result in another currency is not evaluated; one dated differently is evaluated and reported in `degraded_reason`.
+A result in another currency is not evaluated. A result dated differently is evaluated and reported in `degraded_reason`.
 
 ## WhatIfRequest (risk_what_if)
 
@@ -143,11 +153,11 @@ PortfolioRequest plus:
 
 ## ReplayRequest (risk_stress_replay)
 
-PortfolioRequest plus `scenario_name` (text), `prices` (mapping series name to a mapping of ISO date to positive price level), `start` and `end` (dates, start before end, both present in every series used), `measure` (`end_over_start`, the default, or `worst_peak_to_trough`) and `proxies` (mapping a book asset to the series that stands in for it). Prices are the caller's; Risk Desk ships none.
+PortfolioRequest plus `scenario_name` (text), `prices` (mapping series name to a mapping of ISO date to positive price level), `start` and `end` (dates, start before end, both present in every series used), `measure` (`end_over_start`, the default, or `worst_peak_to_trough`) and `proxies` (mapping a book asset to the series that stands in for it). Prices are the caller's. Risk Desk ships none.
 
 ## ReverseStressRequest (risk_reverse_stress)
 
-PortfolioRequest plus `target_loss` (number > 0, in the stated currency), `horizon_days` (1..3650), `assets` (each book asset exactly once), `covariance` (square, ordered like `assets`, horizon returns) and `floors` (mapping asset to the lowest return allowed, at least -1; every asset is floored at -1 regardless).
+PortfolioRequest plus `target_loss` (number > 0, in the stated currency), `horizon_days` (1..3650), `assets` (each book asset exactly once), `covariance` (square, ordered like `assets`, horizon returns) and `floors` (mapping asset to the lowest return allowed, at least -1, and every asset is floored at -1 regardless).
 
 ## ScaleRequest (risk_scenario_scale)
 
@@ -184,7 +194,7 @@ FX and equity add-ons are partially verified: constants checked against CRE52.72
 
 ## ExposureProfileRequest (risk_exposure_profile)
 
-`rows`: 2..100,000 rows of one ORE netting-set exposure report, ORE's column names: `NettingSet`, `Date`, `Time` (years, 0..200, strictly increasing, first row 0), `EPE`, `ENE`, `PFE`, `ExpectedCollateral`, `BaselEE`, `BaselEEE`, `TimeWeightedBaselEPE`, `TimeWeightedBaselEEPE`. `BaselEE` and `PFE` are required and non-negative on every row; all rows share one netting set.
+`rows`: 2..100,000 rows of one ORE netting-set exposure report, ORE's column names: `NettingSet`, `Date`, `Time` (years, 0..200, strictly increasing, first row 0), `EPE`, `ENE`, `PFE`, `ExpectedCollateral`, `BaselEE`, `BaselEEE`, `TimeWeightedBaselEPE`, `TimeWeightedBaselEEPE`. `BaselEE` and `PFE` are required and non-negative on every row. All rows share one netting set.
 
 ## AsrfRequest (risk_credit_asrf) and CopulaRequest (risk_credit_copula)
 

@@ -12,10 +12,10 @@ Run the ORE project at $project.
    otherwise, but a caller who learns this from an error has already
    waited for it.
 2. `riskdesk xva --project $project --config $config --output $output
-   --data-mode user-licensed`. Use `--data-mode synthetic` when the inputs
-   are synthetic. The value records the caller's declaration about their
-   rights to the data; it is not a rights certificate and nothing checks
-   it.
+   --data-mode user-licensed`. When the inputs are synthetic, use
+   `--data-mode synthetic`. The value records the caller's declaration
+   about their rights to the data. It is not a rights certificate, and
+   nothing checks it.
 3. Read the error level first. The adapter refuses to return a summary
    when ORE reports any error, so a result in your hands means no error
    was reported. If the command failed, say so and quote nothing. Do not

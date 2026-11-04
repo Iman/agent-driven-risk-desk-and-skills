@@ -4,8 +4,8 @@ argument-hint: [INPUT_PATH]
 arguments: [input]
 ---
 
-Revalue the book in $input, or `examples/energy_stress.json` when no path
-is given.
+Revalue the book in $input. When no path is given, use
+`examples/energy_stress.json`.
 
 1. `riskdesk stress --input examples/energy_stress.json`. When a path was
    given, use `--input $input`.
@@ -15,7 +15,7 @@ is given.
    will read it as a gain of the wrong size or a loss of the wrong sign.
 3. For each scenario report the name, the loss, and the stressed NAV.
 4. Name the three positions that hurt most, from `contributions`, most
-   negative first. The total says how much; the contributions say what to
+   negative first. The total says how much. The contributions say what to
    do about it.
 5. Attach no probability to any scenario, and do not accept one offered.
    These are shocks somebody specified. A scenario named after a
@@ -25,6 +25,6 @@ is given.
    nothing moves. If a caller wants an asset left out, that is a different
    book, not a missing shock.
 7. The model is linear: each position moves by its own shock. It does not
-   hold for options, for credit migration or for a nonlinear margin call,
-   and it says nothing about being able to trade out at the shocked price.
+   hold for options, for credit migration or for a nonlinear margin call.
+   It says nothing about being able to trade out at the shocked price.
 8. Read `degraded` and report it first, whether or not it is set.

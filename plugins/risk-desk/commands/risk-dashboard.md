@@ -4,16 +4,15 @@ argument-hint: [PORT]
 arguments: [port]
 ---
 
-Start the dashboard on $port, or 8899 when no port is given.
+Start the dashboard on $port. When no port is given, use 8899.
 
 1. `riskdesk dashboard`. When a port was given, add `--port $port`. The
-   defaults read the synthetic energy book from `examples/`; pass
-   `--input`, `--tail`, `--exposure` or `--xva` to serve the caller's own
-   files.
+   defaults read the synthetic energy book from `examples/`. To serve the
+   caller's own files, pass `--input`, `--tail`, `--exposure` or `--xva`.
 2. Give the URL it printed, and say it is loopback only. It binds a
    loopback address and refuses any other host, because it has no
    authentication of any kind. Do not offer `--host` as a way to share it
-   with a colleague; that is what the refusal exists to prevent.
+   with a colleague. The refusal exists to prevent that.
 3. It makes no outbound request and reads no path from the request. Every
    view prints the sign convention and the degraded flag whether or not
    the flag is set.
