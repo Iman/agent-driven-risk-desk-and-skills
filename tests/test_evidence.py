@@ -69,7 +69,7 @@ def test_the_check_rejects_a_document_that_drifted(tmp_path, evidence,
     is the whole point of the file: a build that lets the prose drift is a
     build that certifies nothing."""
     copy_documents(tmp_path, evidence, monkeypatch)
-    assert evidence.check() == 0
+    assert evidence.check(remeasure=False) == 0
 
     figures = json.loads((tmp_path / "docs" / "evidence.json")
                          .read_text(encoding="utf-8"))["figures"]
@@ -79,14 +79,14 @@ def test_the_check_rejects_a_document_that_drifted(tmp_path, evidence,
     assert drifted != sentence
     target.write_text(target.read_text(encoding="utf-8")
                       .replace(sentence, drifted), encoding="utf-8")
-    assert evidence.check() == 1
+    assert evidence.check(remeasure=False) == 1
 
 
 def test_a_missing_document_is_a_failure_not_a_pass(tmp_path, evidence,
                                                     monkeypatch):
     copy_documents(tmp_path, evidence, monkeypatch)
     (tmp_path / "docs" / "ORE.md").unlink()
-    assert evidence.check() == 1
+    assert evidence.check(remeasure=False) == 1
 
 
 def test_a_stray_dot_file_is_not_counted_as_an_upstream_notice(evidence,
@@ -110,6 +110,15 @@ def test_every_measured_figure_still_matches_the_repository(evidence):
     quietly certifying itself."""
     figures = json.loads(evidence.EVIDENCE.read_text(encoding="utf-8"))[
         "figures"]
-    for key in ("skills", "mcp_tools", "notice_files",
-                "notice_distributions", "examples"):
+    for key in evidence.REMEASURED:
         assert figures[key]["value"] == evidence.MEASURES[key](), key
+
+
+def test_the_check_rejects_a_count_that_moved(evidence, monkeypatch, capsys):
+    """The prose can match the record while the record no longer matches
+    the checkout. check has to notice that without a record run."""
+    recorded = json.loads(evidence.EVIDENCE.read_text(encoding="utf-8"))[
+        "figures"]["examples"]["value"]
+    monkeypatch.setitem(evidence.MEASURES, "examples", lambda: recorded + 1)
+    assert evidence.check() == 1
+    assert "examples: recorded" in capsys.readouterr().out

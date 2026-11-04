@@ -406,13 +406,29 @@ def _flat(text):
     return " ".join(text.split())
 
 
-def check():
-    """Every recorded figure must still appear in the document citing it."""
+# Cheap enough to count again on every check. The test count and the
+# coverage figure take minutes, so those are re-measured only by record.
+REMEASURED = ("skills", "commands", "agents", "mcp_tools", "notice_files",
+              "notice_distributions", "examples", "energy_gross_exposure",
+              "energy_net_exposure", "energy_exposure_assets")
+
+
+def check(remeasure=True):
+    """Every recorded figure must still appear in the document citing it,
+    and every cheap measured figure must still be what this checkout
+    counts. Without the second half a stale record certified itself."""
     if not EVIDENCE.exists():
         print("no evidence file: run scripts/evidence.py record")
         return 1
     figures = json.loads(EVIDENCE.read_text(encoding="utf-8"))["figures"]
     problems = []
+    for claim in CLAIMS if remeasure else ():
+        if claim.get("measure") in REMEASURED and claim["id"] in figures:
+            now = MEASURES[claim["measure"]]()
+            if figures[claim["id"]]["value"] != now:
+                problems.append("{}: recorded {!r}, measured {!r}; run "
+                                "scripts/evidence.py record".format(
+                                    claim["id"], figures[claim["id"]]["value"], now))
     for key, entry in figures.items():
         for document, sentence in entry["documents"].items():
             path = ROOT / document
