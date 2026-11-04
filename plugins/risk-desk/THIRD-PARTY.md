@@ -9,10 +9,14 @@ retains its own licences, copyright notices and disclaimers.
 | Open Source Risk Engine, Quaternion/Acadia and contributors | 1.8.16.0 | QuantLib/QuantExt-based simulation, exposure and XVA | Modified BSD; full bundled notice retained |
 | MCP Python SDK contributors | 1.30.0 | Local typed MCP transport | MIT |
 | Pydantic contributors | Recorded in dependency inventory | Input contracts | MIT |
+| NumPy developers | 2.5.3 | Arrays and linear algebra | BSD-style; full bundled notices retained |
+| SciPy developers | 1.18.1 | Distributions, statistical tests, optimisation | BSD-style; full bundled notices retained |
+| scikit-learn developers | 1.9.1 | Ledoit-Wolf covariance shrinkage | BSD-3-Clause; bundled notices retained |
+| Option Desk engine (`optiondesk-engine`), Iman Samizadeh | 0.3.0, built from option-desk commit `4a282d9`; identified by the sha256 in `wheel-hashes.json` | Option prices and Greeks, GARCH-t simulation | PolyForm Noncommercial 1.0.0 |
 
 [dependency-inventory.json](dependency-inventory.json) records the resolved
-Python dependency tree from the tested environment. All 47 upstream
-distributions had located notice files; 79 unchanged files are retained in
+Python dependency tree from the tested environment. All 48 upstream
+distributions had located notice files; 80 unchanged files are retained in
 [notices/](notices/), with hashes. These notices travel in the wheel, source
 archive and plugin package. Packages are installed separately; their binary
 files are not copied into Risk Desk.

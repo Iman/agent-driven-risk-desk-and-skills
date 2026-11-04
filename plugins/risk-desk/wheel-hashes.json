@@ -132,6 +132,13 @@
     "sha256": "334d99e4f4c3a312bba12ce5433631bb9641b2c1b4973f169225b073fd34efd4"
   },
   {
+    "name": "optiondesk-engine",
+    "version": "0.3.0",
+    "wheel": "optiondesk_engine-0.3.0-py3-none-any.whl",
+    "sha256": "8f76f14c9026cad09d77d6d887823902d02085f98e395d67818dba50af0f8a0d",
+    "source": "option-desk commit 4a282d91bdb9fafbb0e4d80f2e88ab790eac6f4c, engine/ built from a clean git archive"
+  },
+  {
     "name": "packaging",
     "version": "26.3",
     "wheel": "packaging-26.3-py3-none-any.whl",

@@ -370,6 +370,20 @@
     ]
   },
   {
+    "name": "optiondesk-engine",
+    "version": "0.3.0",
+    "license_expression": null,
+    "license_metadata": "PolyForm-Noncommercial-1.0.0",
+    "home_page": null,
+    "source": "option-desk commit 4a282d91bdb9fafbb0e4d80f2e88ab790eac6f4c",
+    "notices": [
+      {
+        "file": "notices/optiondesk-engine/optiondesk_engine-0.3.0.dist-info__licenses__LICENSE",
+        "sha256": "3b159dd5d1f918793014c125447403d1efc0116bc9fa9d44dd1a2540307cc372"
+      }
+    ]
+  },
+  {
     "name": "packaging",
     "version": "26.3",
     "license_expression": "Apache-2.0 OR BSD-2-Clause",
@@ -556,7 +570,7 @@
   },
   {
     "name": "riskdesk",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "license_expression": "PolyForm-Noncommercial-1.0.0",
     "license_metadata": null,
     "home_page": null,
