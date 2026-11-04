@@ -6,6 +6,7 @@ riskdesk installed: python scripts/check_hosted.py [BASE_URL]
 """
 import json
 import sys
+import time
 import urllib.request
 
 import anyio
@@ -54,6 +55,9 @@ for tool in tools:
     assert tool['annotations']['title']
     # The GARCH fit and the Monte Carlo paths take seconds, not milliseconds.
     result = rpc('tools/call', {'name':tool['name'],'arguments':{}}, timeout=180)
+    if result.get('isError') and 'was not run' in result['content'][0]['text']:
+        time.sleep(61)  # the slower tools share a time budget per minute; wait it out once
+        result = rpc('tools/call', {'name':tool['name'],'arguments':{}}, timeout=180)
     assert not result.get('isError'), result
     content = result['structuredContent']
     if tool['name'] not in ('risk_desk_status', 'risk_scenario_library'):
