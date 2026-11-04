@@ -140,7 +140,7 @@ absolute path.
 | Claude Code | `/plugin marketplace add Iman/agent-driven-risk-desk-and-skills` then `/plugin install risk-desk@risk-desk` | [.claude-plugin/plugin.json](plugins/risk-desk/.claude-plugin/plugin.json), listed in [.claude-plugin/marketplace.json](.claude-plugin/marketplace.json) |
 | Codex | Configure the plugin through a Codex marketplace, or add its runtime with `codex mcp add riskdesk -- "$PWD/.venv/bin/riskdesk-mcp"`. Hosted setup is in [OpenAI connections](docs/OPENAI.md). | [.codex-plugin/plugin.json](plugins/risk-desk/.codex-plugin/plugin.json), which points at `skills/` and `.mcp.json` |
 | Any MCP client | Add `.mcp.json`'s single stdio server, or run `riskdesk-mcp` yourself | [.mcp.json](plugins/risk-desk/.mcp.json) |
-| Hosted | The endpoint is live at `https://riskdesk.avidquant.com/mcp` and advertises 3 risk tools plus a status tool. It serves synthetic demo data only, and it cannot run `risk_xva`. | [risk-desk-hosted](plugins/risk-desk-hosted/README.md) |
+| Hosted | The endpoint is live at `https://riskdesk.avidquant.com/mcp` and serves 29 tools, every local tool except `risk_xva`. Its shipped examples are synthetic, and it cannot run `risk_xva`. | [risk-desk-hosted](plugins/risk-desk-hosted/README.md) |
 
 Both manifests describe the same plugin and point at the same 14 skill
 directories. A validation test fails the build if either stops matching

@@ -13,9 +13,10 @@ this repository's marketplace. It is not part of either submission.
 
 1. `optiondesk-engine` 0.3.0 is on PyPI. On 4 November 2026 its wheel
    there had the sha256 recorded for it in `wheel-hashes.json`.
-2. Deploy the Risk Desk 0.2 hosted image. Both portals read the live
-   server. On 2026-11-04 `https://riskdesk.avidquant.com/mcp` still served
-   the 0.1 set of four tools, so the 0.2 listing would not match it.
+2. The Risk Desk 0.2 hosted image is deployed. Both portals read the live
+   server. On 4 November 2026 at 19:42 UTC,
+   `https://riskdesk.avidquant.com/api/status` listed the 29 tools of the
+   0.2 listing, without `risk_xva`.
 3. Check the live server from a checkout with riskdesk installed:
 
    ```sh
@@ -132,7 +133,7 @@ skills. Record the tool calls, results and pass or fail for each.
 ### OpenAI checklist
 
 - [x] Engine published to PyPI (4 November 2026).
-- [ ] 0.2 image deployed (see above).
+- [x] 0.2 image deployed (4 November 2026).
 - [ ] `check_hosted.py` passes against the production URL.
 - [ ] Import file validated against the portal schema and uploaded.
 - [ ] Plugin ZIP and skills ZIP rebuilt from the commit being submitted.
@@ -206,7 +207,7 @@ question for an Anthropic partner contact.
 ### Anthropic checklist
 
 - [x] Engine published to PyPI (4 November 2026).
-- [ ] 0.2 image deployed (see above).
+- [x] 0.2 image deployed (4 November 2026).
 - [ ] Repository public on GitHub at the commit being submitted.
 - [ ] `claude plugin validate ./plugins/risk-desk-hosted --strict` clean.
 - [ ] Connector submitted with the server URL, and the no-sign-in note.

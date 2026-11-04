@@ -2,12 +2,9 @@
 
 ## The endpoint is live
 
-`https://riskdesk.avidquant.com/mcp` answers and needs no login. On
-2026-11-04 it advertised `risk_desk_status`, `risk_tail`, `risk_exposure`
-and `risk_stress`, the 0.1 set. This 0.2.0 plugin is written for the 0.2
-set in the table below, which the endpoint serves once the hosted image
-built from this release is deployed. Call `risk_desk_status` to see which
-set is live.
+`https://riskdesk.avidquant.com/mcp` answers and needs no login. Since
+4 November 2026 it serves the 0.2 set in the table below. Call
+`risk_desk_status` to see the tools and the hosted limits.
 
 Every tool runs a synthetic example when no request is sent. It holds no
 market data, places no order, and cannot run `risk_xva`, because that

@@ -77,6 +77,9 @@ Observed on 2026-11-04, for the v0.2 integration on branch `feat/v0.2`:
   the sha256 recorded in `wheel-hashes.json`. `pip install --dry-run
   '.[dev]'` against PyPI alone resolved `optiondesk-engine-0.3.0`, and an
   install from PyPI wrote no `direct_url.json`.
+- On 4 November 2026 at 19:42 UTC the production service answered
+  `/healthz` with 200, and `/api/status` listed 29 tools, without
+  `risk_xva`.
 - The tested dependency tree now has 48 upstream distributions with 80
   notice files. The Option Desk engine's licence notice is the one added.
 
@@ -88,7 +91,7 @@ UNKNOWN for v0.2, and not claimed:
 - The container tests were not run (`-m docker` needs a daemon).
 - SA-CCR FX and equity add-ons are partially verified: constants checked
   against CRE52.72, with no published worked example to reproduce.
-- The hosted endpoint was not changed and still advertises its four tools.
+- `scripts/check_hosted.py` was not run against production here.
 
 Observed on 2026-09-16 London time, for the commands and agents:
 

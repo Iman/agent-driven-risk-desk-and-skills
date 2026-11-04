@@ -14,7 +14,7 @@ pointing at route 1.
 | 2. Manual checkout | The same, with the steps visible | yes |
 | 3. Claude Code plugin | Skills and MCP wiring for Claude Code | yes, first |
 | 4. Codex plugin | Skills and MCP wiring for Codex | yes, first |
-| 5. Hosted service | Three tools over HTTP, nothing installed | no |
+| 5. Hosted service | 29 tools over HTTP, nothing installed | no |
 | 6. MCP without a plugin | The tools in any MCP client | yes, first |
 | 7. Container | The CLI and the demo with no Python on the host | no |
 
@@ -137,9 +137,10 @@ directory. See [docs/OPENAI.md](docs/OPENAI.md) for the hosted variant.
 Nothing to install. `https://riskdesk.avidquant.com/mcp` answers over
 Streamable HTTP and needs no login.
 
-It provides three calculation tools and a status tool, serves a synthetic
-demo book, and **cannot run `risk_xva`**, because that reads an ORE project
-directory on your own machine. For real positions the local install is the
+It provides every local tool except `risk_xva`, 29 in all, and each
+calculation tool runs a synthetic example when a call sends no request.
+It **cannot run `risk_xva`**, because that reads an ORE project directory
+on your own machine. For real positions the local install is the
 better choice: it computes on your machine and sends nothing anywhere.
 
 Connection settings for ChatGPT and Codex are in

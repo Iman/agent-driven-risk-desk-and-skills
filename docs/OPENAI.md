@@ -7,11 +7,10 @@ The public report is at https://riskdesk.avidquant.com/.
 The Streamable HTTP MCP endpoint is `https://riskdesk.avidquant.com/mcp`.
 It requires no login. The public report uses synthetic data.
 
-On 2026-11-04 the hosted service provided four tools: `risk_desk_status`,
-`risk_tail`, `risk_exposure` and `risk_stress`. Risk Desk 0.2 serves every
-local tool except `risk_xva` (29 in all, listed in
-`plugins/risk-desk-hosted/README.md`) once its hosted image is deployed.
-Call status first: it names the live tools and the hosted limits. Every
+Since 4 November 2026 the hosted service runs Risk Desk 0.2. It serves
+every local tool except `risk_xva` (29 in all, listed in
+`plugins/risk-desk-hosted/README.md`). Call status first: it names the
+live tools and the hosted limits. Every
 calculation tool accepts a `request` object. Omitting it selects that
 tool's synthetic example.
 Before you supply data, read the current input schema through MCP.
@@ -74,7 +73,8 @@ Include this object in the `tools` array of a Responses API request:
 }
 ```
 
-When `risk_desk_status` lists a 0.2 tool, add its name to `allowed_tools`.
+To call another tool that `risk_desk_status` lists, add its name to
+`allowed_tools`.
 
 Your OpenAI API credential authenticates the request to OpenAI. Risk Desk
 does not need that credential. Do not send it to the MCP endpoint.

@@ -128,8 +128,8 @@ login in front of it, not a flag.
 
 ### Is there a hosted version
 
-Yes, at `riskdesk.avidquant.com`, with three calculation tools and a
-status tool, no login, and a synthetic demo book. It cannot run
+Yes, at `riskdesk.avidquant.com`, with every local tool except
+`risk_xva`, 29 in all, no login, and synthetic examples. It cannot run
 `risk_xva`, because that reads an ORE project directory on your own
 machine. For real positions the local install is the better choice: it
 computes on your machine and sends nothing anywhere. See
