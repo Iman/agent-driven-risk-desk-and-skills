@@ -1,0 +1,85 @@
+{
+  "as_of": "2026-11-04",
+  "currency": "USD",
+  "data_mode": "synthetic",
+  "source": "Synthetic two-underlying book, not market data and not any real position: a spot index collar over a cash holding and a short future with a long call. Grid shocks are illustrative, not calibrated.",
+  "underlyings": {
+    "SYNTH_INDEX": {
+      "price": 5000.0,
+      "price_type": "spot"
+    },
+    "SYNTH_CRUDE_FUTURE": {
+      "price": 72.5,
+      "price_type": "future"
+    }
+  },
+  "positions": [
+    {
+      "id": "idx-cash",
+      "underlying": "SYNTH_INDEX",
+      "instrument_type": "linear",
+      "quantity": 2000,
+      "multiplier": 1.0
+    },
+    {
+      "id": "idx-put-4750",
+      "underlying": "SYNTH_INDEX",
+      "instrument_type": "option",
+      "quantity": 20,
+      "multiplier": 100.0,
+      "kind": "put",
+      "strike": 4750.0,
+      "expiry": "2027-03-19",
+      "implied_vol": 0.21,
+      "rate": 0.04,
+      "carry_yield": 0.015
+    },
+    {
+      "id": "idx-call-5250",
+      "underlying": "SYNTH_INDEX",
+      "instrument_type": "option",
+      "quantity": -20,
+      "multiplier": 100.0,
+      "kind": "call",
+      "strike": 5250.0,
+      "expiry": "2027-03-19",
+      "implied_vol": 0.16,
+      "rate": 0.04,
+      "carry_yield": 0.015
+    },
+    {
+      "id": "crude-fut",
+      "underlying": "SYNTH_CRUDE_FUTURE",
+      "instrument_type": "linear",
+      "quantity": -10,
+      "multiplier": 1000.0
+    },
+    {
+      "id": "crude-call-80",
+      "underlying": "SYNTH_CRUDE_FUTURE",
+      "instrument_type": "option",
+      "quantity": 15,
+      "multiplier": 1000.0,
+      "kind": "call",
+      "strike": 80.0,
+      "year_fraction": 0.25,
+      "implied_vol": 0.34,
+      "rate": 0.04
+    }
+  ],
+  "spot_shocks": [
+    -0.2,
+    -0.1,
+    -0.05,
+    0.0,
+    0.05,
+    0.1,
+    0.2
+  ],
+  "vol_shocks": [
+    -0.05,
+    0.0,
+    0.05,
+    0.1
+  ]
+}
