@@ -157,3 +157,28 @@ def test_the_tail_checker_passes_a_real_result_and_fails_a_tampered_one(fitted, 
     assert checker.main(str(artifact)) == 1 and "normal: ES below VaR" in capsys.readouterr().out
     artifact.write_text(json.dumps(tail_risk(request(np.arange(-50.0, 50.0)))))
     assert checker.main(str(artifact)) == 0
+
+
+def test_garch_evt_maps_the_residual_quantile_back_with_mean_and_next_volatility(fitted):
+    """VaR = (-mu + sigma_next * z_q) * PV, with z_q rebuilt from the reported GPD by eq. (10)."""
+    _, out = fitted
+    row, mu = out["methods"]["garch_evt"], out["garch"]["posterior_mean"]["mu"]
+    sigma = out["methods"]["filtered_historical"]["sigma_next"]
+    k, n, xi = row["exceedances"], out["observations"], row["xi"]
+    z_q = row["threshold"] + row["beta"]/xi*(((1 - 0.99)/(k/n))**(-xi) - 1)
+    assert row["var"] == pytest.approx((-mu + sigma*z_q)*PV, rel=1e-10)
+    z_es = (z_q + row["beta"] - xi*row["threshold"])/(1 - xi)
+    assert row["expected_shortfall"] == pytest.approx((-mu + sigma*z_es)*PV, rel=1e-10)
+
+
+def test_an_unconverged_garch_posterior_marks_the_result_degraded(monkeypatch):
+    real = tm.fit_garch_t
+
+    def unconverged(returns):
+        posterior = real(returns, draws=200, burn=100)
+        posterior.diagnostics["converged"] = False
+        return posterior
+    monkeypatch.setattr(tm, "fit_garch_t", unconverged)
+    out = tm.tail_models(request(garch_t_series(120)*PV, confidence=0.95))
+    assert out["garch"]["converged"] is False
+    assert out["degraded"] and "did not converge" in out["degraded_reason"]

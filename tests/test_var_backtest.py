@@ -181,3 +181,8 @@ def test_the_backtest_checker_passes_a_real_result_and_fails_a_tampered_one(tmp_
     result["basel_traffic_light"]["zone"] = "red"
     path.write_text(json.dumps(result))
     assert checker.main(str(path)) == 1 and "does not match" in capsys.readouterr().out
+
+
+def test_a_loss_equal_to_var_is_not_an_exception():
+    out = bt.var_backtest(request([-10.0, -10.5, 0.0], [10.0, 10.0, 10.0]))
+    assert out["exceptions"] == 1
