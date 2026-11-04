@@ -72,3 +72,14 @@ def test_the_status_tool_lists_every_tool_and_the_conventions():
     assert status["data_modes"] == ["synthetic", "user-licensed"]
     assert status["xva_data_modes"] == ["synthetic", "user-licensed", "upstream-example"]
     assert any("Loss is positive" in line for line in status["conventions"])
+
+
+def test_the_setup_doctor_gets_an_answer_from_a_real_server():
+    """The doctor's own stdio round trip, through the riskdesk-mcp beside this interpreter."""
+    from pathlib import Path
+    doctor = Path(__file__).resolve().parent.parent / "plugins/risk-desk/skills/risk-setup/scripts/check_artifact.py"
+    env = {"PATH": str(Path(sys.executable).parent), "HOME": str(Path.home())}
+    proc = subprocess.run([sys.executable, str(doctor)], capture_output=True, text=True, timeout=120, env=env)
+    assert proc.returncode == 0, proc.stdout + proc.stderr
+    assert proc.stdout.split()[0] == "OK"
+    assert "risk_desk_status through" in proc.stdout and "available" in proc.stdout

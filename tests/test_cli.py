@@ -264,3 +264,27 @@ def test_the_import_validator_accepts_every_example_and_reports_every_error(tmp_
     [problem] = check.errors(models["risk_exposure"], book)
     assert problem.startswith("request: Value error, position ids must be unique (found {")
     assert check.main("risk_xva", str(path)) == 2
+
+
+def test_the_setup_doctor_reports_the_install_and_fails_when_status_is_silent(monkeypatch, capsys):
+    from riskdesk import __version__
+    doctor = skill_script("risk-setup")
+    def answers(command):     # the real stdio answer is checked in test_interfaces.py
+        return dict(status="available", riskdesk_version=__version__, tools=sorted(TOOLS))
+    def silent(command):
+        raise TimeoutError("no answer")
+    monkeypatch.setattr(doctor, "status_over_stdio", answers)
+    monkeypatch.setattr(doctor.shutil, "which", lambda name: None)
+    assert doctor.main() == 0
+    out = capsys.readouterr().out
+    assert out.startswith("DEGRADED riskdesk " + __version__) and "riskdesk-mcp is not on PATH" in out
+    assert "extra dev: present" in out and "{} tools".format(len(TOOLS)) in out
+    assert all(ok for group, _, _, ok in doctor.requirements() if group == "core")
+    monkeypatch.setattr(doctor, "status_over_stdio", silent)
+    assert doctor.main() == 1
+    out = capsys.readouterr().out
+    assert out.startswith("FAIL") and "risk_desk_status did not answer" in out
+    monkeypatch.setattr(doctor, "status_over_stdio", answers)
+    monkeypatch.setattr(doctor, "origin", lambda name: ("installed from a wheel", "0" * 64))
+    assert doctor.main() == 1
+    assert "is not the one in wheel-hashes.json" in capsys.readouterr().out
