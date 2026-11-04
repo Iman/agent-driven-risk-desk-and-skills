@@ -1,0 +1,85 @@
+{
+  "as_of": "2026-09-12",
+  "currency": "USD",
+  "source": "synthetic example: what-if on examples/portfolio.json; returns are invented so A carries the P&L of examples/tail.json; not market data",
+  "data_mode": "synthetic",
+  "nav": 1000,
+  "positions": [
+    {
+      "id": "long",
+      "asset": "A",
+      "market_value": 600,
+      "instrument_type": "linear"
+    },
+    {
+      "id": "short",
+      "asset": "B",
+      "market_value": -200,
+      "instrument_type": "linear"
+    }
+  ],
+  "trades": [
+    {
+      "asset": "A",
+      "market_value_change": -100
+    },
+    {
+      "asset": "C",
+      "market_value_change": 300
+    }
+  ],
+  "scenarios": [
+    {
+      "name": "combined_down",
+      "shocks": {
+        "A": -0.1,
+        "B": -0.2,
+        "C": -0.5
+      }
+    }
+  ],
+  "asset_returns": {
+    "A": [
+      -0.16666666666666666,
+      -0.08333333333333333,
+      0,
+      0.08333333333333333
+    ],
+    "B": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "C": [
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "confidence": 0.625,
+  "horizon_days": 1,
+  "limits": [
+    {
+      "name": "gross_cap",
+      "metric": "gross_exposure",
+      "direction": "max",
+      "limit": 900,
+      "warning": 850
+    },
+    {
+      "name": "var_cap",
+      "metric": "var",
+      "direction": "max",
+      "limit": 60
+    },
+    {
+      "name": "combined_down_loss",
+      "metric": "stress_loss",
+      "scenario": "combined_down",
+      "direction": "max",
+      "limit": 100
+    }
+  ]
+}
