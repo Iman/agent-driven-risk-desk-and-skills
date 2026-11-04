@@ -9,12 +9,15 @@ handling is right, it refuses an unusable interpreter, and it prints no
 colour. The complete clean-clone run is a release step, recorded in
 docs/IMPLEMENTATION.md with the date it was observed.
 """
+import asyncio
 import os
 from pathlib import Path
 import shutil
 import subprocess
 
 import pytest
+
+from riskdesk.server import server
 
 ROOT = Path(__file__).resolve().parent.parent
 INSTALL = ROOT / "install.sh"
@@ -98,7 +101,8 @@ def test_demo_runs_every_command_and_states_the_conventions(tmp_path):
                      "linear full-position scenario revaluation",
                      "loss is positive",
                      "worst three positions by P&L",
-                     "4 MCP tools",
+                     # From the registry, not a literal: "4" outlived v0.2.
+                     "{} MCP tools".format(len(asyncio.run(server.list_tools()))),
                      "risk_tail", "risk_exposure", "risk_stress", "risk_xva",
                      "WTI_CRUDE_FUTURE",
                      "european_gas_supply_dislocation_shape",
