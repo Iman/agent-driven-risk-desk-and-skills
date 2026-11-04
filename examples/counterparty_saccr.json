@@ -1,0 +1,83 @@
+{
+  "as_of": "2026-11-04",
+  "currency": "USD",
+  "data_mode": "synthetic",
+  "source": "synthetic example: the Basel CRE99 example 5 sample portfolio (CRE99.82 to CRE99.97)",
+  "netting_set": "CRE99_EXAMPLE_5",
+  "trades": [
+    {
+      "id": "1",
+      "asset_class": "interest_rate",
+      "notional": 10000,
+      "market_value": 30,
+      "maturity": 10,
+      "position": "long",
+      "hedging_set": "USD",
+      "start": 0,
+      "end": 10
+    },
+    {
+      "id": "2",
+      "asset_class": "interest_rate",
+      "notional": 10000,
+      "market_value": -20,
+      "maturity": 4,
+      "position": "short",
+      "hedging_set": "USD",
+      "start": 0,
+      "end": 4
+    },
+    {
+      "id": "3",
+      "asset_class": "interest_rate",
+      "notional": 5000,
+      "market_value": 50,
+      "maturity": 11,
+      "position": "long",
+      "hedging_set": "EUR",
+      "start": 1,
+      "end": 11,
+      "option": "put",
+      "underlying_price": 0.06,
+      "strike": 0.05,
+      "exercise": 1
+    },
+    {
+      "id": "7",
+      "asset_class": "commodity",
+      "notional": 10000,
+      "market_value": -50,
+      "maturity": 0.75,
+      "position": "long",
+      "hedging_set": "energy",
+      "reference": "crude oil"
+    },
+    {
+      "id": "8",
+      "asset_class": "commodity",
+      "notional": 20000,
+      "market_value": -30,
+      "maturity": 2,
+      "position": "short",
+      "hedging_set": "energy",
+      "reference": "crude oil"
+    },
+    {
+      "id": "9",
+      "asset_class": "commodity",
+      "notional": 10000,
+      "market_value": 100,
+      "maturity": 5,
+      "position": "long",
+      "hedging_set": "metals",
+      "reference": "silver"
+    }
+  ],
+  "margined": true,
+  "collateral": 200,
+  "threshold": 0,
+  "minimum_transfer_amount": 5,
+  "nica": 150,
+  "remargining_period_business_days": 5,
+  "mpor_business_days": 14
+}
