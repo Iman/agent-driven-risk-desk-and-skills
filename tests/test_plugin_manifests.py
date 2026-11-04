@@ -140,7 +140,10 @@ def test_the_marketplace_parses_and_points_at_plugins_that_exist():
 
 # Keep the hosted endpoint consistent across the packaged clients.
 ENDPOINT = "https://riskdesk.avidquant.com"
-HOSTED_SKILLS = ["risk-portfolio", "risk-stress", "risk-tail"]
+HOSTED_SKILLS = ["risk-attribution", "risk-backtest", "risk-counterparty",
+                 "risk-credit", "risk-data-import", "risk-derivatives",
+                 "risk-frtb", "risk-limits", "risk-liquidity",
+                 "risk-portfolio", "risk-stress", "risk-tail"]
 
 
 def test_the_hosted_manifests_name_one_endpoint_and_only_that_one():

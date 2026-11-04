@@ -1,7 +1,18 @@
-"""Check the public report and MCP tools using synthetic data only."""
+"""Check the public report and MCP tools using synthetic data only.
+
+The hosted tool list is the local server's list without risk_xva, read
+from the registry rather than restated, so run this from a checkout with
+riskdesk installed: python scripts/check_hosted.py [BASE_URL]
+"""
 import json
 import sys
 import urllib.request
+
+import anyio
+
+from riskdesk.server import server
+
+HOSTED = {tool.name for tool in anyio.run(server.list_tools)} - {'risk_xva'}
 
 base = (sys.argv[1] if len(sys.argv) > 1 else
         'https://riskdesk.avidquant.com').rstrip('/')
@@ -22,12 +33,12 @@ assert status['status'] == 'available'
 assert status['data_mode'] == 'synthetic_sample'
 assert status['market_data'] is False
 
-def rpc(method, params):
+def rpc(method, params, timeout=30):
     data = json.dumps({'jsonrpc':'2.0','id':1,'method':method,'params':params}).encode()
     req = urllib.request.Request(base + '/mcp', data=data, headers={
         'Content-Type':'application/json', 'Accept':'application/json, text/event-stream',
         'Host':'riskdesk.avidquant.com', 'User-Agent':'RiskDesk-Check/0.1'})
-    with urllib.request.urlopen(req, timeout=30) as response:
+    with urllib.request.urlopen(req, timeout=timeout) as response:
         result = json.load(response)
     assert 'error' not in result, result
     return result['result']
@@ -36,14 +47,16 @@ rpc('initialize', {'protocolVersion':'2025-03-26','capabilities':{},
                    'clientInfo':{'name':'riskdesk-smoke','version':'1.0'}})
 tools = rpc('tools/list', {})['tools']
 names = {tool['name'] for tool in tools}
-assert names == {'risk_desk_status','risk_tail','risk_exposure','risk_stress'}, names
+assert names == HOSTED, sorted(names ^ HOSTED)
 for tool in tools:
     assert tool['inputSchema'] and tool['outputSchema']
     assert tool['annotations']['readOnlyHint'] is True
-    result = rpc('tools/call', {'name':tool['name'],'arguments':{}})
+    assert tool['annotations']['title']
+    # The GARCH fit and the Monte Carlo paths take seconds, not milliseconds.
+    result = rpc('tools/call', {'name':tool['name'],'arguments':{}}, timeout=180)
     assert not result.get('isError'), result
     content = result['structuredContent']
-    if tool['name'] != 'risk_desk_status':
+    if tool['name'] not in ('risk_desk_status', 'risk_scenario_library'):
         assert content['data_origin'] == 'synthetic_demo'
         assert 'degraded' in content and 'degraded_reason' in content
     print(tool['name'], 'PASS')
@@ -55,3 +68,10 @@ assert not result.get('isError'), result
 assert result['structuredContent']['degraded'] is True
 assert result['structuredContent']['data_origin'] == 'caller_supplied'
 print('supplied synthetic sample degraded warning PASS')
+
+limits = rpc('tools/call', {'name':'risk_desk_status','arguments':{}})['structuredContent']['limits']
+cap = limits['work_limits']['risk_tail_models']['max']
+oversized = dict(sample, pnl=[float(i % 7 - 3) for i in range(cap + 1)])
+result = rpc('tools/call', {'name':'risk_tail_models','arguments':{'request':oversized}})
+assert result.get('isError') and 'hosted limit' in result['content'][0]['text'], result
+print('risk_tail_models work limit refusal PASS')

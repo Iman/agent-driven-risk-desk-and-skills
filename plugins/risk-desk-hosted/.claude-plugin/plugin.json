@@ -1,7 +1,7 @@
 {
   "name": "risk-desk-hosted",
   "version": "0.2.0",
-  "description": "Portfolio risk over the hosted Risk Desk MCP at riskdesk.avidquant.com: historical VaR and Expected Shortfall from P&L you supply, signed linear exposure, and explicit stress scenarios that carry no probability. No market data is fetched and no local install is needed. Counterparty XVA is local only. Research software, not investment advice.",
+  "description": "Portfolio risk over the hosted Risk Desk MCP at riskdesk.avidquant.com, from data you supply or a shipped synthetic example: VaR and Expected Shortfall under several tail models with backtests, signed linear exposure, option Greeks and revaluation, VaR and ES attribution, limits and what-if, liquidity-adjusted VaR, explicit, historical and reverse stress scenarios that carry no probability, SA-CCR and exposure profiles, portfolio credit VaR and FRTB capital pieces. No market data is fetched and no local install is needed. Counterparty XVA is local only. Research software, not investment advice.",
   "author": {
     "name": "Iman Samizadeh"
   },
@@ -19,6 +19,15 @@
     "remote-mcp",
     "skills",
     "claude-skills",
-    "agent-skills"
-  ]
+    "agent-skills",
+    "backtesting",
+    "credit-risk",
+    "frtb",
+    "sa-ccr"
+  ],
+  "documentationUrl": "https://github.com/Iman/agent-driven-risk-desk-and-skills/blob/main/plugins/risk-desk-hosted/README.md",
+  "privacyPolicyUrl": "https://riskdesk.avidquant.com/privacy",
+  "termsOfServiceUrl": "https://riskdesk.avidquant.com/terms",
+  "supportUrl": "https://riskdesk.avidquant.com/support",
+  "icon": "./assets/openai-directory-icon.png"
 }

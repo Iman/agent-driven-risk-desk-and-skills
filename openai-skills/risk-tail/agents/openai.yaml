@@ -1,6 +1,6 @@
 interface:
   display_name: "Risk Tail"
-  short_description: "Historical VaR and Expected Shortfall from supplied P&L"
+  short_description: "VaR and Expected Shortfall from supplied P&L, by model"
 dependencies:
   tools:
     - type: "mcp"

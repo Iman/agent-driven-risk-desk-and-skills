@@ -1,7 +1,7 @@
 {
   "name": "risk-desk-hosted",
   "version": "0.2.0",
-  "description": "Portfolio risk over the hosted Risk Desk MCP at riskdesk.avidquant.com: historical VaR and Expected Shortfall from P&L you supply, signed linear exposure, and explicit stress scenarios that carry no probability. No market data is fetched and no local install is needed. Counterparty XVA is local only. Research software, not investment advice.",
+  "description": "Portfolio risk over the hosted Risk Desk MCP at riskdesk.avidquant.com, from data you supply or a shipped synthetic example: VaR and Expected Shortfall under several tail models with backtests, signed linear exposure, option Greeks and revaluation, VaR and ES attribution, limits and what-if, liquidity-adjusted VaR, explicit, historical and reverse stress scenarios that carry no probability, SA-CCR and exposure profiles, portfolio credit VaR and FRTB capital pieces. No market data is fetched and no local install is needed. Counterparty XVA is local only. Research software, not investment advice.",
   "author": {
     "name": "Iman Samizadeh"
   },
@@ -19,14 +19,18 @@
     "remote-mcp",
     "skills",
     "claude-skills",
-    "agent-skills"
+    "agent-skills",
+    "backtesting",
+    "credit-risk",
+    "frtb",
+    "sa-ccr"
   ],
   "skills": "./skills/",
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Risk Desk (hosted)",
     "shortDescription": "Portfolio risk from your data",
-    "longDescription": "Calculate historical VaR and Expected Shortfall, signed linear exposure and explicit stress scenarios over the hosted Risk Desk MCP, from inputs you supply. Fetches no market data and places no orders. Counterparty XVA needs a local ORE project and is not available here. Research software, not investment advice.",
+    "longDescription": "Calculate VaR and Expected Shortfall under several tail models with backtests, linear exposure, option Greeks and revaluation, risk attribution, limits and what-if, liquidity, explicit, historical and reverse stress, SA-CCR, portfolio credit VaR and FRTB capital pieces over the hosted Risk Desk MCP, from inputs you supply or a shipped synthetic example. Fetches no market data and places no orders. Counterparty XVA needs a local ORE project and is not available here. Research software, not investment advice.",
     "developerName": "Iman Samizadeh",
     "category": "Finance",
     "capabilities": [
@@ -53,7 +57,7 @@
               "description": "Check hosted service availability and supported features.",
               "prompt": "Check Risk Desk status. Explain which tools are available, whether its example data is synthetic, and whether it fetches market prices or places orders.",
               "tools_triggered": "risk_desk_status",
-              "expected_behavior": "Report service status and the available tools. Identify the synthetic example and explain that market-data fetching, order placement, and hosted counterparty XVA are unavailable."
+              "expected_behavior": "Report service status and the available tools, which are every Risk Desk tool except counterparty XVA. Identify the synthetic examples and explain that market-data fetching, order placement, and hosted counterparty XVA are unavailable."
             },
             {
               "description": "Analyze exposure for the public synthetic portfolio.",
@@ -78,6 +82,30 @@
               "prompt": "I created this synthetic fixture and permit sharing it with Risk Desk. Source: Reviewer-created synthetic fixture. As of 2026-10-15, currency USD, data_mode synthetic, NAV 100000. Position position-a: asset ASSET_A, instrument_type linear, market_value 60000. Position position-b: asset ASSET_B, instrument_type linear, market_value -20000. Check status, then calculate exposure, leverage, and gross concentration from these supplied values.",
               "tools_triggered": "risk_desk_status, risk_exposure",
               "expected_behavior": "Send the supplied fixture in request rather than using the demo. Report caller_supplied origin, synthetic data mode and degraded=false. Gross exposure is USD 80000, net exposure USD 40000, gross leverage 0.8, net leverage 0.4, and gross concentration 75% ASSET_A and 25% ASSET_B. Explain that exposure is a point-in-time aggregation with no horizon."
+            },
+            {
+              "description": "Compare tail models on the public synthetic P&L sample.",
+              "prompt": "Check Risk Desk status, then compare VaR and Expected Shortfall across tail models for its synthetic example. State degraded status, currency, confidence and horizon first.",
+              "tools_triggered": "risk_desk_status, risk_tail_models",
+              "expected_behavior": "Call risk_tail_models without a request. Label the data synthetic. Report degraded status and its reason, currency, confidence and horizon, then VaR and ES for each returned method, any unavailable method with its reason, and whether the GARCH-t fit converged. Do not rescale the horizon or present a model as validated."
+            },
+            {
+              "description": "Calculate SA-CCR exposure at default for the public synthetic netting set.",
+              "prompt": "Check Risk Desk status, then calculate SA-CCR exposure at default for its synthetic netting set and explain the parts.",
+              "tools_triggered": "risk_desk_status, risk_saccr",
+              "expected_behavior": "Call risk_saccr without a request. Label the data synthetic and report degraded=false and currency USD. EAD is about USD 1,879.21, with replacement cost 0, multiplier about 0.958 and PFE about 1,342.29. State that this is a research calculation, not a regulatory submission."
+            },
+            {
+              "description": "Calculate Vasicek credit VaR for the public synthetic loan book.",
+              "prompt": "Check Risk Desk status, then calculate credit VaR for its synthetic loan book with the Vasicek model.",
+              "tools_triggered": "risk_desk_status, risk_credit_asrf",
+              "expected_behavior": "Call risk_credit_asrf without a request. Label the data synthetic and report degraded=false. At 99.9% confidence, total exposure USD 6,550,000, expected loss USD 35,250, credit VaR about USD 263,653.78 and unexpected loss about USD 228,403.78."
+            },
+            {
+              "description": "List the dated historical stress windows.",
+              "prompt": "Which historical stress windows does Risk Desk know, and does it supply prices for them?",
+              "tools_triggered": "risk_scenario_library",
+              "expected_behavior": "Call risk_scenario_library. List lehman-2008, covid-2020 and uk-gilt-ldi-2022 with their dates and cited sources. Explain that only dates are shipped and that replaying a window needs the user's own price levels."
             }
           ],
           "negative": [
@@ -100,7 +128,7 @@
         }
       },
       "publication": {
-        "release_notes": "Initial hosted Risk Desk release. Calculate historical VaR and Expected Shortfall, signed linear portfolio exposure, and explicit stress scenarios using supplied data or a synthetic example. Includes risk-portfolio, risk-stress, and risk-tail skills. Fetches no market data and places no orders. Counterparty XVA requires the separate local workflow."
+        "release_notes": "Risk Desk 0.2 on the hosted service: every Risk Desk tool except counterparty XVA, 29 in all. Adds tail model comparison and VaR and ES backtests, option Greeks and revaluation, risk attribution, limits and what-if, liquidity, historical replay and reverse stress, SA-CCR and exposure profiles, portfolio credit VaR and FRTB capital pieces, each with a synthetic example, and twelve skills. Fetches no market data and places no orders."
       }
     }
   }

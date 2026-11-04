@@ -7,9 +7,13 @@ The public report is at https://riskdesk.avidquant.com/.
 The Streamable HTTP MCP endpoint is `https://riskdesk.avidquant.com/mcp`.
 It requires no login. The public report uses synthetic data.
 
-The hosted service provides four tools: `risk_desk_status`, `risk_tail`,
-`risk_exposure` and `risk_stress`. Call status first. The three calculation
-tools accept a `request` object; omitting it selects the synthetic demo.
+On 2026-11-04 the hosted service provided four tools: `risk_desk_status`,
+`risk_tail`, `risk_exposure` and `risk_stress`. Risk Desk 0.2 serves every
+local tool except `risk_xva` (29 in all, listed in
+`plugins/risk-desk-hosted/README.md`) once its hosted image is deployed.
+Call status first: it names the live tools and the hosted limits. Every
+calculation tool accepts a `request` object; omitting it selects that
+tool's synthetic example.
 Discover the current input schema through MCP before supplying data.
 Counterparty XVA requires the local plugin and a trusted ORE project.
 
@@ -22,7 +26,7 @@ workspace settings. Refresh the tool list after connecting, then ask:
 > Check Risk Desk status, then explain the synthetic energy book's tail
 > risk. State the currency, horizon, loss signs and degraded status first.
 
-The hosted plugin includes three skills in `plugins/risk-desk-hosted`.
+The hosted plugin includes twelve skills in `plugins/risk-desk-hosted`.
 The skills guide reporting and distinguish demo data from supplied data.
 Connecting the MCP endpoint alone does not install those skill files.
 MCP prompts are also available, but a client need not expose them; the
@@ -41,10 +45,10 @@ codex mcp add riskdesk-hosted --url https://riskdesk.avidquant.com/mcp
 codex mcp get riskdesk-hosted
 ```
 
-For local skill discovery, copy the three directories from `openai-skills/`
+For local skill discovery, copy the directories from `openai-skills/`
 into `.agents/skills/` in the project where you want to use them. Preserve
 each skill's `agents/openai.yaml`, which declares the hosted MCP dependency.
-Use `$risk-tail`, `$risk-portfolio` or `$risk-stress` in a prompt.
+Use a skill by name in a prompt, for example `$risk-tail` or `$risk-frtb`.
 
 Alternatively, install the packaged hosted plugin through a configured
 Codex plugin marketplace. Its `.codex-plugin/plugin.json` points to both
@@ -69,6 +73,8 @@ Include this object in the `tools` array of a Responses API request:
   "require_approval": "always"
 }
 ```
+
+Add a 0.2 tool name to `allowed_tools` once `risk_desk_status` lists it.
 
 Your OpenAI API credential authenticates the request to OpenAI. Risk Desk
 does not need that credential; do not send it to the MCP endpoint.
