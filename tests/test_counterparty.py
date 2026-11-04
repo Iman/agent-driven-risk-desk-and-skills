@@ -381,3 +381,18 @@ def test_check_artifact_accepts_results_and_rejects_tampering(tmp_path, capsys):
         path.write_text(json.dumps(result))
         assert checker.main(str(path)) == 1
     assert "FAIL" in capsys.readouterr().out
+
+
+PARTIAL = "partially verified"
+
+
+def test_fx_and_equity_add_ons_are_labelled_partially_verified_and_others_are_not():
+    """The Basel Framework publishes no FX or equity worked example, so a
+    result with those classes says so in its own assumptions."""
+    assert not any(PARTIAL in a for a in run(EXAMPLE_1)["assumptions"])
+    fx = dict(id="f", asset_class="fx", notional=100, market_value=1, maturity=0.5,
+              position="long", hedging_set="EUR/USD")
+    equity = dict(id="e", asset_class="equity", notional=1_000, market_value=0, maturity=1,
+                  position="long", reference="Firm A")
+    for trades in ([fx], [equity], EXAMPLE_1 + [fx]):
+        assert sum(PARTIAL in a for a in run(trades)["assumptions"]) == 1

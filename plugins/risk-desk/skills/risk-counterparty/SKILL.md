@@ -78,8 +78,9 @@ not used.
 - This is one bilateral netting set. Basis and volatility hedging sets, CDO tranches, central
   counterparty MPOR floors, the 20-day MPOR cases and multiple netting sets or margin
   agreements are not modelled. Say so if the user's book needs them.
-- FX and equity add-ons use verified CRE52.72 constants, but the Basel Framework publishes no
-  worked FX or equity example, so they are checked by hand arithmetic only.
+- FX and equity add-ons are partially verified: their constants are checked against CRE52.72,
+  but the Basel Framework publishes no worked FX or equity example, so they are checked by hand
+  arithmetic only. A result with FX or equity trades says so in its `assumptions`; report it.
 - The profile summary is not an IMM EAD. Alpha times Effective EPE needs supervisory approval.
 - The figures are only as good as the ORE simulation behind them; a clean summary does not
   validate the ORE calibration.

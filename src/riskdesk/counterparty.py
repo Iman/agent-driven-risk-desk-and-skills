@@ -268,6 +268,10 @@ def saccr_ead(payload):
         "Not modelled: basis and volatility hedging sets (CRE52.46, 52.47), CDO tranches "
         "(CRE52.41), central counterparty MPOR floors (CRE54), the 20 day MPOR cases of CRE52.51, "
         "and multiple margin agreements or netting sets (CRE52.74 to 52.77)."])
+    if {t.asset_class for t in request.trades} & {"fx", "equity"}:
+        result["assumptions"].append("FX and equity add-ons are partially verified: constants checked "
+                                     "against CRE52.72, but the Basel Framework publishes no worked "
+                                     "FX or equity example to reproduce.")
     figures = _netting_set(request, request.margined)
     if request.margined:  # CRE52.2: capped at the same netting set calculated unmargined
         unmargined = _netting_set(request, False)
