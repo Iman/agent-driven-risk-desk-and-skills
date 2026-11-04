@@ -16,15 +16,15 @@ Not measured in the 2026-09-14/15 session, and therefore not claimed:
   observation, carried forward and marked `pinned` in `docs/evidence.json`.
   The ORE wheel installed, which is a different and smaller claim.
 - Python 3.11 and 3.12 were not exercised HERE. CI run 34963838757 is
-  reported green on 3.11, 3.12 and 3.13; that is a report, not a log this
+  reported green on 3.11, 3.12 and 3.13. That is a report, not a log this
   session read. Locally only CPython 3.13.14 and, in containers, 3.13.15
   were run.
 - No behaviour was observed on Windows. Linux is no longer unknown: see
   the container entries under VERIFIED, which were measured on
   linux/arm64 and linux/amd64.
 - The mutation harness has no case over `report.py` or over the
-  dashboard, so the sign handling in the exposure ladder and every
-  dashboard view are guarded by unit tests only. Adding mutations there
+  dashboard. So unit tests alone guard the sign handling in the exposure
+  ladder and every dashboard view. Adding mutations there
   was outside the scope approved for those runs and is not claimed as
   done.
 - The screenshots were taken by one Chromium build at one device scale.
@@ -32,8 +32,8 @@ Not measured in the 2026-09-14/15 session, and therefore not claimed:
 - No CI log was read in this session. What is known about CI is reported:
   34911224128 green, then 34959651440 and 34960887423 red on `gates`, then
   34963838757 green on all four jobs after the container fix. No CI badge
-  is claimed, because a badge would assert something this repository has
-  not itself observed.
+  is claimed, because a badge asserts something this repository has not
+  itself observed.
 
 ## VERIFIED
 
@@ -64,10 +64,10 @@ Observed on 2026-11-04, for the v0.2 integration on branch `feat/v0.2`:
   `math.fsum` and every module, `frtb` included, called it.
 - Black-76 rho now comes from the engine (option-desk commit `4a282d9`).
   The two `test_derivatives.py` tests that check it pass against a wheel
-  built from that commit and fail against the engine wheel of 13
+  built from that commit. They fail against the engine wheel of 13
   September, which carries the same version number 0.3.0.
 - That wheel, built twice from a clean `git archive` of the commit with
-  hatchling 1.33.0, gave the same sha256 both times; it is recorded in
+  hatchling 1.33.0, gave the same sha256 both times. It is recorded in
   `wheel-hashes.json`. Before the PyPI upload, `pip install --dry-run` of
   this checkout failed with `No matching distribution found for
   optiondesk-engine==0.3.0` without it, and resolved to that hash with
@@ -78,7 +78,7 @@ Observed on 2026-11-04, for the v0.2 integration on branch `feat/v0.2`:
   '.[dev]'` against PyPI alone resolved `optiondesk-engine-0.3.0`, and an
   install from PyPI wrote no `direct_url.json`.
 - The tested dependency tree now has 48 upstream distributions with 80
-  notice files; the Option Desk engine's licence notice is the one added.
+  notice files. The Option Desk engine's licence notice is the one added.
 
 UNKNOWN for v0.2, and not claimed:
 
@@ -94,21 +94,21 @@ Observed on 2026-09-16 London time, for the commands and agents:
 
 - `plugins/risk-desk/` gained `commands/` with 6 files and `agents/` with
   2. Each command wraps a CLI command that exists and states what to read
-  before quoting a number, which is the point of them: the discipline is
-  put where an agent hits it rather than in prose it may never read.
+  before quoting a number. That is the point of them: the discipline is
+  put where an agent hits it, not in prose it can skip.
 - Neither manifest declares them, and no key was invented. The sibling
   project's two manifests do not mention `commands` or `agents` either,
   so the runtime discovers them by directory. A test asserts the key
   stays absent, so nobody adds configuration that does nothing.
 - The packager already shipped them. `scripts/package_plugin.py` globs the
-  plugin recursively, so no change was needed; verified by reading the zip
-  rather than the script, and a test now pins all eight files in the
-  archive.
+  plugin recursively, so no change was needed. This was verified by
+  reading the zip rather than the script, and a test now pins all eight
+  files in the archive.
 - Every option a command file names was checked against the CLI sources:
   `--input`, `--output`, `--tail`, `--exposure`, `--xva`, `--host`,
   `--port`, `--project`, `--config`, `--data-mode`. The check is static so
-  it starts no process, and it proves a flag exists rather than that it
-  belongs to the subcommand beside it; the test says so. Its mutation
+  it starts no process. It proves a flag exists, not that it belongs to
+  the subcommand beside it, and the test says so. Its mutation
   check asserts `--horizon`, `--draws`, `--symbols` and `--band`, all real
   flags in the sibling project, are absent here.
 - The hosted plugin was deliberately left alone. All six commands run a
@@ -126,16 +126,16 @@ Observed on 2026-09-16 London time, for the project documentation:
 
 - Eight root documents added: CLA.md, CODE_OF_CONDUCT.md,
   CONTRIBUTING.md, CONTRIBUTORS.md, FAQ.md, INSTALL.md, LICENSES.md and
-  PRIVACY.md. Adapted from the sibling project rather than copied; every
-  options-specific sentence was removed and a validation test now fails
+  PRIVACY.md. Adapted from the sibling project rather than copied. Every
+  options-specific sentence was removed, and a validation test now fails
   the build if one returns.
-- Two were deliberately NOT created, and an empty shell of either would
-  have been worse than its absence. GEMINI.md there is generated by a
-  tool from that project's SKILL.md files; this repository has no such
-  generator, so a hand-written copy of five skills would drift from them
-  immediately. LOOPS.md documents slash commands and loop patterns;
-  `plugins/risk-desk/` contains no `commands/` and no `agents/`
-  directory, so there is nothing to document.
+- Two were deliberately NOT created, because an empty shell of either is
+  worse than its absence. GEMINI.md there is generated by a tool from that
+  project's SKILL.md files. This repository has no such generator, so a
+  hand-written copy of five skills drifts from them immediately. LOOPS.md
+  documents slash commands and loop patterns. `plugins/risk-desk/`
+  contained no `commands/` and no `agents/` directory, so there was
+  nothing to document.
 - 279 tests collected then, all passing and none skipped, up from 268. Unit
   coverage unchanged at 86.06 percent, since the additions are documents
   and validation tests. Unit
@@ -163,8 +163,8 @@ Observed on 2026-09-16 London time, for the project documentation:
   hostname scan over the hosted plugin reads every file as UTF-8, and the
   branding commit made the packager generate PNG icons into that
   directory. It pins the two icons it knows by name and crashes on any
-  other binary, which is what a third icon would be; it now skips
-  anything that is not text and keeps the byte comparison for the two.
+  other binary, and a third icon is such a binary. It now skips anything
+  that is not text and keeps the byte comparison for the two.
   Separately, a `git commit` in this session ran after a `pytest` whose
   exit code was masked by a pipe to `tail`, so 694dd61 was committed with
   the suite red. The suite is green at the commit after it, and the
@@ -173,11 +173,13 @@ Observed on 2026-09-16 London time, for the project documentation:
   `./assets/openai-directory-icon.png` and `./assets/openai-composer-icon.png`,
   which the packager generates, and a test asserts each one exists, is
   non-empty and is committed rather than only generated.
-- Claims verified against the code before being written down: 33
-  mutations; the supply-dislocation scenario really does report a negative
-  loss of -1,843,000.00 USD; the dashboard really does refuse
-  `--host 10.0.0.1`; and `riskdesk-mcp` on empty stdin exits 0 with no
-  traceback, which is the diagnostic INSTALL.md ends with.
+- Claims verified against the code before being written down:
+  - 33 mutations.
+  - The supply-dislocation scenario reports a negative loss of
+    -1,843,000.00 USD.
+  - The dashboard refuses `--host 10.0.0.1`.
+  - `riskdesk-mcp` on empty stdin exits 0 with no traceback, which is the
+    diagnostic INSTALL.md ends with.
 
 Observed on 2026-09-15 London time, for what looking at the pages found:
 
@@ -189,14 +191,13 @@ Observed on 2026-09-15 London time, for what looking at the pages found:
   why the 64-colour palette is the one that ships.
 - At 390px the charts were unreadable: an inline SVG at width 100% scales
   its own text down with it, and the axis labels rendered around 5px. The
-  shared system's own chart frame does not fix this; its body rule is the
+  shared system's own chart frame does not fix this. Its body rule is the
   same width 100%, height auto. So the frame here adds a horizontal
   scroll and a minimum chart width, and below that width the frame moves
   rather than the page. Re-checked at 390px afterwards: the asset labels
   are legible.
-- Every chart now sits in a frame, pinned by a test, because a chart
-  emitted outside one would quietly go back to being unreadable on a
-  phone. The chart functions are untouched, so there is still one place a
+- Every chart now sits in a frame, pinned by a test. A chart emitted
+  outside one goes back to being unreadable on a phone. The chart functions are untouched, so there is still one place a
   chart is drawn.
 - Re-measured after the frame changed the rendered pages:
   report-energy-stress 250,126, dashboard-exposure 82,310,
@@ -239,19 +240,19 @@ Observed on 2026-09-15 London time, for the design system:
   must be kept in step.
 - Both surfaces now read the tokens and neither writes a colour. Before
   this, `report.STYLE` carried 22 literal colours, 11 of them chart
-  rules, and the dashboard inlines that same string, which is why one
-  could not be restyled without the other.
+  rules, and the dashboard inlines that same string. So restyling one
+  restyled the other.
 - Contrast was measured here rather than inherited from the 50-pair
   result, which was measured on other markup: 32 pairs enforced across
   both modes, 0 failures. Two further pairs are recorded as decoration
   and not enforced: `--od-line` on `--od-ground` is 1.39 to 1 dark and
   1.48 to 1 light. Table rules are neither a control boundary nor a
   graphical object required to understand the content under WCAG 2.1 SC
-  1.4.11, and no token that clears 3 to 1 against the ground would leave
-  a dense table readable. The chart axis is enforced, not exempted, and
+  1.4.11. A token that clears 3 to 1 against the ground leaves a dense
+  table unreadable. The chart axis is enforced, not exempted, and
   passes at 4.34 and 3.43.
 - `--od-stale` is declared and deliberately unpainted, with a test
-  pinning that. This project has no freshness state; the only "stale" in
+  pinning that. This project has no freshness state. The only "stale" in
   the source is the ORE adapter's refusal to reuse an old cube.
 - `data_mode == "synthetic"` gained its own flag. It was already on the
   page as grey prose and is a different fact from degraded.
@@ -274,7 +275,7 @@ Observed on 2026-09-15 London time, for the dashboard:
   dashboard module and asserts each import is standard library or
   `riskdesk`.
 - One charting path, enforced rather than intended. The four SVG functions
-  in `report.py` became public and the dashboard imports them; a test
+  in `report.py` became public and the dashboard imports them. A test
   asserts no dashboard module contains `<svg` and that none of the four is
   redefined. A second test compares the dashboard payload field by field
   against `report_payload` for the same inputs, so the served page and the
@@ -293,7 +294,7 @@ Observed on 2026-09-15 London time, for the dashboard:
 - The unit and integration split is enforced from the syntax tree, not
   from prose. An earlier version of that check matched the word socket
   anywhere in a file and failed on a docstring reading "no socket", which
-  tested prose rather than behaviour; it now walks the AST for imports and
+  tested prose rather than behaviour. It now walks the AST for imports and
   names. 154 unit tests bind nothing.
 - `docs/images/dashboard-{overview,exposure,tail}.png` were captured from
   a server this repository started and stopped, at scale 1.25 and 32
@@ -307,14 +308,14 @@ Observed on 2026-09-15 London time, for the dashboard:
 - Unit line coverage 472 of 539 lines before, 778 of 906 lines after,
   85.87 percent, still above the 80 percent gate. `dashboard/server.py` is
   31.82 percent under the unit marker because its handler body only runs
-  when a socket serves, which is integration; that is visible rather than
+  when a socket serves, which is integration. That is visible rather than
   averaged away, as `ore_worker.py` already was.
 
 Observed on 2026-09-15 London time, for the CI failure and its fix:
 
 - CI went red on `gates` for the first run that ever exercised the docker
   split, runs 34959651440 and 34960887423. The three pytest matrix jobs
-  succeeded; only the container step failed, `1 failed, 5 passed, 1
+  succeeded. Only the container step failed, `1 failed, 5 passed, 1
   skipped`, on `docker run ... demo` returning 1 with an empty stderr and
   stdout stopping at the report step.
 - REPRODUCED here before anything was changed, which took two attempts.
@@ -336,8 +337,8 @@ Observed on 2026-09-15 London time, for the CI failure and its fix:
   tested contract, and a human line now also goes to stderr.
 - The fix keeps every guard. The entrypoint now refuses an unwritable
   mount with exit 65 before running anything, naming the uid and the
-  `--user` flag; exit 64 for no mount and 69 for no ORE backend are
-  unchanged; the image still runs as uid 10001 and was not made root.
+  `--user` flag. Exit 64 for no mount and 69 for no ORE backend are
+  unchanged. The image still runs as uid 10001 and was not made root.
 - Verified on linux/amd64, the platform CI uses, which also closes an
   earlier UNKNOWN: that image reports `ORE extra: installed: 1.8.16.0`,
   so the wheel does resolve there and the Dockerfile's platform logic is
@@ -355,8 +356,8 @@ Observed on 2026-09-15 London time, for the CI failure and its fix:
   covered and nothing skips.
 - Tests: 144 collected before, 148 after, all passing and none skipped. Container tests 7 before, 11 after, 0 skipped.
   The eleventh separates a missing artifacts directory, exit 66, from
-  an unwritable one, exit 65, because pointing a reader at --user
-  for a path that does not exist would not help them.
+  an unwritable one, exit 65. Pointing a reader at --user for a path that
+  does not exist does not help them.
   Unit coverage 471 of 538 lines before, 472 of 539 lines after, 87.57
   percent.
 
@@ -364,29 +365,32 @@ Observed on 2026-09-15 London time, for the hosted plugin, code only:
 
 - Nothing was deployed, no DNS record was created or read, no registry or
   directory was contacted, and no credential was written. The endpoint
-  `https://riskdesk.avidquant.com` does not resolve today; it is written
-  into the manifests as the documented target and both the plugin's own
-  README and the root README say it is not live.
+  `https://riskdesk.avidquant.com` did not resolve on that day. It was
+  written into the manifests as the documented target, and both the
+  plugin's own README and the root README said it was not live.
 - `plugins/risk-desk-hosted` carries a Claude Code manifest, a Codex
   manifest, an `.mcp.json` declaring one http server, a README and the
   licence. `glama.json` is at the repository root. The marketplace now
   lists 2 plugins.
 - The hosted plugin carries 3 skills, not 5. `risk_xva` is deliberately
   absent because it reads a trusted local ORE project directory and a
-  remote endpoint cannot read files on the caller's machine; offering it
-  would put a tool in the list that could never run. Each hosted skill
+  remote endpoint cannot read files on the caller's machine. Offering it
+  puts a tool in the list that can never run. Each hosted skill
   says so in its own text.
 - The hosted skills are copies of `openai-skills/`, rebuilt by
   `scripts/package_plugin.py`. A validation test compares them byte for
   byte, because two hand-edited copies drift and the one nobody opens is
   the one that ships.
-- Six new validation tests: the endpoint hostname is pinned in the
-  `.mcp.json`, the Codex `websiteURL` and both descriptions; no other
-  hostname and no credential-shaped string reaches the hosted directory,
-  with the upstream PolyForm licence URL as the one allowance; the
-  not-live wording is required in both READMEs; the absent tool is
-  required to stay absent; the copies must match their sources; and
-  `glama.json` carries a maintainer and nothing else.
+- Six new validation tests:
+  - The endpoint hostname is pinned in the `.mcp.json`, the Codex
+    `websiteURL` and both descriptions.
+  - No other hostname and no credential-shaped string reaches the hosted
+    directory, with the upstream PolyForm licence URL as the one
+    allowance.
+  - The not-live wording was required in both READMEs.
+  - The absent tool is required to stay absent.
+  - The copies must match their sources.
+  - `glama.json` carries a maintainer and nothing else.
 - Tests: 138 collected before, 144 after, all passing and none skipped,
   in 55.73s. Unit coverage unchanged at 471 of 538 lines,
   87.55 percent, because the additions are JSON, Markdown and validation
@@ -444,7 +448,7 @@ the container image, with Docker 29.7.2:
   87.55 percent, because the container tests are integration and the new
   files are not Python.
 - The container tests skip rather than fail when no Docker binary or no
-  answering daemon is present. They ran here; they were not skipped.
+  answering daemon is present. They ran here. They were not skipped.
 
 Observed on 2026-09-15 London time, on macOS ARM64 (Darwin 25.6.0), for
 the plugin manifests:
@@ -476,19 +480,19 @@ the plugin manifests:
 Observed on 2026-09-15 London time, on macOS ARM64 (Darwin 25.6.0), for
 the exposure charts:
 
-- Before this change: 103 tests collected, all passing, none skipped; unit
-  line coverage 400 of 467 lines, 85.65 percent; `evidence.py check`
+- Before this change: 103 tests collected, all passing, none skipped. Unit
+  line coverage 400 of 467 lines, 85.65 percent. `evidence.py check`
   reported `14 figures checked, 0 problems`.
-- After this change: 117 tests collected, all passing, none skipped; unit
+- After this change: 117 tests collected, all passing, none skipped. Unit
   line coverage 471 of 538 lines, 87.55 percent, so the change raised
-  coverage rather than lowering it; `evidence.py check` reports
+  coverage rather than lowering it. `evidence.py check` reported
   `17 figures checked, 0 problems`. Per file after: `models.py` 100.00%,
   `report.py` 99.52%, `cli.py` 97.78%, `analytics.py` 94.64%,
   `summaries.py` 92.45%, `server.py` 87.50%, `ore.py` 77.61%,
   `ore_worker.py` 0.00%.
 - Mutation harness re-run, unchanged: 33 mutations, 31 detected by the test
   file named for each, 0 detected only elsewhere, 2 equivalent, 0 survived,
-  0 skipped. The harness targets `analytics.py` and `models.py`; it has no
+  0 skipped. The harness targets `analytics.py` and `models.py`. It has no
   case over the new chart code, which is named under UNKNOWN below.
 - The exposure figures the charts draw, from
   `examples/energy_book.json`: NAV 12,000,000.00 USD, gross exposure
@@ -499,20 +503,20 @@ the exposure charts:
   BRENT_CRUDE_FUTURE -2,600,000.00. Two of the six are negative and are
   drawn on the short side of the zero line. Share of gross, as the
   concentration chart orders it: 29.8%, 22.0%, 18.4%, 12.8%, 10.3%, 6.7%.
-- `riskdesk report` with all three inputs wrote 14,778 bytes; with stress
+- `riskdesk report` with all three inputs wrote 14,778 bytes. With stress
   alone it wrote 4,795 bytes and the page states that no exposure result
   and no tail result were supplied. Both figures were first taken before
-  the page title changed and were 20 bytes lower; they are re-measured
+  the page title changed and were 20 bytes lower. They are re-measured
   here rather than carried forward.
 - Images. `docs/images/report-energy-exposure.png` is new (and was
   removed later the same day, see the README images entry above), clipped to the
   exposure section's own bounding box read from the live DOM, 63,427
   bytes. `docs/images/report-energy-stress.png` was regenerated, because
   the page it documents now carries an exposure section and the old
-  capture no longer showed what that command writes; it is 216,280 bytes,
+  capture no longer showed what that command writes. It is 216,280 bytes,
   up from 158,998. To stay inside the 300,000 byte budget its palette was
   reduced from 64 to 32 colours, which cost 22,836 bytes and left the text
-  legible; nothing was cropped away. Total 279,707 bytes, 20,293 under
+  legible. Nothing was cropped away. Total 279,707 bytes, 20,293 under
   budget.
 
 Observed overnight on 2026-09-14 into 2026-09-15 London time, on
@@ -540,26 +544,27 @@ macOS ARM64 (Darwin 25.6.0):
   passes. Per file: `models.py` 100.00%, `report.py` 99.28%, `cli.py`
   97.67%, `analytics.py` 94.64%, `summaries.py` 92.45%, `server.py`
   87.50%, `ore.py` 77.61%, `ore_worker.py` 0.00%. `ore_worker.py` is zero
-  because it only executes inside the ORE worker process; that is a real
-  gap and it is visible rather than averaged away.
+  because it only executes inside the ORE worker process. That is a real
+  gap, and it is visible rather than averaged away.
 - Mutation run over `analytics.py` and `models.py`: 33 mutations, 31
   detected by the test file named for each, 0 detected only elsewhere, 0
   survived, 0 skipped, 2 recorded as equivalent.
 - The mutation harness found four real gaps before it found none. The
   first run reported six survivors. Two were the quantile-boundary pair
-  below. The other four were holes: the overflow guard could be removed
-  because the test matched a substring that both error messages contain;
-  `net_leverage` was computed but never asserted; and allowing non-finite
-  numbers or a zero portfolio value still raised a ValueError further down
-  the function, so a test asserting `ValueError` could not tell the
-  contract from the arithmetic. Tests were tightened until each was
+  below. The other four were holes:
+  - The overflow guard was removable, because the test matched a
+    substring that both error messages contain.
+  - `net_leverage` was computed but never asserted.
+  - Allowing non-finite numbers or a zero portfolio value still raised a
+    ValueError further down the function. So a test asserting
+    `ValueError` did not tell the contract from the arithmetic. Tests were tightened until each was
   killed, then the run was repeated.
 - The two quantile-boundary mutants are recorded as equivalent, on a
   measurement rather than an argument. Over 199,500 (count, confidence)
   pairs, count 2 to 400 and confidence 0.500 to 0.999, neither mutation
   ever changed which observation VaR selects, and Expected Shortfall
-  differed by at most 4.09e-16 and 4.43e-16 relative. Killing them would
-  mean asserting a last-bit float. Note what that also says: on this grid
+  differed by at most 4.09e-16 and 4.43e-16 relative. Killing them means
+  asserting a last-bit float. Note what that also says: on this grid
   the unconditional shift is indistinguishable from the guarded one. That
   is one grid, not a proof that the guard is redundant.
 - `scripts/evidence.py record` wrote 13 figures to `docs/evidence.json`:
@@ -574,12 +579,12 @@ macOS ARM64 (Darwin 25.6.0):
   one digit of the recorded CVA in a copy of the documents and requiring
   the check to return 1.
 - The notice count was wrong before it was right. A `.DS_Store` inside
-  `notices/` was counted as an upstream notice, which would have put 80
-  into README.md for 79 notices. The recorder now ignores dot files and a
+  `notices/` was counted as an upstream notice. Counted that way, the
+  recorder gave 80 for 79 notices, before the figure reached README.md. The recorder now ignores dot files and a
   test pins that behaviour.
 - `riskdesk report` wrote a self-contained page. From
   `examples/energy_stress.json` and `examples/energy_tail.json` it wrote
-  10,230 bytes with `"degraded": false` and both scenarios listed; from
+  10,230 bytes with `"degraded": false` and both scenarios listed. From
   `examples/stress.json` with no tail input it wrote 4,195 bytes and the
   page states that no tail result was supplied. A run against the
   four-sample `examples/tail.json` instead wrote 8,908 bytes and reported
@@ -604,8 +609,8 @@ macOS ARM64 (Darwin 25.6.0):
   escape byte.
 - `docs/images/report-energy-stress.png` was captured with Playwright's
   Chromium from a page written in the same run, at 1650 by 3233 pixels and
-  158,998 bytes. Playwright is not a project dependency; the capture ran
-  from a separate interpreter.
+  158,998 bytes. Playwright is not a project dependency, so the capture
+  ran from a separate interpreter.
 
 Observed on 2026-09-13 London time, and not re-measured since:
 
@@ -629,8 +634,8 @@ Observed on 2026-09-13 London time, and not re-measured since:
   unused by its swap. The reproducible fixture removes those two curves.
   The adapter refuses any remaining ORE error.
 - ORE's `nullDouble()` sentinel was observed in disabled trade-level
-  adjustments. The worker now emits JSON null for that exact sentinel;
-  unavailable MVA was checked in the real rerun.
+  adjustments. The worker now emits JSON null for that exact sentinel.
+  Unavailable MVA was checked in the real rerun.
 - All five Risk Desk skills and its plugin manifest passed their validators.
 - The tested dependency tree contains 47 upstream distributions. All had
   located notices. The wheel includes all 79 copied notice files. Exact
@@ -665,8 +670,8 @@ The energy example is a hand-written synthetic book. Its two scenario
 shapes were chosen by hand to be recognisable, not fitted to any dated
 episode, and they carry no probability. `examples/energy_tail.json` is a
 drawn sample from a heavy-tailed distribution, reproducible from the recipe
-written into its own `source` field; it is not an observed history and it
-says nothing about how any real energy book behaves.
+written into its own `source` field. It is not an observed history, and
+it says nothing about how any real energy book behaves.
 
 ## PLAN
 
@@ -679,12 +684,12 @@ Deliberately not done in the 2026-09-14/15 session, so that nothing
 unmeasured reached README.md:
 
 - No mutation badge. Two of the 33 cases are equivalent rather than
-  killed, and a badge would round that away.
-- No CI badge. The workflow exists and has never run.
+  killed, and a badge rounds that away.
+- No CI badge. The workflow existed and had not yet run.
 - No Docker image, no registry or Smithery listing, no hosted sample.
-  These need the owner's decision before any work starts.
+  These needed the owner's decision before any work started.
 - No new risk model, no market-data client and no broker connectivity. The
-  report command reads results that already exist and draws them; it
+  report command reads results that already exist and draws them. It
   computes no risk of its own.
 - `notices/`, `wheel-hashes.json` and the requirements lock were not
   touched, because no dependency changed. The report page is drawn with

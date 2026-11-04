@@ -12,16 +12,16 @@ On 2026-11-04 the hosted service provided four tools: `risk_desk_status`,
 local tool except `risk_xva` (29 in all, listed in
 `plugins/risk-desk-hosted/README.md`) once its hosted image is deployed.
 Call status first: it names the live tools and the hosted limits. Every
-calculation tool accepts a `request` object; omitting it selects that
+calculation tool accepts a `request` object. Omitting it selects that
 tool's synthetic example.
-Discover the current input schema through MCP before supplying data.
+Before you supply data, read the current input schema through MCP.
 Counterparty XVA requires the local plugin and a trusted ORE project.
 
 ## ChatGPT
 
 Use ChatGPT's developer-mode connection flow to add the MCP URL above.
 Choose no authentication. Availability depends on your account and
-workspace settings. Refresh the tool list after connecting, then ask:
+workspace settings. After you connect, refresh the tool list. Then ask:
 
 > Check Risk Desk status, then explain the synthetic energy book's tail
 > risk. State the currency, horizon, loss signs and degraded status first.
@@ -29,8 +29,8 @@ workspace settings. Refresh the tool list after connecting, then ask:
 The hosted plugin includes twelve skills in `plugins/risk-desk-hosted`.
 The skills guide reporting and distinguish demo data from supplied data.
 Connecting the MCP endpoint alone does not install those skill files.
-MCP prompts are also available, but a client need not expose them; the
-shared reporting instructions are included in MCP initialization.
+MCP prompts are also available, but a client need not expose them. The
+shared reporting instructions are included in MCP initialisation.
 
 See the official [connection and testing guide](https://developers.openai.com/plugins/deploy/connect-chatgpt)
 and [skill guide](https://learn.chatgpt.com/docs/build-skills).
@@ -52,7 +52,7 @@ Use a skill by name in a prompt, for example `$risk-tail` or `$risk-frtb`.
 
 Alternatively, install the packaged hosted plugin through a configured
 Codex plugin marketplace. Its `.codex-plugin/plugin.json` points to both
-the skills and `.mcp.json`. Avoid configuring the same hosted server twice.
+the skills and `.mcp.json`. Do not configure the same hosted server twice.
 Use either the hosted or local Risk Desk plugin in a session: their
 calculation tools share names.
 
@@ -74,12 +74,12 @@ Include this object in the `tools` array of a Responses API request:
 }
 ```
 
-Add a 0.2 tool name to `allowed_tools` once `risk_desk_status` lists it.
+When `risk_desk_status` lists a 0.2 tool, add its name to `allowed_tools`.
 
 Your OpenAI API credential authenticates the request to OpenAI. Risk Desk
-does not need that credential; do not send it to the MCP endpoint.
+does not need that credential. Do not send it to the MCP endpoint.
 When the response contains `mcp_approval_request`, inspect its tool and
-arguments before submitting an `mcp_approval_response` in the next turn.
+arguments. Then submit an `mcp_approval_response` in the next turn.
 Follow the official [Responses MCP guide](https://developers.openai.com/api/docs/guides/tools-connectors-mcp)
 for the request and approval flow.
 
@@ -89,7 +89,7 @@ and label synthetic results. Do not assume that an API request loads local
 `SKILL.md` files. Supply these instructions explicitly or configure skills
 through the API's supported skill workflow.
 
-Before sending a real portfolio, establish permission to share it with
+Before you send a real portfolio, establish permission to share it with
 both services. The public endpoint has no hosted XVA, market-data feed,
 broker connection or order-placement tool.
 

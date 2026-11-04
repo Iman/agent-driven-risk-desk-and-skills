@@ -2,12 +2,12 @@
 
 This file is the submission package for two portals: OpenAI's plugin
 directory and Anthropic's directory. Nothing has been submitted to either
-portal from it. It records what to submit and how to check it; it is not
+portal from it. It records what to submit and how to check it. It is not
 evidence of approval, publication or a completed reviewer test.
 
 Submit the hosted plugin, `plugins/risk-desk-hosted`. The local plugin,
 `plugins/risk-desk`, computes on the user's machine and is installed from
-this repository's marketplace; it is not part of either submission.
+this repository's marketplace. It is not part of either submission.
 
 ## Before either submission
 
@@ -22,9 +22,10 @@ this repository's marketplace; it is not part of either submission.
    python scripts/check_hosted.py https://riskdesk.avidquant.com
    ```
 
-   It expects every local tool except `risk_xva` (29 tools), a title and
-   `readOnlyHint` on each, a successful synthetic-example call of each,
-   and a work-limit refusal from `risk_tail_models`.
+   It expects every local tool except `risk_xva` (29 tools), with a title
+   and `readOnlyHint` on each. It also expects a successful
+   synthetic-example call of each, and a work-limit refusal from
+   `risk_tail_models`.
 4. Rebuild the packages and run the tests:
 
    ```sh
@@ -47,10 +48,10 @@ MCP server and its skills. Select **With MCP** in the OpenAI portal.
 | `dist/risk-desk-hosted-skills.zip` | The twelve skill directories, for the portal's Skills page. |
 | `https://riskdesk.avidquant.com/mcp` | Production Streamable HTTP MCP URL, entered separately in the portal. No authentication. |
 
-The tool list, annotations, justifications and review cases for the
-portal's import file are kept in the hosted service's private repository
-as `chatgpt-app-submission.json`, with the same cases as the Codex
-manifest here.
+The hosted service's private repository keeps the tool list,
+annotations, justifications and review cases for the portal's import
+file. The file is `chatgpt-app-submission.json`, and it has the same
+cases as the Codex manifest here.
 
 ### Listing text
 
@@ -98,16 +99,16 @@ read-only, each with a title: `risk_desk_status`, `risk_tail`,
 `risk_credit_copula`, `risk_frtb_imcc`, `risk_frtb_ima_capital`,
 `risk_frtb_pla`, `risk_frtb_backtest` and `risk_frtb_sbm_fx`.
 
-Every calculation tool takes one optional `request`; without it the tool
-runs a shipped synthetic example. `risk_xva` is absent because it reads a
+Every calculation tool takes one optional `request`. Without it, the
+tool runs a shipped synthetic example. `risk_xva` is absent because it reads a
 local ORE project directory, which a remote server cannot.
 
 ### Evaluation cases
 
 These are the cases in `plugins/risk-desk-hosted/.codex-plugin/plugin.json`.
-They are specifications, not completed test results. Run them in a new
-conversation with the hosted MCP and its skills after the 0.2 deploy, and
-record the tool calls, results and pass or fail for each.
+They are specifications, not completed test results. After the 0.2
+deploy, run them in a new conversation with the hosted MCP and its
+skills. Record the tool calls, results and pass or fail for each.
 
 | ID | Prompt | Tools | Expected behaviour |
 |---|---|---|---|
@@ -181,12 +182,12 @@ question for an Anthropic partner contact.
 
 1. **MCP connector:** server URL `https://riskdesk.avidquant.com/mcp`,
    Streamable HTTP, no authentication. The connector checklist asks for
-   test credentials; the server has no accounts, so state in the portal
-   that no sign-in exists and that every tool runs on a synthetic example
-   without input. Public documentation: `plugins/risk-desk-hosted/README.md`
+   test credentials. The server has no accounts, so state in the portal
+   that no sign-in exists. Also state that every tool runs on a synthetic
+   example without input. Public documentation: `plugins/risk-desk-hosted/README.md`
    in this repository and the hosted support page.
 2. **Plugin bundle:** this repository on GitHub, plugin folder
-   `plugins/risk-desk-hosted`, from the branch the listing should follow.
+   `plugins/risk-desk-hosted`, from the branch that the listing follows.
    Its `.claude-plugin/plugin.json` carries the name, version,
    description, author, licence, homepage, repository, the listing icon
    and the documentation, privacy, terms and support URLs. Its `.mcp.json`

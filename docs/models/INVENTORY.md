@@ -2,22 +2,22 @@
 
 Risk Desk v0.2, reviewed at commit c9e649e of feat/v0.2 (worktree feat/governance) on 4 November 2026.
 Line references are to that commit, except that src/riskdesk/analytics.py (an overflow fix) and
-src/riskdesk/derivatives.py (removal of the local Black-76 rho correction) changed afterwards on feat/v0.2;
-their hashes in [research/math-review/manifest.json](../../research/math-review/manifest.json) were
-re-recorded after those changes and the numerical review rerun with 0 failures.
+src/riskdesk/derivatives.py (removal of the local Black-76 rho correction) changed afterwards on feat/v0.2.
+Their hashes in [research/math-review/manifest.json](../../research/math-review/manifest.json) were
+re-recorded after those changes, and the numerical review was rerun with 0 failures.
 
 Status vocabulary:
 
 - **verified**: the arithmetic is checked against an independent reference (a hand calculation, a closed form,
-  brute force, numerical integration or a published figure) in the unit tests, in the independent review
-  under research/math-review, or both, and nothing material is UNPROVEN.
-- **partially verified**: as above for part of the model; what is UNPROVEN is named.
+  brute force, numerical integration or a published figure), in the unit tests, the independent review
+  under research/math-review, or both. Nothing material is UNPROVEN.
+- **partially verified**: as above for part of the model. What is UNPROVEN is named.
 - **not validated**: no independent check of the model's numbers exists in this repository.
 
 Verified means the code computes the stated formula. It does not mean the model is fit for a given portfolio,
-calibrated, or approved by a supervisor. Regulatory constants and published tables are transcribed by the
-engineers from bis.org (often from images); this review re-read only CRE99 Table 1. Every other transcription
-is UNPROVEN by this review and is listed in the cards and in [ASSUMPTIONS.md](ASSUMPTIONS.md) Part B.
+calibrated, or approved by a supervisor. The engineers transcribed regulatory constants and published tables
+from bis.org (often from images). This review re-read only CRE99 Table 1. Every other transcription is
+UNPROVEN by this review and is listed in the cards and in [ASSUMPTIONS.md](ASSUMPTIONS.md) Part B.
 
 Assumptions per model are in [ASSUMPTIONS.md](ASSUMPTIONS.md): Part A rows carry the model id, Part B ids
 (I01 to I25) are cited below.
@@ -56,7 +56,7 @@ Assumptions per model are in [ASSUMPTIONS.md](ASSUMPTIONS.md): Part A rows carry
 | M28 | FRTB SA FX delta and vega | `src/riskdesk/frtb.py` `frtb_sbm_fx` (349-393) | sensitivities-based method (MAR21) | partially verified |
 | M29 | ORE exposure and XVA adapter | `src/riskdesk/ore.py` `run_ore` (61-82), `prepare_config` (10-58) | adapter to an external risk-neutral engine | not validated |
 
-Independent review evidence is in [research/math-review](../../research/math-review/README.md); each check id
+Independent review evidence is in [research/math-review](../../research/math-review/README.md). Each check id
 below names a row of that area's `report.md`.
 
 ## Cards
