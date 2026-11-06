@@ -1,7 +1,7 @@
 {
   "area": "tail",
   "title": "Historical, parametric and EVT tail measures: independent numerical review",
-  "generated_utc": "2026-11-04T17:27:34.995788+00:00",
+  "generated_utc": "2026-11-06T09:58:04.185888+00:00",
   "checks": [
     {
       "id": "hs-var-n20-q0.95",

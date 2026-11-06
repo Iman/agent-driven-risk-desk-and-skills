@@ -1,7 +1,7 @@
 {
   "area": "counterparty",
   "title": "SA-CCR: independent recomputation against CRE99 and the module",
-  "generated_utc": "2026-11-04T17:27:35.034410+00:00",
+  "generated_utc": "2026-11-06T09:58:04.216957+00:00",
   "checks": [
     {
       "id": "example-1-published",

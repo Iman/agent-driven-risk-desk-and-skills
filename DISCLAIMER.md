@@ -1,6 +1,6 @@
 # Disclaimer and terms of use
 
-Last updated 2026-09-15.
+Last updated 2026-11-06.
 
 This document applies to the entire repository, to the runtime under
 `src/riskdesk`, to the CLI, to the MCP server, to the plugin skills, to
@@ -8,64 +8,47 @@ every file any of them writes, and to every response produced by an AI
 agent that invokes them. Using, copying or running this software means you
 accept what follows. If you do not accept it, do not use the software.
 
-## 1. This is software, not advice
+The separate hosted service has its own [terms](https://riskdesk.avidquant.com/terms)
+and [privacy notice](https://riskdesk.avidquant.com/privacy). Those terms govern use of
+that service; this document applies to the software here.
 
-This project is research and engineering software. It computes numbers
-from inputs you choose. Nothing it produces is investment advice, a
-personal recommendation, an inducement, an invitation, an offer, or a
-solicitation to buy, sell or hold any security, derivative, contract,
-commodity, currency or digital asset.
+## 1. Research purpose and decisions
 
-No output is tailored to any person's financial situation, objectives,
-knowledge, experience, tax position or risk tolerance, and no output should
-be read as if it were. The software cannot know those things and does not
-ask.
+This project provides software for research, education and evaluation of
+calculations from selected inputs. It does not assess whether an investment,
+strategy, position size or level of risk is suitable or appropriate for you.
 
-The software is general in nature. Its output is not suitable or
-appropriate for you, in the regulatory sense of those words, because no
-assessment of suitability or appropriateness has been performed or is
-possible.
+A calculation, ranking, comparison or illustration must not be treated as a
+personal recommendation, an instruction to trade or an assurance that an
+investment is safe. Obtain independent professional advice where needed.
 
-## 2. No regulated status, and no regulated activity is carried on
+## 2. Regulatory boundaries
 
-The author and copyright holder is not authorised or regulated by the
-Financial Conduct Authority. He is not registered with the United States
-Securities and Exchange Commission, is not an investment adviser, is not a
-broker or dealer, is not a commodity trading advisor, is not registered in
-any equivalent capacity in any other jurisdiction, and does not hold
-himself out as being so.
+Access to this software is not regulatory approval of a model, result,
+investment or use. It does not grant you any authorisation or registration.
+Research labels, disclaimers and a software licence do not determine whether
+a particular activity is regulated. Applicable duties depend on the actual
+service, communications, operator, users and jurisdictions.
 
-Nothing offered here constitutes, and nothing here is intended to
-constitute:
-
-- investment advice or a personal recommendation, within the meaning of the
-  FCA Handbook or Article 53 of the Financial Services and Markets Act 2000
-  (Regulated Activities) Order 2001, or advice within the meaning of the
-  US Investment Advisers Act of 1940
-- an offer, inducement or invitation to engage in investment activity, or a
-  financial promotion within the meaning of section 21 of the Financial
-  Services and Markets Act 2000
-- dealing, arranging, managing, safeguarding or administering investments
-  for any person
-- an offer to sell or a solicitation of an offer to buy any security
-
-No fiduciary, advisory, agency or client relationship of any kind is
-created by your use of this software, by your reading of its documentation,
-by any correspondence about it, or by any commercial licence granted for
-it.
+The project is not offered as an advisory, brokerage or execution service.
+Do not present its outputs as suitable for a particular person's circumstances
+or as satisfying FCA, SEC, CFTC or other regulatory requirements. Nothing in
+this document removes duties imposed by applicable law.
 
 ## 3. Your responsibility
 
-You are solely responsible for every decision you make and every order you
-place. You are solely responsible for determining whether your use of this
-software is lawful where you are, for obtaining your own professional
-advice before acting, and for complying with the rules of any venue,
-broker or regulator you deal with.
-
-Where local law makes any part of this software unlawful to use, it is your
-responsibility not to use it.
+You remain responsible for selecting inputs, checking assumptions and deciding
+whether and how to use results, subject to any duties the law places on the
+software provider. Check the rules applicable to your use and obtain qualified
+professional advice where needed. Do not use the software unlawfully.
 
 ## 4. A risk measure is not a prediction, and a scenario is not a forecast
+
+Algorithms, software and third-party components can contain defects. Inputs
+can be incomplete, inaccurate, stale or unsuitable for a model. Results depend
+on assumptions, calibration, conventions and limitations. Reproducibility and
+successful tests do not establish fitness for a purpose or regulatory approval.
+A risk estimate is not a maximum possible loss.
 
 Historical VaR and Expected Shortfall are descriptions of a sample you
 supplied. They are not forecasts, they are not bounds, and they do not
@@ -79,8 +62,8 @@ one. Linear revaluation assumes exposure is linear in the shocked asset,
 which for real books is an approximation that fails exactly when it matters
 most.
 
-Exposure figures are arithmetic over values you supplied. They are correct
-about your input and say nothing about whether the input is correct.
+Exposure figures are arithmetic over values you supplied. They can contain
+calculation errors and do not establish whether the input is correct.
 
 Risk-neutral exposure and XVA from ORE are valuation-model output under
 that model's calibration and conventions. They are not real-world loss
@@ -101,55 +84,63 @@ certificate and not a check.
 
 A licence to this software conveys no rights whatsoever to any data. Each
 data provider's terms govern what you may do with what you hold, including
-whether you may store it, redistribute it, or use it commercially. Reading
-and honouring those terms is your responsibility, not the author's.
+whether you may store it, redistribute it, or use it commercially.
+You must comply with those terms. This does not remove the provider's own
+applicable data-protection or security duties.
 
 Market-data rights and methodology rights are separate from software
 licences. This software distributes no ISDA SIMM material and claims no
 rights to your market data.
 
-## 6. No warranty
+You retain whatever rights you hold in supplied inputs. Before using a hosted
+service or remote client, confirm permission for upload, processing, temporary
+storage where used and output delivery through that client. Grant only the
+permission needed for that processing. A confirmation does not override a
+provider agreement or create rights you do not hold. Software access grants no
+market-data, exchange, methodology, display or redistribution rights; derived
+outputs can remain restricted. Do not send credentials, personal account
+identifiers or confidential data you are not permitted to disclose.
 
-The software is provided "as is", without warranty of any kind, express or
-implied, including but not limited to the warranties of merchantability,
-fitness for a particular purpose, accuracy, and non-infringement. The
-author does not warrant that the software is free of defects, that
-calculations are correct, that it will run without interruption, or that
-any output is suitable for any purpose.
+## 6. Warranty limits
 
-Financial models embed assumptions. The assumptions in this software are
-documented where practical, and they are still assumptions. They can be
-wrong, and they can be wrong in ways that are not obvious from the output.
+To the extent permitted by applicable law, the software and its outputs are
+provided as is and as available, without warranties of accuracy, completeness,
+availability, fitness for a particular purpose or achievement of any financial
+result. No model or result is guaranteed to prevent a loss, identify every risk
+or comply with a particular regulatory reporting regime. Mandatory rights and
+any licence already granted remain unaffected.
 
-## 7. Limitation of liability
+## 7. Liability and mandatory rights
 
-To the maximum extent permitted by law, the author shall not be liable for
-any trading loss, lost profit, lost opportunity, loss of data, business
-interruption, regulatory penalty, or any direct, indirect, incidental,
-special, exemplary, punitive or consequential damages arising out of or in
-connection with the software or its use, whether in contract, tort
-including negligence, strict liability or otherwise, and whether or not the
-author was advised of the possibility of such damages.
+For business users, and only to the extent permitted by applicable law, the
+provider excludes liability for trading losses, lost profits, lost opportunities
+and indirect or consequential loss arising from use of the software or reliance
+on its outputs. This business exclusion does not apply to consumers.
 
-Nothing in this document excludes or limits liability for death or personal
-injury caused by negligence, for fraud or fraudulent misrepresentation, or
-for any other liability that cannot lawfully be excluded or limited.
+Nothing excludes or limits liability for fraud, fraudulent misrepresentation,
+death or personal injury caused by negligence, or any other liability that
+cannot lawfully be excluded or limited. Nothing waives mandatory consumer or
+data-protection rights. These terms do not prevent complaints to a competent
+regulator or court.
 
-## 8. Indemnity
+## 8. Software ownership and licences
 
-To the extent permitted by law, you agree to indemnify and hold the author
-harmless from any claim, demand, loss, liability, cost or expense,
-including reasonable legal fees, arising from your use of the software,
-from any output you distribute or act on, from any decision you or a third
-party takes in connection with it, from your breach of these terms or of
-the licence, from your breach of any data provider's terms, or from your
-breach of any law or regulation.
+Rights in original software remain with its rights holders. Third-party
+software, algorithms, methodologies and data retain their respective rights
+and licence terms. Access or input processing does not transfer those rights.
+Inclusion of a component is not a guarantee of its accuracy or fitness.
 
-## 9. No reliance
+Nothing here changes a licence already granted or permits removal of required
+notices. See the repository's `LICENSE`, `LICENSES.md` and applicable
+upstream notices.
 
-You must not rely on anything this software produces. Any decision you take
-is yours alone, taken on your own judgement and on your own information,
-and the copyright holder has no responsibility for it.
+## 9. Independent verification
+
+Independently verify material inputs and results before relying on them in
+financial, valuation, risk, accounting or regulatory processes. Check source,
+timestamp, currency, horizon, assumptions and warnings. A modelled price is
+not an executable quote. Historical and simulated performance do not guarantee
+future performance.
 
 ## 10. Automated and agent use
 
@@ -161,7 +152,7 @@ sign convention before the numbers, and must not present a historical loss
 measure as a valuation or a regression value as model validation.
 
 Automated execution against a live account is outside the scope of this
-project. If you build it, you own the consequences entirely. Nothing in
+project. If you build it, you must assess its separate legal and operational requirements. Nothing in
 this repository places, routes or executes an order, opens a broker
 connection, or is a path to one.
 
@@ -180,7 +171,7 @@ Commercial use of any kind requires a separate written agreement; the
 source-available licence in `LICENSE` is PolyForm Noncommercial 1.0.0.
 Obtaining such an agreement does not make the copyright holder your
 adviser, does not transfer any regulatory permission to you, and does not
-make him responsible for how you use the software.
+remove either party's applicable legal duties.
 
 ## 12. Not a substitute for professional advice
 

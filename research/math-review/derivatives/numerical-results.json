@@ -1,7 +1,7 @@
 {
   "area": "derivatives",
   "title": "Option book Greeks: independent numerical review",
-  "generated_utc": "2026-11-04T17:27:35.209268+00:00",
+  "generated_utc": "2026-11-06T09:58:04.384154+00:00",
   "checks": [
     {
       "id": "rho-future-call",

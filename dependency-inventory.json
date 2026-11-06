@@ -371,11 +371,11 @@
   },
   {
     "name": "optiondesk-engine",
-    "version": "0.3.0",
+    "version": "0.3.0.post1",
     "license_expression": null,
     "license_metadata": "PolyForm-Noncommercial-1.0.0",
     "home_page": null,
-    "source": "option-desk commit 4a282d91bdb9fafbb0e4d80f2e88ab790eac6f4c",
+    "source": "option-desk commit 00ccd5759c79bff5672148b3ceab0ae4f30b6a00",
     "notices": [
       {
         "file": "notices/optiondesk-engine/optiondesk_engine-0.3.0.dist-info__licenses__LICENSE",

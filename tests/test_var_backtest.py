@@ -9,6 +9,14 @@ from riskdesk import backtest as bt
 pytestmark = pytest.mark.unit
 
 
+@pytest.mark.parametrize("family,dof", [("normal", None), ("student-t", 5)])
+def test_es_backtest_refuses_numerical_overflow(family, dof):
+    payload = request([-1e308, -1e308], [0, 0], expected_shortfall=[1e-308, 1e-308],
+                      es_null=family, es_null_dof=dof)
+    with pytest.raises(ValueError, match="numerical"):
+        bt.var_backtest(payload)
+
+
 def request(pnl, var, confidence=0.99, **extra):
     return dict(as_of="2026-09-12", currency="USD", source="synthetic test", data_mode="synthetic",
                 pnl=[float(v) for v in pnl], var=[float(v) for v in var], confidence=confidence,

@@ -133,10 +133,10 @@
   },
   {
     "name": "optiondesk-engine",
-    "version": "0.3.0",
-    "wheel": "optiondesk_engine-0.3.0-py3-none-any.whl",
-    "sha256": "8f76f14c9026cad09d77d6d887823902d02085f98e395d67818dba50af0f8a0d",
-    "source": "option-desk commit 4a282d91bdb9fafbb0e4d80f2e88ab790eac6f4c, engine/ built from a clean git archive"
+    "version": "0.3.0.post1",
+    "wheel": "optiondesk_engine-0.3.0.post1-py3-none-any.whl",
+    "sha256": "45e9ded34b05ed63ea80402bd57937f2dae262a5db5b735858ec6ac5b1ca3e50",
+    "source": "option-desk commit 00ccd5759c79bff5672148b3ceab0ae4f30b6a00, engine/ built from a clean git archive for this deployment; not the PyPI wheel"
   },
   {
     "name": "packaging",

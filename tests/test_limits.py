@@ -137,6 +137,30 @@ def test_non_finite_payload_value_is_refused():
         check_limits(request(limit("g", "gross_exposure", "max", 1), results=payload))
 
 
+@pytest.mark.parametrize("scenarios", [7, "down", {}, [None],
+    [{"name": "down", "loss": 1}, {"name": "down", "loss": 1000}]])
+def test_malformed_or_ambiguous_stress_is_not_evaluated(scenarios):
+    result = check_limits(request(limit("stress", "stress_loss", "max", 10, scenario="down"),
+                                  results={"stress": dict(meta(), scenarios=scenarios)}))
+    assert result["limits"][0]["status"] == "not_evaluated"
+    assert result["limits"][0]["value"] is None
+    assert result["limits"][0]["reason"]
+    assert result["degraded"]
+    assert checker().check(result) == []
+
+
+def test_overflowing_utilisation_preserves_breach_and_explains_null():
+    result = check_limits(request(limit("gross", "gross_exposure", "max", 1e-308),
+                                  results={"exposure": dict(meta(), gross_exposure=1e308)}))
+    row = result["limits"][0]
+    assert row["status"] == "breach"
+    assert row["utilisation"] is None
+    assert row["utilisation_unavailable_reason"]
+    assert result["degraded"]
+    json.dumps(result, allow_nan=False)
+    assert checker().check(result) == []
+
+
 def whatif(**extra):
     book = load("portfolio.json")
     # Before P&L is tail.json's [-100, -50, 0, 50]: A carries it all (600 x r_A), B and C return zero.

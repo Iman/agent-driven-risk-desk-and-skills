@@ -1,5 +1,9 @@
 # Changelog
 
+The deployment build uses optiondesk-engine 0.3.0.post1 from the audited Option
+Desk commit recorded in `wheel-hashes.json`. Its local wheel includes the pricing
+validation changes; it is not a claim that the PyPI wheel has those changes.
+
 This file records what changed and what was observed, with the date of the
 observation. A figure that appears here was measured; one that was not
 measured is named as not measured.
@@ -8,6 +12,15 @@ measured is named as not measured.
 
 Ten new calculation areas on the same runtime, all read-only and all
 called by the CLI and the MCP server alike. Fourteen plugin skills.
+
+### Audit corrections on 2026-11-06
+
+- Malformed or duplicate matching stress scenarios are not evaluated.
+- Overflowing utilisation returns null with a reason and degraded status;
+  the comparison still reports the breach.
+- Non-finite ES calibration, statistics and simulated values are refused.
+- 818 tests collected; 93.78 percent unit line coverage from 677
+  passing unit tests. These checks do not establish model fitness.
 
 ### Added on 2026-11-04
 

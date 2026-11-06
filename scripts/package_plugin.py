@@ -11,7 +11,7 @@ for target_plugin in (plugin, hosted):
     assets.mkdir(exist_ok=True)
     for name in ('openai-directory-icon.png', 'openai-composer-icon.png'):
         shutil.copyfile(root / 'assets' / name, assets / name)
-for name in ('LICENSE','THIRD-PARTY.md','dependency-inventory.json','wheel-hashes.json'):
+for name in ('LICENSE','DISCLAIMER.md','THIRD-PARTY.md','dependency-inventory.json','wheel-hashes.json'):
     shutil.copyfile(root/name,plugin/name)
 shutil.copytree(root/'notices',plugin/'notices',dirs_exist_ok=True)
 
@@ -24,6 +24,7 @@ if (root/'openai-skills').is_dir():
     shutil.copytree(root/'openai-skills',hosted/'skills',
                     ignore=shutil.ignore_patterns('.DS_Store','__pycache__'))
     shutil.copyfile(root/'LICENSE',hosted/'LICENSE')
+    shutil.copyfile(root/'DISCLAIMER.md',hosted/'DISCLAIMER.md')
 target=root/'dist/risk-desk-plugin.zip'
 target.parent.mkdir(exist_ok=True)
 def publishable(path):
@@ -58,7 +59,7 @@ with ZipFile(hosted_target, 'w', ZIP_DEFLATED) as archive:
             archive.write(path, path.relative_to(hosted))
 with ZipFile(hosted_target) as archive:
     assert archive.testzip() is None
-    for required in ('LICENSE', '.codex-plugin/plugin.json', '.mcp.json'):
+    for required in ('LICENSE', 'DISCLAIMER.md', '.codex-plugin/plugin.json', '.mcp.json'):
         assert required in archive.namelist(), required
 print(hosted_target)
 

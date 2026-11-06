@@ -1,10 +1,11 @@
 {
-  "generated_utc": "2026-11-04T17:27:35.212541+00:00",
+  "generated_utc": "2026-11-06T09:58:04.388040+00:00",
   "command": "python research/math-review/run_all.py",
-  "reviewed_head": "5fc0c4c397815de144b5235bd59e9d218f2820be",
-  "reviewed_branch": "feat/v0.2",
+  "reviewed_head": "1f4ffc08dec3703191ad24c0d99c65e631929054",
+  "reviewed_branch": "main",
   "uncommitted_module_changes": [
-    "M src/riskdesk/derivatives.py"
+    "M src/riskdesk/backtest.py",
+    " M src/riskdesk/limits.py"
   ],
   "python": "3.13.14",
   "packages": {
@@ -16,22 +17,20 @@
   },
   "option_desk": {
     "path": "/Users/developer/workspace/trading-desk/option-desk",
-    "head": "37ce667e2aaf0781bcd6391c4429dd517226b863",
+    "head": "52df47d8c02b2b0559a87bb6c6a91d1008b16207",
     "uncommitted_engine_changes": [
-      "M engine/README.md",
-      " M engine/pyproject.toml",
-      "?? engine/src/optiondesk_engine/notices/",
-      "?? engine/src/optiondesk_engine/pricing/quantlib_backend.py",
-      "?? engine/tests/test_quantlib_backend.py"
+      "M engine/src/optiondesk_engine/pricing/black_scholes.py",
+      " M engine/src/optiondesk_engine/pricing/greeks_full.py",
+      " M engine/tests/test_greeks_full.py"
     ]
   },
   "module_sha256": {
     "src/riskdesk/analytics.py": "71649a023da6a779d482bb2bd61286c457aec0d92ee5eda15ba3a41fd70001f2",
     "src/riskdesk/tail_models.py": "dc30ba30d5df55e7739416f6c9cf44db72123beb4f0b31c128ff8778e5033430",
-    "src/riskdesk/backtest.py": "08eebc277e696ff69eb08c2c78011713a24bba4f2da87434739750fef773d05e",
+    "src/riskdesk/backtest.py": "e43bcb16658434845350630bc6f0e2677d05315a82e71de9ca995cea448e14fb",
     "src/riskdesk/derivatives.py": "c2d50bfb0167f98dd15b041981ba1a3625917609a926c3a62c1c73d06cf16d28",
     "src/riskdesk/decomposition.py": "18a136ba9bdeb2a9aa74299bd79eb156791159d1ea18353f9045a190f0260309",
-    "src/riskdesk/limits.py": "aafe26988030c1ee866fda529dd97c8c5d4b3e02433456b2efd24939421b75a6",
+    "src/riskdesk/limits.py": "8405fd38135ac7d4389370cd1427ca9709039e72b49c2c600f9863ec50c05585",
     "src/riskdesk/liquidity.py": "ff73f44810d5e98f806bd305b1ef42f32d86b5b7b1176d923cfc62fdb144ceab",
     "src/riskdesk/scenarios.py": "96cb4a3f8c1615f7899c7539dd7e7e737acf8551c648f9f2c7d00ae0fcb927b4",
     "src/riskdesk/counterparty.py": "06adf8cc9665156777991a37e0844e79ed82a2ca6a4bb8bccc4e606418275ce6",
@@ -44,15 +43,15 @@
     "src/riskdesk/derivatives.py": "the integrator is removing the Black-76 rho workaround now that Option Desk 4a282d9 fixes black76_greeks; re-run this script after it lands"
   },
   "results_sha256": {
-    "backtest/numerical-results.json": "0a9da9627364af3c735916503fb0ab954b63b8a12b9f9bb664368a5342b1c02b",
-    "tail/numerical-results.json": "5d8e13676adb67d351f86eb51154dec5a4bf72e7271fe03a5e5056e2fb960b3f",
-    "counterparty/numerical-results.json": "aef885dbe9fac4dafd9d5c1caa9da9e0432456fba5b588841b1ca1a8a5073cd0",
-    "credit/numerical-results.json": "0e188491d058948afc3c9a3aa4f29004cbe9c2f9e68d909b34f043baa89e9710",
-    "decomposition/numerical-results.json": "8d3ad82950587e067b143ffb1e6902d6355844d8195588c8482d764394c155ad",
-    "scenarios/numerical-results.json": "4e5dd512b7a663bb6ef83239d96c7cd18ad4b82db4fe30cbb3f362d6e6371b79",
-    "frtb/numerical-results.json": "46863139c03d5eb76cbd9780efaa333e79af0f9e752dfb9fe77b2033d51cdfc9",
-    "derivatives/numerical-results.json": "885807277e7ad28fe8f5cd5e9a915656f6eea1767f04c4a810f5f255aa00cea8",
-    "liquidity/numerical-results.json": "28ef4c439324c4ce32c8454257158928aa7470c772c9d384cc1a7772560513e6"
+    "backtest/numerical-results.json": "8f57a0624abf61bdaad860c208b71e12e65fb78fb7a2290bf3f253ed892c8765",
+    "tail/numerical-results.json": "bf4e371a808de90ccbe8d1204f80becafb1be49825a2ea1489647b741f0dc908",
+    "counterparty/numerical-results.json": "e062109c3ec6fc61aa225b64b5c4b22e7ec7671cdafb0ccafb372ff859f9c5c2",
+    "credit/numerical-results.json": "2eae8b4a6c1985582acefcea97deb80b233ab8fe710c7f550d4e42d2714f306e",
+    "decomposition/numerical-results.json": "2b0500966c33c74e37744facbe7cf769caa9726b5a412e0cadeb7789ca2cd4ca",
+    "scenarios/numerical-results.json": "f1e6542034e9d1793eb8aed57829e2a04d8b176278c2e0439fd4cea6c6e920ef",
+    "frtb/numerical-results.json": "44cbb1b6b53573a38a3690ad35ed9f04ba92de1a9701a3cc035f2f826f10f4b4",
+    "derivatives/numerical-results.json": "5974ffa5a74e5212f88ffb95aff1c7c9775aa27fda2295f92d6df850e4cf8167",
+    "liquidity/numerical-results.json": "21a6f20c918959709145fa1a923772df4de86dfcc1c706a505dce6b2e7949eb5"
   },
   "totals": {
     "checks": 186,

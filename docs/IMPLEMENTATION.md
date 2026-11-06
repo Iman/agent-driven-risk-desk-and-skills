@@ -1,5 +1,15 @@
 # Initial implementation evidence
 
+## Audit on 2026-11-06
+
+818 tests collected. Unit line coverage was 93.78 percent, measured
+from 677 passing unit tests. The audit adds refusals for non-finite ES
+backtests and protects limit evaluation against malformed or ambiguous
+stress results. Overflowing utilisation remains null with a reason and
+degraded status while the breach status is preserved.
+
+The observations below retain their original dates and measurements.
+
 ## UNKNOWN
 
 No licensed production portfolio or historical option dataset was supplied.

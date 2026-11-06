@@ -154,6 +154,7 @@ def test_the_hosted_manifests_name_one_endpoint_and_only_that_one():
     assert list(servers) == ["riskdesk-hosted"]
     assert servers["riskdesk-hosted"]["type"] == "http"
     assert servers["riskdesk-hosted"]["url"] == ENDPOINT + "/mcp"
+    assert servers["riskdesk-hosted"]["extensions"]["com.openai"]["auth"] == {"type": "none"}
     codex = load(hosted / ".codex-plugin" / "plugin.json")
     assert codex["interface"]["websiteURL"] == ENDPOINT
     for runtime in (".claude-plugin", ".codex-plugin"):

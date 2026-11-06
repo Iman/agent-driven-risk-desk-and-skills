@@ -54,3 +54,19 @@ certificate and the service does not check it.
 Market impact modelling and Counterparty XVA are not available here. XVA
 needs a trusted local ORE project directory and the local `risk-desk`
 plugin.
+
+## Data and result limits
+
+For every calculation with a supplied `request`, set the separate boolean
+`rights_confirmed=true` only after the user confirms permission for hosted
+processing and output delivery. Existing explicit permission is sufficient.
+Never infer permission from an attachment or `data_mode`. No-input synthetic
+demonstrations need no confirmation. Confirmation does not verify a licence.
+
+Keep model and data limitations visible. Results can be wrong; reproducibility
+does not establish fitness or regulatory approval. Do not present a ranking or
+comparison as a personal recommendation, executable quote or guaranteed loss
+limit. Independently verify material results before use.
+
+[Terms](https://riskdesk.avidquant.com/terms) and
+[privacy](https://riskdesk.avidquant.com/privacy) explain data handling and legal limits.

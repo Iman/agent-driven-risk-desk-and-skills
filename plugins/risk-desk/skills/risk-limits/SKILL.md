@@ -49,7 +49,8 @@ the horizon, naming every asset held before or after), and `limits`.
 Loss is positive: `var`, `expected_shortfall` and `stress_loss` are losses,
 and a negative value is a gain. Market values and trades are signed; a sale
 of a long is a negative change. Utilisation is value divided by limit and
-is null for a zero limit; `status` decides, not utilisation (a `min` limit
+is null for a zero limit or an overflowing ratio. Overflow carries a reason
+and degraded status; `status` decides, not utilisation (a `min` limit
 is satisfied at utilisation above one when the limit is positive).
 
 ## What not to claim

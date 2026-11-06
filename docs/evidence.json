@@ -2,25 +2,27 @@
  "note": "Figures quoted in the documentation, with where each came from. A measured figure was counted in this checkout when this file was written. A pinned figure came from a run against inputs that are not in this repository and was not re-measured. Written by scripts/evidence.py.",
  "figures": {
   "tests_collected": {
-   "value": 810,
+   "value": 818,
    "kind": "measured",
-   "measured_by": "scripts/evidence.py record",
+   "measured_by": "python -m pytest --collect-only -q --color=no",
    "about": "tests pytest collects in this checkout",
    "documents": {
-    "README.md": "tests-810%20collected",
-    "docs/IMPLEMENTATION.md": "810 tests collected"
-   }
+    "README.md": "tests-818%20collected",
+    "docs/IMPLEMENTATION.md": "818 tests collected"
+   },
+   "observed": "2026-11-06"
   },
   "unit_coverage": {
-   "value": "93.85",
+   "value": "93.78",
    "kind": "measured",
-   "measured_by": "scripts/evidence.py record",
+   "measured_by": "python -m coverage run -m pytest -q --color=no -m unit; python -m coverage json -q",
    "about": "unit line coverage of src/riskdesk, percent",
    "documents": {
-    "README.md": "unit%20coverage-93.85%25",
-    "docs/IMPLEMENTATION.md": "93.85 percent",
-    "CHANGELOG.md": "93.85 percent"
-   }
+    "README.md": "unit%20coverage-93.78%25",
+    "docs/IMPLEMENTATION.md": "93.78 percent",
+    "CHANGELOG.md": "93.78 percent"
+   },
+   "observed": "2026-11-06"
   },
   "skills": {
    "value": 14,

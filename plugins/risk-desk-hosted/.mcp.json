@@ -2,7 +2,14 @@
   "mcpServers": {
     "riskdesk-hosted": {
       "type": "http",
-      "url": "https://riskdesk.avidquant.com/mcp"
+      "url": "https://riskdesk.avidquant.com/mcp",
+      "extensions": {
+        "com.openai": {
+          "auth": {
+            "type": "none"
+          }
+        }
+      }
     }
   }
 }

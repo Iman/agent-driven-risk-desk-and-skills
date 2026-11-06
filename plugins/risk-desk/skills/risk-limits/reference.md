@@ -27,10 +27,13 @@ Let v be the value, L the hard limit, W the optional warning.
 - min: breach if v < L; else warning if W is set and v <= W; else within.
 - not_evaluated, with a reason, when the result, asset or scenario is
   absent, the result is an error envelope, its currency differs from the
-  request, or the value is not a finite number.
+  request, the value is not a finite number, or stress scenarios are malformed
+  or contain duplicate matches for the requested name.
 
 A value exactly at the hard limit is within (or warning when W = L).
-Utilisation u = v / L, null when L = 0.
+Utilisation u = v / L, null when L = 0 or the ratio overflows. An overflow
+preserves the limit status, adds `utilisation_unavailable_reason` to the row
+and marks the result degraded.
 
 Overall status is the most severe row under the order
 within < not_evaluated < warning < breach.

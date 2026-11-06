@@ -60,7 +60,7 @@ Part A: 116 distinct returned assumptions. Part B: 25 interpretations.
 | A048 | M12 | data assumption | Factor exposure is currency P&L per 1.00 factor return; factor beta divides it by NAV. | Factor returns supplied in percent rather than per 1.00 scale exposures by 100. |
 | A049 | M13 | data assumption | Values are read from the supplied result payloads; nothing is recomputed here. | A tampered or stale payload is graded as supplied; provenance checks flag currency and as-of only. |
 | A050 | M13 | modelling choice | max limits breach when value > limit and warn when value >= warning; min limits mirror this. | A value exactly at the hard limit is within; a desk whose policy is breach-at-limit would differ. |
-| A051 | M13 | modelling choice | Utilisation is value divided by limit (null when the limit is zero); status is the authority. | None; status, not utilisation, is the authority. |
+| A051 | M13 | modelling choice | Utilisation is value divided by limit (null when the limit is zero or the ratio overflows); status is the authority. | None; status, not utilisation, is the authority. |
 | A052 | M13 | modelling choice | A limit whose metric, asset or scenario is absent is reported not_evaluated, never skipped. | None; missing data is reported, never passed as within. |
 | A053 | M13 | modelling choice | Overall status is the most severe of breach, warning, not_evaluated, within. | None; ordering is the desk's definition. |
 | A054 | M14 | data assumption | Each trade is a signed change in linear market value at as-of prices, applied to the position holding its asset (or the named position_id); an asset not yet held opens a what-if-N position. | Trades priced away from as-of prices or non-linear trades are not represented. |

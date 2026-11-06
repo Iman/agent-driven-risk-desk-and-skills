@@ -98,10 +98,16 @@ def _es_test(pnl, var, es, request):
         draw = lambda size: rng.standard_t(dof, size)
     scale = (es - var)/(e - q)
     loc = var - scale*q
+    if not (np.isfinite(scale).all() and np.isfinite(loc).all()):
+        raise ValueError("ES null calibration exceeded numerical limits")
     observed = float(_z2(pnl, var, es, alpha))
+    if not np.isfinite(observed):
+        raise ValueError("ES backtest statistic exceeded numerical limits")
     batch = max(1, 2_000_000//len(pnl))  # bounds memory at about 16 MB per batch
     simulated = np.concatenate([_z2(-(loc + scale*draw((min(batch, ES_SIMULATIONS - s), len(pnl)))), var, es, alpha)
                                 for s in range(0, ES_SIMULATIONS, batch)])
+    if not np.isfinite(simulated).all():
+        raise ValueError("ES null simulation exceeded numerical limits")
     # add-one estimator: a finite simulation cannot show a p-value of exactly zero
     p_value = float((np.sum(simulated <= observed) + 1)/(ES_SIMULATIONS + 1))
     return dict(z2=observed, p_value=p_value, mc_standard_error=float(np.sqrt(p_value*(1 - p_value)/ES_SIMULATIONS)),
@@ -122,7 +128,11 @@ def var_backtest(payload):
         basel_reason = "MAR99 zones apply to one-day VaR at 99% coverage only"
     es_test = None
     if request.expected_shortfall is not None:
-        es_test = _es_test(pnl, var, np.asarray(request.expected_shortfall), request)
+        try:
+            with np.errstate(over="raise", invalid="raise", divide="raise"):
+                es_test = _es_test(pnl, var, np.asarray(request.expected_shortfall), request)
+        except FloatingPointError:
+            raise ValueError("ES backtest exceeded numerical limits") from None
     result = envelope(request, "VaR exception backtests and Acerbi-Szekely ES backtest", [
         "An exception is a realised loss strictly greater than that day's VaR; loss is minus P&L.",
         "Each VaR was forecast before its P&L was realised and covers the stated horizon; rows are in time order.",

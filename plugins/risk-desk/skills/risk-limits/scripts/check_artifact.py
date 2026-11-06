@@ -44,6 +44,10 @@ def check(artifact):
             problems.append("{}: status {} but value {} gives {}".format(
                 name, row.get("status"), value, expected))
         utilisation = value/limit if limit else None
+        if utilisation is not None and not math.isfinite(utilisation):
+            utilisation = None
+            if not row.get("utilisation_unavailable_reason") or not artifact.get("degraded"):
+                problems.append("{}: overflowing utilisation needs a reason and degraded status".format(name))
         if (utilisation is None) != (row.get("utilisation") is None) or (
                 utilisation is not None and not math.isclose(utilisation, row["utilisation"], rel_tol=1e-12)):
             problems.append("{}: utilisation is not value / limit".format(name))

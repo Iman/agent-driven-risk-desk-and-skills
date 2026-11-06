@@ -67,7 +67,8 @@ for tool in tools:
 sample = {'as_of':'2026-09-15','currency':'GBP','source':'Synthetic deployment check',
           'data_mode':'synthetic','pnl':[-100,-50,10,20,5],'confidence':0.99,
           'horizon_days':1,'portfolio_value':10000}
-result = rpc('tools/call', {'name':'risk_tail','arguments':{'request':sample}})
+result = rpc('tools/call', {'name':'risk_tail','arguments':{
+    'request':sample, 'rights_confirmed':True}})
 assert not result.get('isError'), result
 assert result['structuredContent']['degraded'] is True
 assert result['structuredContent']['data_origin'] == 'caller_supplied'
@@ -76,6 +77,7 @@ print('supplied synthetic sample degraded warning PASS')
 limits = rpc('tools/call', {'name':'risk_desk_status','arguments':{}})['structuredContent']['limits']
 cap = limits['work_limits']['risk_tail_models']['max']
 oversized = dict(sample, pnl=[float(i % 7 - 3) for i in range(cap + 1)])
-result = rpc('tools/call', {'name':'risk_tail_models','arguments':{'request':oversized}})
+result = rpc('tools/call', {'name':'risk_tail_models','arguments':{
+    'request':oversized, 'rights_confirmed':True}})
 assert result.get('isError') and 'hosted limit' in result['content'][0]['text'], result
 print('risk_tail_models work limit refusal PASS')

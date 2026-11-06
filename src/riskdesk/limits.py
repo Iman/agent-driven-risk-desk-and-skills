@@ -82,9 +82,13 @@ def _read(limit, results, currency):
         if value is None:
             return None, None, "asset {} is not in the exposure result".format(limit.asset)
     if limit.scenario is not None:
-        rows = [row for row in value or [] if isinstance(row, dict) and row.get("name") == limit.scenario]
+        if not isinstance(value, list) or any(not isinstance(row, dict) for row in value):
+            return None, None, "stress scenarios must be a list of objects"
+        rows = [row for row in value if row.get("name") == limit.scenario]
         if not rows:
             return None, None, "scenario {} is not in the stress result".format(limit.scenario)
+        if len(rows) != 1:
+            return None, None, "scenario {} is duplicated in the stress result".format(limit.scenario)
         value = rows[0].get("loss")
     if kind == "tail":
         basis = dict(confidence=payload.get("confidence"), horizon_days=payload.get("horizon_days"))
@@ -114,6 +118,10 @@ def _evaluate(request):
             row.update(status="not_evaluated", reason=reason)
         else:
             row["utilisation"] = value/limit.limit if limit.limit else None
+            if row["utilisation"] is not None and not math.isfinite(row["utilisation"]):
+                row["utilisation"] = None
+                row["utilisation_unavailable_reason"] = "value divided by limit exceeded numerical limits"
+                warnings.append("{}: {}".format(limit.name, row["utilisation_unavailable_reason"]))
             row["status"] = ("breach" if _exceeds(limit.direction, value, limit.limit) else
                              "warning" if limit.warning is not None
                              and not _exceeds(limit.direction, limit.warning, value) else "within")
@@ -131,7 +139,7 @@ def check_limits(payload):
     result = envelope(request, "limit utilisation against supplied Risk Desk results", [
         "Values are read from the supplied result payloads; nothing is recomputed here.",
         "max limits breach when value > limit and warn when value >= warning; min limits mirror this.",
-        "Utilisation is value divided by limit (null when the limit is zero); status is the authority.",
+        "Utilisation is value divided by limit (null when the limit is zero or the ratio overflows); status is the authority.",
         "A limit whose metric, asset or scenario is absent is reported not_evaluated, never skipped.",
         "Overall status is the most severe of breach, warning, not_evaluated, within."], warnings)
     result.update(overall_status=overall, status_counts=counts, limits=rows)

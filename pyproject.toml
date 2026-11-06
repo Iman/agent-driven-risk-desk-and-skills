@@ -7,7 +7,7 @@ license = "PolyForm-Noncommercial-1.0.0"
 license-files = ["LICENSE", "notices/**/*"]
 authors = [{name = "Iman Samizadeh"}]
 dependencies = ["skfolio==1.1.0", "pydantic>=2.11,<3", "mcp==1.30.0", "numpy>=2", "scipy>=1.15.2",
-                "scikit-learn==1.9.1", "optiondesk-engine==0.3.0"]
+                "scikit-learn==1.9.1", "optiondesk-engine==0.3.0.post1"]
 
 [project.optional-dependencies]
 xva = ["open-source-risk-engine==1.8.16.0"]

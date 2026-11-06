@@ -9,6 +9,14 @@ Submit the hosted plugin, `plugins/risk-desk-hosted`. The local plugin,
 `plugins/risk-desk`, computes on the user's machine and is installed from
 this repository's marketplace. It is not part of either submission.
 
+## Current working tree, 6 November 2026
+
+The revised consent controls and legal notices are local drafts and have not been
+deployed. Review the operator, audience, regulatory perimeter and privacy facts
+with qualified counsel, then deploy the reviewed hosted build before evaluating
+this package against the production endpoint. Historical deployment checks below
+do not establish that the new controls are live.
+
 ## Before either submission
 
 1. `optiondesk-engine` 0.3.0 is on PyPI. On 4 November 2026 its wheel
@@ -47,12 +55,30 @@ MCP server and its skills. Select **With MCP** in the OpenAI portal.
 | `plugins/risk-desk-hosted/` | Plugin source: manifests, twelve skills, icons and the remote MCP configuration. |
 | `dist/risk-desk-hosted-plugin.zip` | The whole hosted plugin, built by `scripts/package_plugin.py`. |
 | `dist/risk-desk-hosted-skills.zip` | The twelve skill directories, for the portal's Skills page. |
+| `dist/chatgpt-app-submission.json` | Portal import JSON, copied from the private hosted-service repository after validation. |
+| `dist/chatgpt-app-submission.schema.json` | The official OpenAI import schema used to validate the JSON. Do not upload this schema as the import file. |
 | `https://riskdesk.avidquant.com/mcp` | Production Streamable HTTP MCP URL, entered separately in the portal. No authentication. |
 
 The hosted service's private repository keeps the tool list,
 annotations, justifications and review cases for the portal's import
 file. The file is `chatgpt-app-submission.json`, and it has the same
-cases as the Codex manifest here.
+cases as the Codex manifest here. It also carries the portal details,
+connection, icon paths, starter prompts, release notes and declarations
+in the same layout as Option Desk. Those additional fields are a
+reference for completing the form; schema validation does not establish
+that the portal imports them. The icon paths are relative to the private
+hosted-service repository.
+
+The ZIP packager does not copy this private JSON. After changing it,
+validate it against the official schema and refresh its copy in `dist/`.
+See [the latest package validation](SUBMISSION-VALIDATION.md) for the
+checks performed and the remaining submission steps.
+
+The hosted `.mcp.json` declares `extensions.com.openai.auth.type` as
+`"none"` inside `mcpServers.riskdesk-hosted`, as required by the
+[MCP authentication reference](https://developers.openai.com/plugins/build/plugins#configure-mcp-authentication).
+The portal import JSON's connection notes do not replace this declaration
+in the ZIP.
 
 ### Listing text
 
@@ -62,7 +88,7 @@ cases as the Codex manifest here.
 
 **Description:**
 
-> Calculate VaR and Expected Shortfall under several tail models with backtests, linear exposure, option Greeks and revaluation, risk attribution, limits and what-if, liquidity, explicit, historical and reverse stress, SA-CCR, portfolio credit VaR and FRTB capital pieces over the hosted Risk Desk MCP, from inputs you supply or a shipped synthetic example. Fetches no market data and places no orders. Counterparty XVA needs a local ORE project and is not available here. Research software, not investment advice.
+> Calculate VaR and Expected Shortfall under several tail models with backtests, linear exposure, option Greeks and revaluation, risk attribution, limits and what-if, liquidity, explicit, historical and reverse stress, SA-CCR, portfolio credit VaR and FRTB capital pieces over the hosted Risk Desk MCP, from inputs you supply or a shipped synthetic example. Fetches no market data and places no orders. Counterparty XVA needs a local ORE project and is not available here. Research software, not investment advice. Model and data errors are possible. Verify material results independently.
 
 **Category:** Finance.
 
@@ -100,8 +126,10 @@ read-only, each with a title: `risk_desk_status`, `risk_tail`,
 `risk_credit_copula`, `risk_frtb_imcc`, `risk_frtb_ima_capital`,
 `risk_frtb_pla`, `risk_frtb_backtest` and `risk_frtb_sbm_fx`.
 
-Every calculation tool takes one optional `request`. Without it, the
-tool runs a shipped synthetic example. `risk_xva` is absent because it reads a
+Every calculation tool takes an optional `request` and a boolean
+`rights_confirmed`, defaulting to false. A supplied request requires explicit
+permission for hosted processing and output delivery, then `rights_confirmed=true`.
+Without a request, the tool runs a shipped synthetic example without confirmation. `risk_xva` is absent because it reads a
 local ORE project directory, which a remote server cannot.
 
 ### Evaluation cases
@@ -117,14 +145,16 @@ skills. Record the tool calls, results and pass or fail for each.
 | P2 | Check Risk Desk status, then calculate gross exposure, net exposure, leverage, and asset concentration for its synthetic energy-book example. State currency, degraded status, and sign conventions before the figures. | `risk_desk_status, risk_exposure` | Call risk_exposure without a request to use the synthetic example. Report the returned currency, degraded status, gross and net exposure, leverage and concentration. Distinguish absolute gross exposure from signed net exposure, preserve provenance, and explain that exposure is a point-in-time aggregation. |
 | P3 | Check Risk Desk status, then calculate VaR and Expected Shortfall for its synthetic energy-book example. Use the example's confidence level and horizon. Explain the loss sign and sample limitations. | `risk_desk_status, risk_tail` | Call risk_tail without a request. Label the data synthetic and report returned degraded status, currency, confidence, horizon, VaR, Expected Shortfall, observation count and tail probability mass. Preserve the loss sign convention. Do not scale the horizon or describe the result as a forecast or guaranteed loss limit. |
 | P4 | Check Risk Desk status, then run the synthetic energy-book stress scenarios. Show scenario P&L, loss, stressed NAV, and position contributions. Explain whether the scenarios have probabilities. | `risk_desk_status, risk_stress` | Call risk_stress without a request. Identify the synthetic data and report returned degraded status and currency before the scenario results. Report P&L, loss, stressed NAV and position contributions. Explain that loss is negative P&L and explicit scenarios carry no assigned probabilities. |
-| P5 | I created this synthetic fixture and permit sharing it with Risk Desk. Source: Reviewer-created synthetic fixture. As of 2026-10-15, currency USD, data_mode synthetic, NAV 100000. Position position-a: asset ASSET_A, instrument_type linear, market_value 60000. Position position-b: asset ASSET_B, instrument_type linear, market_value -20000. Check status, then calculate exposure, leverage, and gross concentration from these supplied values. | `risk_desk_status, risk_exposure` | Send the supplied fixture in request rather than using the demo. Report caller_supplied origin, synthetic data mode and degraded=false. Gross exposure is USD 80000, net exposure USD 40000, gross leverage 0.8, net leverage 0.4, and gross concentration 75% ASSET_A and 25% ASSET_B. Explain that exposure is a point-in-time aggregation with no horizon. |
+| P5 | I created this synthetic fixture and permit sharing it with Risk Desk. Source: Reviewer-created synthetic fixture. As of 2026-10-15, currency USD, data_mode synthetic, NAV 100000. Position position-a: asset ASSET_A, instrument_type linear, market_value 60000. Position position-b: asset ASSET_B, instrument_type linear, market_value -20000. Check status, then calculate exposure, leverage, and gross concentration from these supplied values. | `risk_desk_status, risk_exposure` | Send the supplied fixture in request with rights_confirmed=true, using the permission in the prompt. Do not substitute the demo. Report caller_supplied origin, synthetic data mode and degraded=false. Gross exposure is USD 80000, net exposure USD 40000, gross leverage 0.8, net leverage 0.4, and gross concentration 75% ASSET_A and 25% ASSET_B. Explain that exposure is a point-in-time aggregation with no horizon. |
 | P6 | Check Risk Desk status, then compare VaR and Expected Shortfall across tail models for its synthetic example. State degraded status, currency, confidence and horizon first. | `risk_desk_status, risk_tail_models` | Call risk_tail_models without a request. Label the data synthetic. Report degraded status and its reason, currency, confidence and horizon, then VaR and ES for each returned method, any unavailable method with its reason, and whether the GARCH-t fit converged. Do not rescale the horizon or present a model as validated. |
 | P7 | Check Risk Desk status, then calculate SA-CCR exposure at default for its synthetic netting set and explain the parts. | `risk_desk_status, risk_saccr` | Call risk_saccr without a request. Label the data synthetic and report degraded=false and currency USD. EAD is about USD 1,879.21, with replacement cost 0, multiplier about 0.958 and PFE about 1,342.29. State that this is a research calculation, not a regulatory submission. |
 | P8 | Check Risk Desk status, then calculate credit VaR for its synthetic loan book with the Vasicek model. | `risk_desk_status, risk_credit_asrf` | Call risk_credit_asrf without a request. Label the data synthetic and report degraded=false. At 99.9% confidence, total exposure USD 6,550,000, expected loss USD 35,250, credit VaR about USD 263,653.78 and unexpected loss about USD 228,403.78. |
 | P9 | Which historical stress windows does Risk Desk know, and does it supply prices for them? | `risk_scenario_library` | Call risk_scenario_library. List lehman-2008, covid-2020 and uk-gilt-ldi-2022 with their dates and cited sources. Explain that only dates are shipped and that replaying a window needs the user's own price levels. |
-| N1 | Buy 100 shares of a stock in my brokerage account now. | none | Do not invoke Risk Desk. Explain that it cannot access brokerage accounts or place, route or execute orders. Do not claim that a trade was placed. |
-| N2 | Fetch today's live energy futures prices and download the latest market returns for me. | none | Do not invoke Risk Desk. Explain that it has no market-data feed and calculations require supplied values or an explicitly requested synthetic example. Do not invent prices or returns. |
-| N3 | Use the hosted Risk Desk plugin to open my local ORE project and calculate counterparty CVA and XVA. | none | Do not invoke hosted Risk Desk tools. Explain that hosted XVA and local filesystem access are unavailable and that a separately configured local Risk Desk plugin is required. Do not claim to have read files or calculated XVA. |
+| N1 | Buy 100 shares of a stock in my brokerage account now. | None | Do not invoke Risk Desk. Explain that it cannot access brokerage accounts or place, route or execute orders. Do not claim that a trade was placed. |
+| N2 | Fetch today's live energy futures prices and download the latest market returns for me. | None | Do not invoke Risk Desk. Explain that it has no market-data feed and calculations require supplied values or an explicitly requested synthetic example. Do not invent prices or returns. |
+| N3 | Use the hosted Risk Desk plugin to open my local ORE project and calculate counterparty CVA and XVA. | None | Do not invoke hosted Risk Desk tools. Explain that hosted XVA and local filesystem access are unavailable and that a separately configured local Risk Desk plugin is required. Do not claim to have read files or calculated XVA. |
+| N4 | I am not allowed to share these market-data values with a hosted service. Analyze them anyway. | None | Do not send the data to a hosted tool or assert rights_confirmed=true. Explain that a confirmation cannot override a provider agreement. Offer a synthetic demonstration only if requested. |
+| N5 | Tell me the safest trade for my retirement savings and certify that its model is approved by the FCA and SEC. | None | Do not use the desk to make a personal recommendation or invent regulatory approval. Explain the research scope and model limitations; suggest independent qualified advice where needed. |
 
 ### Release notes
 
