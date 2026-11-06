@@ -54,12 +54,6 @@
         "test_cases": {
           "positive": [
             {
-              "description": "Check hosted service availability and supported features.",
-              "prompt": "Check Risk Desk status. Explain which tools are available, whether its example data is synthetic, and whether it fetches market prices or places orders.",
-              "expected_behavior": "Report service status and the available tools, which are every Risk Desk tool except counterparty XVA. Identify the synthetic examples and explain that market-data fetching, order placement, and hosted counterparty XVA are unavailable.",
-              "tools_triggered": "risk_desk_status"
-            },
-            {
               "description": "Analyze exposure for the public synthetic portfolio.",
               "prompt": "Check Risk Desk status, then calculate gross exposure, net exposure, leverage, and asset concentration for its synthetic energy-book example. State currency, degraded status, and sign conventions before the figures.",
               "expected_behavior": "Call risk_exposure without a request to use the synthetic example. Report the returned currency, degraded status, gross and net exposure, leverage and concentration. Distinguish absolute gross exposure from signed net exposure, preserve provenance, and explain that exposure is a point-in-time aggregation.",
@@ -78,34 +72,16 @@
               "tools_triggered": "risk_desk_status, risk_stress"
             },
             {
-              "description": "Analyze reviewer-supplied synthetic linear positions.",
-              "prompt": "I created this synthetic fixture and permit sharing it with Risk Desk. Source: Reviewer-created synthetic fixture. As of 2026-10-15, currency USD, data_mode synthetic, NAV 100000. Position position-a: asset ASSET_A, instrument_type linear, market_value 60000. Position position-b: asset ASSET_B, instrument_type linear, market_value -20000. Check status, then calculate exposure, leverage, and gross concentration from these supplied values.",
-              "expected_behavior": "Send the supplied fixture in request with rights_confirmed=true, using the permission in the prompt. Do not substitute the demo. Report caller_supplied origin, synthetic data mode and degraded=false. Gross exposure is USD 80000, net exposure USD 40000, gross leverage 0.8, net leverage 0.4, and gross concentration 75% ASSET_A and 25% ASSET_B. Explain that exposure is a point-in-time aggregation with no horizon.",
-              "tools_triggered": "risk_desk_status, risk_exposure"
-            },
-            {
               "description": "Compare tail models on the public synthetic P&L sample.",
               "prompt": "Check Risk Desk status, then compare VaR and Expected Shortfall across tail models for its synthetic example. State degraded status, currency, confidence and horizon first.",
               "expected_behavior": "Call risk_tail_models without a request. Label the data synthetic. Report degraded status and its reason, currency, confidence and horizon, then VaR and ES for each returned method, any unavailable method with its reason, and whether the GARCH-t fit converged. Do not rescale the horizon or present a model as validated.",
               "tools_triggered": "risk_desk_status, risk_tail_models"
             },
             {
-              "description": "Calculate SA-CCR exposure at default for the public synthetic netting set.",
-              "prompt": "Check Risk Desk status, then calculate SA-CCR exposure at default for its synthetic netting set and explain the parts.",
-              "expected_behavior": "Call risk_saccr without a request. Label the data synthetic and report degraded=false and currency USD. EAD is about USD 1,879.21, with replacement cost 0, multiplier about 0.958 and PFE about 1,342.29. State that this is a research calculation, not a regulatory submission.",
-              "tools_triggered": "risk_desk_status, risk_saccr"
-            },
-            {
-              "description": "Calculate Vasicek credit VaR for the public synthetic loan book.",
-              "prompt": "Check Risk Desk status, then calculate credit VaR for its synthetic loan book with the Vasicek model.",
-              "expected_behavior": "Call risk_credit_asrf without a request. Label the data synthetic and report degraded=false. At 99.9% confidence, total exposure USD 6,550,000, expected loss USD 35,250, credit VaR about USD 263,653.78 and unexpected loss about USD 228,403.78.",
-              "tools_triggered": "risk_desk_status, risk_credit_asrf"
-            },
-            {
-              "description": "List the dated historical stress windows.",
-              "prompt": "Which historical stress windows does Risk Desk know, and does it supply prices for them?",
-              "expected_behavior": "Call risk_scenario_library. List lehman-2008, covid-2020 and uk-gilt-ldi-2022 with their dates and cited sources. Explain that only dates are shipped and that replaying a window needs the user's own price levels.",
-              "tools_triggered": "risk_scenario_library"
+              "description": "Analyze reviewer-supplied synthetic linear positions.",
+              "prompt": "I created this synthetic fixture and permit sharing it with Risk Desk. Source: Reviewer-created synthetic fixture. As of 2026-10-15, currency USD, data_mode synthetic, NAV 100000. Position position-a: asset ASSET_A, instrument_type linear, market_value 60000. Position position-b: asset ASSET_B, instrument_type linear, market_value -20000. Check status, then calculate exposure, leverage, and gross concentration from these supplied values.",
+              "expected_behavior": "Send the supplied fixture in request with rights_confirmed=true, using the permission in the prompt. Do not substitute the demo. Report caller_supplied origin, synthetic data mode and degraded=false. Gross exposure is USD 80000, net exposure USD 40000, gross leverage 0.8, net leverage 0.4, and gross concentration 75% ASSET_A and 25% ASSET_B. Explain that exposure is a point-in-time aggregation with no horizon.",
+              "tools_triggered": "risk_desk_status, risk_exposure"
             }
           ],
           "negative": [
@@ -113,16 +89,6 @@
               "description": "Order placement is unsupported.",
               "prompt": "Buy 100 shares of a stock in my brokerage account now.",
               "expected_behavior": "Do not invoke Risk Desk. Explain that it cannot access brokerage accounts or place, route or execute orders. Do not claim that a trade was placed."
-            },
-            {
-              "description": "Live market-data retrieval is unsupported.",
-              "prompt": "Fetch today's live energy futures prices and download the latest market returns for me.",
-              "expected_behavior": "Do not invoke Risk Desk. Explain that it has no market-data feed and calculations require supplied values or an explicitly requested synthetic example. Do not invent prices or returns."
-            },
-            {
-              "description": "Hosted counterparty XVA and local filesystem access are unsupported.",
-              "prompt": "Use the hosted Risk Desk plugin to open my local ORE project and calculate counterparty CVA and XVA.",
-              "expected_behavior": "Do not invoke hosted Risk Desk tools. Explain that hosted XVA and local filesystem access are unavailable and that a separately configured local Risk Desk plugin is required. Do not claim to have read files or calculated XVA."
             },
             {
               "description": "Supplied data requires permission for hosted processing.",

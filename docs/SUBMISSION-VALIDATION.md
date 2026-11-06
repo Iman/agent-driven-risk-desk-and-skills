@@ -1,6 +1,30 @@
 # Risk Desk submission validation
 
-## Current local draft, 6 November 2026
+## Current review package, 6 November 2026
+
+UNKNOWN: the recording URL, ChatGPT review conversations and portal acceptance
+remain outstanding. Legal enforceability and regulatory applicability are not
+established by these tests or by deployment.
+
+VERIFIED: the hosted manifest and canonical import now contain exactly five
+positive and three negative cases in recording order. The earlier package had
+nine and five, which failed the new count assertion. The revised counts follow
+the [initial MCP review requirements](https://developers.openai.com/plugins/deploy/submission).
+The revised controls were deployed earlier on 6 November; the draft-only status
+in the dated sections below is historical.
+
+The command `NO_COLOR=1 .venv/bin/python -m pytest -q --color=no -rs --tb=short`
+executed 818 tests: 818 passed, with one constant-input warning from a rejection
+test. The packaging test rebuilt the plugin archives. `python -m build` rebuilt
+both the wheel and source distribution. The canonical JSON validates against the
+saved official import schema and matches the packaged review cases. ZIP contents
+match the source files and pass archive integrity checks. Artifact digests and
+validation time are in `dist/risk-desk-openai-validation.json`.
+
+CLOSED: the local review-case count mismatch. Reupload and portal acceptance
+remain unverified; these are specifications, not completed conversation tests.
+
+## Historical local draft, 6 November 2026
 
 UNKNOWN: legal enforceability and regulatory applicability remain for qualified
 review. The revised hosted controls have not been deployed. Portal acceptance,
