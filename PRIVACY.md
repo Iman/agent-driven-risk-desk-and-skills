@@ -9,9 +9,9 @@ about you anywhere, and makes no outbound request at all. There is no
 telemetry, no analytics, no crash reporting, no licence check and no
 phone-home of any kind.
 
-That is not a policy promise you have to take on trust, which is the only
-reason it is worth writing down. This software fetches no market data by
-design: it computes over files you give it. There is no provider to call,
+That statement follows from the design and does not have to be taken on
+trust. This software fetches no market data by design, because it
+computes over files you give it. There is no provider to call,
 no key to store, and no account to have.
 
 Two things this section does not cover, both below: the separate hosted
@@ -81,9 +81,9 @@ Its public report uses synthetic data and needs no login. It cannot run
 `risk_xva` at all, because that reads an ORE project directory on your own
 machine, which a remote service cannot see.
 
-If you are weighing whether to use it: the local plugin computes on your
-machine and sends nothing anywhere, and for real positions it is the
-better choice. That is the recommendation the hosted plugin's own README
+If you are weighing whether to use it, note that the local plugin
+computes on your machine and sends nothing anywhere, and for real
+positions it is the better choice. That is the recommendation the hosted plugin's own README
 makes as well.
 
 ## What an AI agent changes

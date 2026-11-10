@@ -5,10 +5,10 @@
 Report privately, not as a public issue. Use GitHub's private vulnerability
 reporting on this repository, under Security, Report a vulnerability.
 
-Tell me what you did, what happened, and what you expected. A reproduction
-is worth more than a description. I will confirm receipt, and I will tell
-you plainly if I disagree that something is a vulnerability rather than
-letting the report go quiet.
+State what was done, what happened, and what was expected. A reproduction
+is worth more than a description. The maintainer confirms receipt, and
+states any disagreement that a report describes a vulnerability instead
+of leaving the report unanswered.
 
 ## What is in scope
 
@@ -19,7 +19,7 @@ resolves paths out of it and starts a process. The installer, because it
 creates an environment and installs packages. The report writer, because it
 puts caller-supplied strings into an HTML page.
 
-Two classes I care about in particular:
+Two classes are of particular concern:
 
 - Anything that makes the ORE adapter read or write outside the directories
   it declares. It requires every referenced input to resolve inside the
@@ -52,7 +52,7 @@ are yours.
 
 ## Reporting without identifying yourself
 
-You do not need to tell me where you are or how you reach the internet to
+You do not need to state where you are or how you reach the internet to
 report a bug or a vulnerability, and you should not be asked. A
 reproduction that runs anywhere is worth more than a description of your
 network, and every diagnostic question worth asking has a form that does

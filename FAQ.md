@@ -1,14 +1,14 @@
 # Questions about Risk Desk
 
-Weighted deliberately toward what this does not do. If you are evaluating
-it for a desk, those are the answers that decide it. They are cheaper to
-read here than to discover in a week.
+The questions are weighted towards what the software does not do. In an
+evaluation for a desk, those answers decide the outcome.
 
 ## Scope and limits
 
 ### What is it, in short
 
-A small, auditable risk calculator over files you supply. It computes VaR
+Risk Desk is a small, auditable risk calculator over supplied files. It
+computes VaR
 and Expected Shortfall with backtests, signed linear exposure and Greeks
 for European options. It also covers attribution, limits, liquidity,
 stress scenarios, SA-CCR, credit VaR and FRTB capital pieces. It exposes
@@ -20,11 +20,11 @@ Risk Engine project for counterparty exposure and XVA.
 No. It has no position store, no market-data connection, no end-of-day
 process and no entitlements. It has no audit trail beyond the input hash
 it records, and no notion of a book that persists between runs. It
-computes over the file you hand it and prints the answer.
+computes over the supplied file and prints the result.
 
 It is useful as a component and as a reference for how to label a
-result. An agent can also drive it without lying to you. It is
-not a replacement for anything a bank runs.
+result. An agent can also drive it and return each result with its labels
+attached. It is not a replacement for anything a bank runs.
 
 ### What does it deliberately not do
 
@@ -44,8 +44,8 @@ not a replacement for anything a bank runs.
 Only under a separate written agreement. The licence is PolyForm
 Noncommercial, and use inside a fund, a bank, a trading desk or any
 business that runs a book is exactly what that excludes. See
-[LICENSES.md](LICENSES.md). The answer to a polite request is not
-automatically no.
+[LICENSES.md](LICENSES.md). A request for such an agreement is considered
+on its merits.
 
 ## The numbers
 
@@ -56,20 +56,19 @@ positive VaR or Expected Shortfall is a loss, a negative one is a gain,
 and neither is floored at zero. Stress P&L is signed and loss is its
 negation, so a negative loss is a scenario the book gains in.
 
-That last one catches people. A scenario showing a loss of -1,843,000 is a
-scenario you make money in.
+For example, a scenario that shows a loss of -1,843,000 is a scenario in
+which the book gains.
 
 ### Does it scale my daily numbers to a ten-day horizon
 
-No. Each P&L observation you supply must already span the horizon you
-state. There is no square-root-of-time scaling anywhere, because applying
-it silently to a sample whose dependence nobody checked is how a number
-stops meaning anything.
+No. Each supplied P&L observation must already span the stated horizon.
+No square-root-of-time scaling is applied anywhere, because the
+dependence of the sample is not tested.
 
 ### Why does it refuse a scenario that omits an asset
 
-Because an omitted shock and a zero shock are different statements, and
-a guess at which you meant changes the answer. Every scenario must name
+An omitted shock and a zero shock are different statements, and a guess
+between them changes the result. Every scenario must name
 exactly the assets in the book, including an explicit zero where nothing
 moves.
 
@@ -92,14 +91,14 @@ for it.
 No. Every file in `examples/` is synthetic and says so in its own `source`
 field. The energy book is hand-written. Its P&L series is a drawn sample
 from a heavy-tailed distribution, and the file records the exact recipe
-so you can regenerate it. The scenario shapes are hand-chosen, not fitted to
+so that the series can be regenerated. The scenario shapes are hand-chosen, not fitted to
 any dated episode, and carry no probability.
 
 ### Are the ORE figures validated
 
-No. They are a numerical regression: the same pinned inputs produce the
-same numbers. That is worth having and it is not model validation, does
-not establish calibration quality, and does not imply regulatory approval.
+No. They are a numerical regression, in which the same fixed inputs
+produce the same numbers. A regression is not model validation, does not
+establish calibration quality, and does not imply regulatory approval.
 The figures in the documents come from one run against one upstream
 checkout, recorded with the date it was observed.
 
@@ -109,7 +108,7 @@ checkout, recorded with the date it was observed.
 
 Only for `riskdesk xva`. Its wheel does not exist for every platform: it
 resolves on macOS ARM64 and on linux/amd64 under CPython 3.13, and not on
-linux/arm64. The installer attempts it and says plainly what happened.
+linux/arm64. The installer attempts it and reports the outcome.
 Without it, every other command and tool still works.
 
 ### The plugin is installed but the agent lists no tools
@@ -121,18 +120,17 @@ Installing a plugin does not install the software. See
 
 ### Can I expose the dashboard to my team
 
-No, and it refuses to let you. It binds a loopback address and rejects any
-other host with a non-zero exit, because it has no authentication of any
-kind. Putting a risk book on a network must be a deliberate act with a
+No. It binds a loopback address and rejects any other host with a
+non-zero exit, because it has no authentication of any kind. Putting a risk book on a network must be a deliberate act with a
 login in front of it, not a flag.
 
 ### Is there a hosted version
 
 Yes, at `riskdesk.avidquant.com`, with every local tool except
 `risk_xva`, 29 in all, no login, and synthetic examples. It cannot run
-`risk_xva`, because that reads an ORE project directory on your own
-machine. For real positions the local install is the better choice: it
-computes on your machine and sends nothing anywhere. See
+`risk_xva`, because that tool reads an ORE project directory on the local
+machine. For real positions the local install is the better choice,
+because it computes locally and sends nothing anywhere. See
 [PRIVACY.md](PRIVACY.md).
 
 ## Trusting it
@@ -146,35 +144,33 @@ disagree. Figures measured in the checkout are marked `measured`. The ORE
 values came from a run against an upstream checkout that is not in this
 repository. They are marked `pinned`, with the date.
 
-Change a digit in a README badge and the suite fails. That is the single
-feature this project most wants you to look at.
+A changed digit in a README badge makes the suite fail.
 
 ### How do you know the tests can fail
 
-`scripts/mutate.py` breaks the analytics on purpose, 33 ways, and requires
-the tests to notice: sign flips, the quantile boundary, gross counted as
-net, the leverage divisor, the degraded flag and every validation rule.
-Two of the 33 are recorded as equivalent, with the measurement that
-justifies calling them that rather than an argument.
+`scripts/mutate.py` applies 33 deliberate faults to the analytics and
+requires the tests to detect each one. The faults cover sign flips, the
+quantile boundary, gross counted as net, the leverage divisor, the
+degraded flag and every validation rule. Two of the 33 are recorded as
+equivalent, with the measurement that supports that classification.
 
 ### What has actually been measured, and what has not
 
-`docs/IMPLEMENTATION.md` is the honest ledger, kept in VERIFIED, UNKNOWN,
-ASSUMPTIONS and PLAN sections. Read the UNKNOWN section first. It names
-what was not measured, including things that are convenient to imply.
-One example is which Python versions were exercised locally and which
-were only reported by CI.
+`docs/IMPLEMENTATION.md` is the evidence ledger, kept in VERIFIED,
+UNKNOWN, ASSUMPTIONS and PLAN sections. Read the UNKNOWN section first.
+It names what was not measured. One example is which Python versions were
+exercised locally and which were only reported by CI.
 
 ### Can I run this on a loop or a schedule
 
 There is nothing to poll. This software fetches no data, so nothing
-changes between two runs unless you change a file. A scheduled run
-recomputes the same answer from the same input and reports it as news.
+changes between two runs unless an input file changes. A scheduled run
+recomputes the same result from the same input.
 
 The 10 commands are single-shot by design: each one runs, reports, and
 ends. There is no goal-based loop because there is no completion criterion
-to check. If a number matters enough to watch, the thing that changes is
-your book, and that change happens in your systems rather than here.
+to check. A number changes only when the book changes, and that change
+occurs in the systems that hold the book.
 
 ### Who wrote this
 

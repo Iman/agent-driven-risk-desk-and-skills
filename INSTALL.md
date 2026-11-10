@@ -1,14 +1,12 @@
 # Install Risk Desk
 
-Seven routes. They are not alternatives in the way a list suggests. The
-first installs the software, and most of the rest only tell an agent
-where to find it.
+This guide gives seven routes. The first installs the software, and most
+of the others tell an agent where to find it.
 
-**Installing a plugin does not install the runtime.** That is the one
-mistake worth avoiding. It is the reason routes 3, 4 and 6 all start by
-pointing at route 1.
+**Installing a plugin does not install the runtime.** Routes 3, 4 and 6
+therefore start from route 1.
 
-| Route | What it gives you | Needs Python |
+| Route | Result | Needs Python |
 | --- | --- | --- |
 | 1. Installer | The `riskdesk` command, the MCP server, the dashboard | yes |
 | 2. Manual checkout | The same, with the steps visible | yes |
@@ -21,7 +19,7 @@ pointing at route 1.
 ## Requirements
 
 Git, and a Python the project supports. `pyproject.toml` declares 3.11 or
-later. The pinned dependency set and the ORE wheel were tested on CPython
+later. The fixed-version dependency set and the ORE wheel were tested on CPython
 3.13 on macOS ARM64. CI runs the suite on 3.11, 3.12 and 3.13.
 
 ### The Option Desk engine
@@ -34,7 +32,7 @@ an earlier build also numbered 0.3.0 lacks the Black-76 rho fix. On
 4 November 2026 the wheel on PyPI had the recorded sha256.
 
 pip records no hash when it installs from an index, so check the wheel
-before you install it:
+before the install:
 
 ```sh
 python3 -m pip download --no-deps -d engine-wheel optiondesk-engine==0.3.0
@@ -54,9 +52,9 @@ cd agent-driven-risk-desk-and-skills
 ```
 
 `install.sh` creates `.venv` and installs the package with its
-development extra. It attempts the optional ORE extra, says plainly
-whether that worked, then runs the test suite. It writes nothing outside the checkout,
-puts nothing on your `PATH`, and registers nothing with any agent runtime.
+development extra. It attempts the optional ORE extra, reports the
+outcome, then runs the test suite. It writes nothing outside the checkout,
+adds nothing to `PATH`, and registers nothing with any agent runtime.
 
 `demo.sh` runs every command over the example books and prints what each
 result means. Both are POSIX sh, print no colour, and exit non-zero on any
@@ -82,13 +80,13 @@ limited set of Python and platform combinations. The installer attempts it
 and reports the outcome rather than failing. Without it, every command
 and tool works except `riskdesk xva` and `risk_xva`.
 
-Measured, so you know what to expect: the wheel resolves on macOS ARM64
-under CPython 3.13, and on `python:3.13-slim` at linux/amd64. It does not
-resolve at linux/arm64, where pip reports no distribution of any version.
+The wheel was measured to resolve on macOS ARM64 under CPython 3.13, and
+on `python:3.13-slim` at linux/amd64. It does not resolve at linux/arm64,
+where pip reports no distribution of any version.
 
 ## 2. Manual checkout
 
-The same thing with the steps visible:
+The same install with each step visible:
 
 ```sh
 git clone https://github.com/Iman/agent-driven-risk-desk-and-skills.git
@@ -139,13 +137,13 @@ Streamable HTTP and needs no login.
 
 It provides every local tool except `risk_xva`, 29 in all, and each
 calculation tool runs a synthetic example when a call sends no request.
-It **cannot run `risk_xva`**, because that reads an ORE project directory
-on your own machine. For real positions the local install is the
-better choice: it computes on your machine and sends nothing anywhere.
+It **cannot run `risk_xva`**, because that tool reads an ORE project
+directory on the local machine. For real positions the local install is
+the better choice, because it computes locally and sends nothing anywhere.
 
 Connection settings for ChatGPT and Codex are in
-[docs/OPENAI.md](docs/OPENAI.md). What the service does with data you send
-it is in [PRIVACY.md](PRIVACY.md).
+[docs/OPENAI.md](docs/OPENAI.md). [PRIVACY.md](PRIVACY.md) states what the
+service does with data sent to it.
 
 ## 6. MCP without a plugin
 
@@ -164,7 +162,7 @@ Any MCP client can start the server directly. The plugin's own
 }
 ```
 
-If the client does not inherit your environment, replace `riskdesk-mcp`
+If the client does not inherit the shell environment, replace `riskdesk-mcp`
 with the absolute path inside `.venv/bin`. The server speaks stdio, binds
 no socket, and makes no market-data or broker request.
 
@@ -179,10 +177,11 @@ docker run --rm --user "$(id -u):$(id -g)" \
     -v "$PWD/artifacts:/artifacts" risk-desk demo
 ```
 
-`--user` is not decoration. The image runs as a fixed non-root uid. On
-Linux a bind mount keeps the ownership it has on the host, so without
-`--user` the container cannot write your directory. Without `--user`, the
-entrypoint refuses with exit 65 and prints the line above.
+`--user` is required on Linux. The image runs as a fixed non-root uid,
+and a Linux bind mount keeps the ownership it has on the host. Without
+`--user` the container cannot write the mounted directory, and the
+entrypoint refuses with exit 65 and names the flag. Docker Desktop on
+macOS remaps the ownership, so the refusal does not occur there.
 
 The image states its own scope. Exit codes:
 
@@ -191,16 +190,16 @@ The image states its own scope. Exit codes:
 - 66: an artifacts path that does not exist.
 - 69: `xva` with no ORE backend in this image.
 
-The agent on your host reads the skills, not the image. So the container
-is a route to the CLI and the demo, not to an agent setup.
+An agent on the host reads the skills, not the image. The container is
+therefore a route to the CLI and the demo, not to an agent setup.
 
 ## Removing it
 
 There is no uninstaller because there is nothing to uninstall. Delete the
 checkout. `install.sh` writes only inside it.
 
-If you added an MCP server to an agent runtime, remove that entry too. If
-you installed the Claude Code plugin, remove it with
+If an MCP server was added to an agent runtime, remove that entry too. If
+the Claude Code plugin was installed, remove it with
 `/plugin uninstall risk-desk`. `pip` leaves its own cache, which is not
 this project's to delete.
 

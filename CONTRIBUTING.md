@@ -1,23 +1,20 @@
 # Contributing
 
-Issues and pull requests are welcome. This document says what the project
-expects, so a contribution is not sent back for something you could not
-have known.
+Issues and pull requests are welcome. This document states what the
+project expects, so that no contribution is returned for an unstated rule.
 
 Start with AGENTS.md. It is short, it is the repository's own statement of
 scope, and it is binding on a pull request as much as on a maintainer.
 
-## Before you write code
+## Before writing code
 
-Say what you measured. The project's rule, and the reason most of its
-documents read the way they do, is that a claim carries its evidence: the
-command you ran, the output you saw, the file and the line. An issue that
-opens with a reproduction is worth more than one that opens with a
-diagnosis.
+State what was measured. The rule of the project is that a claim carries
+its evidence, namely the command, its output, the file and the line. An
+issue that opens with a reproduction is worth more than one that opens
+with a diagnosis.
 
-Validate the premise before building on it. More than one change in this
-repository's history was written, tested and then reverted because nobody
-measured the problem first. If you are fixing something, show it failing.
+Validate the premise before building on it. A change that fixes a defect
+must first show the defect failing.
 
 ## The scope, which is deliberately narrow
 
@@ -29,8 +26,8 @@ profiles, portfolio credit VaR, FRTB capital pieces, and counterparty
 exposure and XVA through a local Open Source Risk Engine project.
 
 A pull request that adds a risk model, a market-data client or broker
-connectivity will be declined however good it is, not because it is
-unwelcome but because it changes what this project claims to be. Open an
+connectivity will be declined, because it changes what this project
+claims to be. Open an
 issue first and name the instrument, the data source or the requirement it
 serves.
 
@@ -46,7 +43,7 @@ Two rules follow from that and are enforced by tests:
 
 ## Tests
 
-Run the suite before you open anything:
+Run the suite before opening an issue or a pull request:
 
 ```sh
 ./install.sh
@@ -66,9 +63,8 @@ documented:
 A unit test that reaches a socket will fail a validation test that reads
 the syntax tree looking for exactly that.
 
-New behaviour needs a test that fails before your change and passes after.
-If you cannot make it fail first, say so in the pull request; that is
-useful information, not a black mark.
+New behaviour needs a test that fails before the change and passes after
+it. If the test cannot be made to fail first, say so in the pull request.
 
 ## The gates a change has to pass
 
@@ -81,7 +77,7 @@ useful information, not a black mark.
 .venv/bin/python scripts/contrast.py           # colour contrast, both modes
 ```
 
-If you change a figure a document quotes, re-record it:
+If a change alters a figure that a document quotes, record the figure again:
 
 ```sh
 .venv/bin/python scripts/evidence.py record
@@ -98,30 +94,33 @@ of the file is that it is measured.
 - No automated authorship. Commits carry the contributor's own identity
   and nothing else. A commit-message hook enforces this.
 - Do not touch `notices/`, `wheel-hashes.json` or the requirements lock
-  unless a dependency genuinely changed.
+  unless a dependency changed.
 - Every example is synthetic and says so in its own `source` field. Keep
-  it that way; see CLA.md for why.
+  it that way. CLA.md gives the reason.
 
 ## What will be sent back
 
-A claim with no measurement behind it. A number in a document that no
-command produces. A test that cannot fail. A new dependency added
-quietly. Prose that describes a capability the code does not have, which
-is the specific failure `scripts/evidence.py` and the validation tests
-exist to catch.
+A contribution with any of these is returned:
+
+- A claim with no measurement behind it.
+- A number in a document that no command produces.
+- A test that cannot fail.
+- A new dependency added without prior discussion.
+- Prose that describes a capability the code does not have. This is the
+  failure that `scripts/evidence.py` and the validation tests detect.
 
 ## Licensing and your rights
 
 Contributions are licensed under PolyForm Noncommercial 1.0.0 and require
-the agreement in CLA.md, which you record by adding your name to
-CONTRIBUTORS.md in the same pull request. You keep your copyright. See
-LICENSES.md for what the licence permits and what needs a written
-agreement.
+the agreement in CLA.md. Record the agreement by adding the name of the
+contributor to CONTRIBUTORS.md in the same pull request. The contributor
+keeps the copyright. LICENSES.md states what the licence permits and what
+needs a written agreement.
 
 ## Privacy
 
-Opening an issue or a pull request means what you write is public and
-permanent. Do not paste a real position file, a real P&L series, or
+The text of an issue or a pull request is public and permanent. Do not
+paste a real position file, a real P&L series, or
 anything derived from a licensed data feed. PRIVACY.md says what this
 software does and does not do with data; the same discipline applies to
 the issue tracker.
