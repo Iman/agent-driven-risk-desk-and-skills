@@ -1,5 +1,6 @@
 """Package plugin instructions with the current licence and dependency notices."""
 from pathlib import Path
+import json
 import shutil
 from zipfile import ZipFile, ZIP_DEFLATED
 
@@ -55,10 +56,20 @@ print(target)
 hosted_target = root / 'dist/risk-desk-hosted-plugin.zip'
 with ZipFile(hosted_target, 'w', ZIP_DEFLATED) as archive:
     for path in sorted(hosted.rglob('*')):
-        if publishable(path):
+        if not publishable(path):
+            continue
+        if path == hosted / '.mcp.json':
+            # OpenAI needs the auth declaration in its upload. Anthropic's
+            # directory refuses the field, so the repository file omits it.
+            config = json.loads(path.read_text(encoding='utf-8'))
+            for server in config['mcpServers'].values():
+                server['extensions'] = {'com.openai': {'auth': {'type': 'none'}}}
+            archive.writestr('.mcp.json', json.dumps(config, indent=2) + '\n')
+        else:
             archive.write(path, path.relative_to(hosted))
 with ZipFile(hosted_target) as archive:
     assert archive.testzip() is None
+    assert '"com.openai"' in archive.read('.mcp.json').decode('utf-8')
     for required in ('LICENSE', 'DISCLAIMER.md', '.codex-plugin/plugin.json', '.mcp.json'):
         assert required in archive.namelist(), required
 print(hosted_target)

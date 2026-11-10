@@ -78,8 +78,11 @@ validate it against the official schema and refresh its copy in `dist/`.
 See [the latest package validation](SUBMISSION-VALIDATION.md) for the
 checks performed and the remaining submission steps.
 
-The hosted `.mcp.json` declares `extensions.com.openai.auth.type` as
-`"none"` inside `mcpServers.riskdesk-hosted`, as required by the
+The `.mcp.json` inside the hosted ZIP declares
+`extensions.com.openai.auth.type` as `"none"` inside
+`mcpServers.riskdesk-hosted`. `scripts/package_plugin.py` adds it to the ZIP
+only: Anthropic's directory refused the repository file while it carried the
+field (10 November 2026). It is required by the
 [MCP authentication reference](https://developers.openai.com/plugins/build/plugins#configure-mcp-authentication).
 The portal import JSON's connection notes do not replace this declaration
 in the ZIP.

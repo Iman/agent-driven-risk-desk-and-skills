@@ -154,7 +154,9 @@ def test_the_hosted_manifests_name_one_endpoint_and_only_that_one():
     assert list(servers) == ["riskdesk-hosted"]
     assert servers["riskdesk-hosted"]["type"] == "http"
     assert servers["riskdesk-hosted"]["url"] == ENDPOINT + "/mcp"
-    assert servers["riskdesk-hosted"]["extensions"]["com.openai"]["auth"] == {"type": "none"}
+    # Anthropic's directory refuses fields outside its allowed list here;
+    # scripts/package_plugin.py adds the OpenAI auth field to the ZIP only.
+    assert set(servers["riskdesk-hosted"]) == {"type", "url"}
     codex = load(hosted / ".codex-plugin" / "plugin.json")
     assert codex["interface"]["websiteURL"] == ENDPOINT
     for runtime in (".claude-plugin", ".codex-plugin"):
