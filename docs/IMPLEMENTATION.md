@@ -536,7 +536,7 @@ Observed overnight on 2026-09-14 into 2026-09-15 London time, on
 macOS ARM64 (Darwin 25.6.0):
 
 - Environment. CPython 3.13.14 at
-  `/Users/iman/.local/share/uv/python/cpython-3.13-macos-aarch64-none/bin/python3.13`.
+  `~/.local/share/uv/python/cpython-3.13-macos-aarch64-none/bin/python3.13`.
   The system default is 3.14.7, which the pinned stack was not tested on
   and which was not used. `python3.13 -m venv .venv` then
   `.venv/bin/python -m pip install '.[dev]'` installed 53 distributions,

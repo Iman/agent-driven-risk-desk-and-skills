@@ -53,7 +53,7 @@ def main():
         uncommitted_module_changes=git("status", "--porcelain", "--", "src/riskdesk").splitlines(),
         python=platform.python_version(),
         packages={p: version(p) for p in ("numpy", "scipy", "skfolio", "scikit-learn", "pydantic")},
-        option_desk=dict(path=str(option_desk), head=git("rev-parse", "HEAD", cwd=option_desk),
+        option_desk=dict(path=option_desk.name, head=git("rev-parse", "HEAD", cwd=option_desk),
                          uncommitted_engine_changes=git("status", "--porcelain", "--", "engine", cwd=option_desk).splitlines()),
         module_sha256={f"src/riskdesk/{m}.py": sha256(ROOT / "src" / "riskdesk" / f"{m}.py") for m in REVIEWED},
         pending_rehash={f"src/riskdesk/{m}.py": why for m, why in PENDING_REHASH.items()},

@@ -16,7 +16,7 @@
     "pydantic": "2.13.5"
   },
   "option_desk": {
-    "path": "/Users/developer/workspace/trading-desk/option-desk",
+    "path": "option-desk",
     "head": "52df47d8c02b2b0559a87bb6c6a91d1008b16207",
     "uncommitted_engine_changes": [
       "M engine/src/optiondesk_engine/pricing/black_scholes.py",
